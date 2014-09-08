@@ -1,0 +1,10 @@
+target
+*.log*
+.project
+.settings
+/bin
+*target*
+*project*
+*classpath
+*xls*
+*csv*

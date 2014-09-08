@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.intellbi.dao.UserDao">
+   
+   <select id="findAll" resultType="com.intellbi.dataobject.UserDO">
+       select  id as id,
+       		   group_id as groupId,
+               staff_id as staffId,
+               username as username,
+               password as password,
+               gmt_create as gmtCreate,
+               gmt_modified as gmtModified 
+       from bi_users
+   </select>
+    
+</mapper>

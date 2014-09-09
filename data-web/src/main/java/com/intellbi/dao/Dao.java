@@ -41,5 +41,5 @@ public interface Dao<T, ID extends Serializable> {
 	
 	boolean exists(ID id);
 	
-	
+	T findByUser(String username);
 }

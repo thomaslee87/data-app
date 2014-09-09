@@ -1,12 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>  
-
-<shiro:notAuthenticated>
-    <script type="text/javascript">
-        window.location.href = 'login.jsp';
-    </script>
-    </shiro:notAuthenticated>
-    
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -17,15 +9,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!--[if IE 7]><html class="ie7 lte9 lte8 lte7" lang="zh-CN"><![endif]-->
 <!--[if !(IE 6) | !(IE 7) | !(IE 8) | !(IE 9)  ]><!--><html lang="zh-CN"><!--<![endif]-->
 <head>
-
   <base href="<%=basePath%>"/>
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
   <!--[if IE 6]>
   <meta http-equiv="refresh" content="0;url=ie6.html" />
   <![endif]-->
-  <title>客户保有工具</title>
-  
+  <title>EasyCMS 内容发布系统</title>
   <link type="text/css" rel="stylesheet" href="admin/assets/css/easyui.css"/>
   <link type="text/css" rel="stylesheet" href="admin/assets/css/font-awesome.min.css"/>
   <!--[if IE 7]>
@@ -40,27 +30,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>--><!-- /#preloader -->
     <div id="header" data-options="region:'north',border:false">
       <div id="header-inner">
-        <h1 class="logo"><span>存量用户保有工具</span></h1>
+        <h1 class="logo"><span>EasyCMS</span></h1>
         <ul class="top-nav group">
-      <li><span>你好，<%=session.getAttribute("username")%>  &nbsp;&nbsp;今天是 </span></li>
-      <li><span id="timedate"></span></li>
-          <!--li><a href="javascript:;" title=""><i class="icon-tasks"></i><span class="badge badge-warning">4</span></a></li>
+          <li><a href="javascript:;" title=""><i class="icon-tasks"></i><span class="badge badge-warning">4</span></a></li>
           <li><a href="javascript:;" title=""><i class="icon-volume-up"></i><span class="badge badge-important">5</span></a></li>
           <li><a href="javascript:;" title=""><i class="icon-bell-alt"></i><span class="badge badge-success">3</span></a></li>
           <li><a href="javascript:;" title="系统设置"><i class="icon-cogs"></i></a></li>
-          <li><a href="javascript:;" title="系统退出" onclick="quitLogin()"><i class="icon-signout"></i></a></li-->
+          <li><a href="javascript:;" title="系统退出" onclick="quitLogin()"><i class="icon-signout"></i></a></li>
         </ul>
-        <!--div class="date-box-bar">
+        <div class="date-box-bar">
           <i class="icon-time"></i> 系统日期：<span id="timedate"></span>
-        </div-->
-        <!-- div class="usercount">
+        </div>
+        <div class="usercount">
           <i class="icon-foursquare"></i> 当前有 <a href="#" class="badge">5</a> 条未处理的信息
-        </div-->
+        </div>
       </div><!-- /#header-inner -->
     </div><!-- /#header -->   
     <div id="sidebar" data-options="region:'west',split:false, border:false">
         <div class="sidebar-wrapper">
-            <!--div class="mini-profile group">
+            <div class="mini-profile group">
                 <div class="mini-user-avatar">
                   <a href="#" title="欢迎您，moocss@gmail.com !"><img class="img-circle" alt="头像" src="admin/assets/images/avatar.jpg" width="32" height="32"></a>
                 </div>
@@ -70,8 +58,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                   <a title="查看首页" href="javascript:;"><i class="icon-home"></i></a>
                   <a title="退出系统" href="javascript:;" onclick="quitLogin()"><i class="icon-signout"></i></a>
                 </div>
-            </div-->
- 			<%@include file="admin/pages/menu.jsp"%>
+            </div>
+ 			<%@include file="menu.jsp"%>
         </div>
     </div><!-- /#sidebar -->
     <div id="content" data-options="region:'center',border:false">
@@ -81,16 +69,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
         </div>
     </div><!-- /#content -->
-    <!--div id="footer" data-options="region:'south',border:false">
+    <div id="footer" data-options="region:'south',border:false">
       <div id="footer-inner" class="group">
-        <p class="copyright">2014 &copy; IntellBi</p>
+        <p class="copyright">2013 &copy; EasyCMS Admin System</p>
         <ul class="bottom-nav">
           <li><a href="javascript:;" title="邮件"><i class="icon-envelope"></i> 邮件 <span class="badge">2</span></a></li>
           <li><a href="javascript:;" title="事务提醒"><i class="icon-bullhorn"></i> 事务提醒 <span class="badge">3</span></a></li>
           <li><a href="javascript:;" title="留言"><i class="icon-meh"></i> 留言 <span class="badge">41</span></a></li>
         </ul>
       </div><!-- /#footer-inner -->
-    </div--><!-- /#footer -->
+    </div><!-- /#footer -->
 
     <!--javascript start-->
     <script type="text/javascript" src="admin/assets/js/libs/jquery-1.8.3.min.js"></script>

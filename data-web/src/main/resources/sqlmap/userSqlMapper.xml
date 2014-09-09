@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.intellbi.dao.UserDao">
+   
+   <select id="findAll" resultType="biUser">
+       select  id as id,
+       		   group_id as groupId,
+               staff_id as staffId,
+               username as username,
+               password as password,
+               gmt_create as gmtCreate,
+               gmt_modified as gmtModified 
+       from bi_users
+   </select>
+   
+   <select id="get" parameterType="java.lang.Integer" resultType="biUser">
+    	select  id as id,
+       		   group_id as groupId,
+               staff_id as staffId,
+               username as username,
+               password as password,
+               gmt_create as gmtCreate,
+               gmt_modified as gmtModified 
+        from bi_users 
+        where id=#{id}
+   </select>
+   
+   <select id="findByUser" parameterType="java.lang.String" resultType="biUser">
+    	select  id as id,
+       		   group_id as groupId,
+               staff_id as staffId,
+               username as username,
+               password as password,
+               gmt_create as gmtCreate,
+               gmt_modified as gmtModified 
+        from bi_users 
+        where username=#{username}
+   </select>
+    
+    <insert id="save" parameterType="biUser" useGeneratedKeys="true" keyProperty="id">
+		insert into bi_users (
+			group_id,
+			staff_id,
+			username,
+			password,
+			gmt_create,
+			gmt_modified
+		) values(#{groupId},#{staffId},#{username},#{password},now(),now());
+	</insert>
+
+
+	<update id="update" parameterType="biUser">
+	   update bi_users set 
+		   group_id=#{groupId},
+		   staff_id=#{staffId},
+		   username=#{username},
+		   password=#{password},
+		   gmt_modified=now()
+	   where id=#{id} 
+	</update>
+    
+</mapper>

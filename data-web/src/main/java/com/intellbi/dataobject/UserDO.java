@@ -10,10 +10,11 @@ public class UserDO implements Serializable {
 
 	private static final long serialVersionUID = 9057148502455850564L;
 	
+	private int id;
 	private String username;
 	private String password;
 	private int groupId;
-	private int staffId;
+	private String staffId;
 	private Date gmtCreate=new Date();
 	private Date gmtModified=new Date();
 	
@@ -39,12 +40,6 @@ public class UserDO implements Serializable {
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
 	}
-	public int getStaffId() {
-		return staffId;
-	}
-	public void setStaffId(int staffId) {
-		this.staffId = staffId;
-	}
 	public Date getGmtCreate() {
 		return gmtCreate;
 	}
@@ -56,6 +51,22 @@ public class UserDO implements Serializable {
 	}
 	public void setGmtModified(Date gmtModified) {
 		this.gmtModified = gmtModified;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getStaffId() {
+		return staffId;
+	}
+
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
 	}
 	
 }

@@ -1,12 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-
-<shiro:authenticated>
-   <script type="text/javascript">
-       window.location.href = 'index.jsp';
-   </script>
-</shiro:authenticated>
-    
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -16,43 +8,40 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <base href="<%=basePath%>"/>
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-  <title>IntellBi登录</title>
+  <title>EasyCMS 登录</title>
   <link type="text/css" rel="stylesheet" href="admin/assets/css/font-awesome.min.css"/>
   <!--[if IE 7]>
   <link type="text/css" rel="stylesheet" href="admin/assets/css/font-awesome-ie7.min.css"/>
   <![endif]-->
-  
-  
   <link type="text/css" rel="stylesheet" href="admin/assets/css/base.css"/>
   <link type="text/css" rel="stylesheet" href="admin/assets/css/login.css"/>
 </head>
 <body>
     <div id="login" class="group">
         <div id="login-inner" data-active="login">
-            <h1 class="logo-mini"><span>IntellBi 存量客户保有工具</span></h1>
+            <h1 class="logo-mini"><span>EasyCMS</span> Content Admin System</h1>
             <div id="login-box" class="box">
             	<div class="hd">
             		<h2>用户登录</h2>
             	</div>
-            	
             	<div class="bd">
-	                <form id="login-form" action="login" name="login" method="post" novalidate="true">
+	                <form id="login-form" action="member/login.do" name="login" method="post" novalidate="true">
 	                    <p class="control-group">
 	                        <label for="username"><i class="icon-user"></i><span>用户名：</span></label>
-	                        <input class="ipt w278" type="text" placeholder="用户名" id="username" name="username" value="" required maxlength="20"/>
+	                        <input class="ipt w278" type="text" placeholder="用户名" id="username" name="username" value="fuxin" required maxlength="20"/>
 	                    </p>
 	                    <p class="control-group">
 	                        <label for="password"><i class="icon-lock"></i><span>密码：</span></label>
-	                        <input class="ipt w278" type="password" placeholder="密码" id="password" name="password" value="" required maxlength="15"/>
+	                        <input class="ipt w278" type="password" placeholder="密码" id="password" name="password" value="123456" required maxlength="15"/>
 	                    </p>
-	                    <!--p class="control-group">
+	                    <p class="control-group">
 	                        <label for="verifyCode"><i class="icon-key"></i><span>验证码：</span></label>
 	                        <input class="ipt w191" type="text" placeholder="验证码" id="verifyCode" name="verifyCode" required min="1" max="4" maxlength="4"/>
 	                        <img id="img_vcode" alt="..." src="captcha?complexity=99&size=30&length=4" width="80" height="30" onclick="javascript:_rvi()"/>
 	                        <script language='javascript'>
 	                          function _rvi(){document.getElementById('img_vcode').src = 'captcha?complexity=80&size=36&length=4&t='+Math.random(1000);}
 	                        </script>
-	                    </p-->
+	                    </p>
 	                    <p class="form-actions tc">
 	                        <button class="btn" type="submit">现在登录</button>
 	                    </p>

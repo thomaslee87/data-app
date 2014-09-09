@@ -7,14 +7,28 @@
 	<constant name="struts.i18n.encoding" value="utf-8"></constant>
 	<constant name="struts.multipart.maxSize" value="20971520"/>
     <constant name="struts.devMode" value="true" />
+    <constant name="struts.action.extension" value=","></constant>
     
     <package name="default" extends="struts-default">  
-        <action name="userAction" class="com.intellbi.web.UserAction">  
-            <!--result name="success" type="freemarker">/WEB-INF/test.ftl</result-->
-            			<result name="success">
-				/login_success.jsp
-			</result>
-        </action>  
+    <!--result name="success" type="freemarker">/WEB-INF/test.ftl</result-->
+        <!--action name="doLogin" class="com.intellbi.web.UserAction" method="doLogin">  
+            
+            <result name="success">/login_success.jsp</result>
+            <result name="error">/login.jsp</result> 
+        </action>
+         <action name="logout" class="com.intellbi.web.UserAction" method="logout">  
+            <result>/login.jsp</result>  
+        </action-->  
+        
+        <action name="login" class="com.intellbi.web.UserAction" method="login">  
+        	<result name="error">/error.jsp</result>
+            <result name="success" type="redirect">/index.jsp</result>
+        </action>
+        
+        <action name="logout" class="com.intellbi.web.UserAction" method="logout">
+        	<result name="error">/error.jsp</result>
+            <result name="success" type="redirect">/login.jsp</result>
+        </action>
     </package>  
     
 	<!--package name="p_user" namespace="/" extends="struts-default">

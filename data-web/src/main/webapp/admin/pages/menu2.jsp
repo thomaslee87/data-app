@@ -1,80 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
            <div id="mainnav">
               <div id="mainnav-hd">
-                <h2>我的工作台</h2>
+                <h2>导航菜单</h2>
                 <a id="sidebar-toggler" href="javascript:;" title="隐藏/显示 导航菜单"><span></span></a>
               </div>
               <div id="navlist-wraper">
                 <ul id="navlist" class="nav nav-list">
-                
-                <li class="current hasSub">
-                	<a href="javascript:;" data-nbid="1" title="我的任务" class="expand">
-                      <i class="icon icon-tasks"></i>
-                      <span class="txt">任务管理</span>
-                      <span class="more"><i class="icon-caret-down"></i></span>
-                    </a>
-                    <ul class="sub-nav" style="display:block">
-                      <li>
-                        <a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/dailyTask.jsp">
-                          <i class="icon icon-caret-right"></i>
-                          <span class="txt">日常任务</span>
-                        </a>
-                        
-                        <a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/contractTask.jsp">
-                          <i class="icon icon-caret-right"></i>
-                          <span class="txt">保有任务</span>
-                        </a>
-                      </li>
-                     </ul>
-                </li>
-
-                <%
-                	Object group = session.getAttribute("group");
-                	if(group != null && group.toString().equals("0")) {
-                %>
-                <li class="hasSub">
-                	<a href="javascript:;" data-nbid="2" title="数据管理" class="notExpand">
-                      <i class="icon icon-inbox"></i>
-                      <span class="txt">数据管理</span>
-                      <span class="more"><i class="icon-caret-down"></i></span>
-                    </a>
-                    <ul class="sub-nav">
-                      <li>
-                        <a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/dailyTask.jsp">
-                          <i class="icon icon-caret-right"></i>
-                          <span class="txt">上传数据</span>
-                        </a>
-                      </li>
-                     </ul>
-                </li>
-                
-                <li class="hasSub">
-                	<a href="javascript:;" data-nbid="3" title="系统工具" class="notExpand">
-                      <i class="icon icon-cogs"></i>
-                      <span class="txt">系统工具</span>
-                      <span class="more"><i class="icon-caret-down"></i></span>
-                    </a>
-                    <ul class="sub-nav">
-                      <li>
-                        <a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/dailyTask.jsp">
-                          <i class="icon icon-caret-right"></i>
-                          <span class="txt">用户管理</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/dailyTask.jsp">
-                          <i class="icon icon-caret-right"></i>
-                          <span class="txt">系统公告</span>
-                        </a>
-                      </li>
-                     </ul>
-                </li>
-                
-                <%
-                	}
-                %>
-                
-                  <!--li class="current hasSub">
+                  <li class="current hasSub">
                     <a href="javascript:;" data-nbid="1" title="用户管理" class="notExpand">
                       <i class="icon icon-user"></i>
                       <span class="txt">用户管理</span>
@@ -402,7 +334,6 @@
                           <span class="txt">站点管理</span>
                         </a>
                       </li>
-                       -->
                     </ul>
                   </li>
                 </ul><!-- /.nav-list -->

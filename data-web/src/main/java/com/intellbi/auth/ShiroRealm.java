@@ -33,7 +33,6 @@ import com.intellbi.service.UserService;
  * We felt it better to use that same DAO to show code re-use.
  * </p>
  */
-@Component
 public class ShiroRealm extends AuthorizingRealm {
 
 	@Autowired
@@ -59,6 +58,7 @@ public class ShiroRealm extends AuthorizingRealm {
 			if(password.equals(user.getPassword())) {
 				Session session =  SecurityUtils.getSubject().getSession();
 				session.setAttribute("username", user.getUsername());
+				session.setAttribute("group", user.getGroupId());
 				return new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());
 			}
 		}

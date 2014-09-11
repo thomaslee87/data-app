@@ -90,7 +90,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         function quitLogin(){
           $.messager.confirm('系统提示', '确认退出当前系统？', function(data){
             if(data){
-               window.location.href="member/logout";
+               window.location.href="logout";
             }
           });
         }

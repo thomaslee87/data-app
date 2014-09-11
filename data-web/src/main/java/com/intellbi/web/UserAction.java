@@ -45,6 +45,11 @@ public class UserAction extends ActionSupport {
 	}
 
 	public String login() {
+		
+		String method = ServletActionContext.getRequest().getMethod();
+		if(!"POST".equalsIgnoreCase(method))
+			return ERROR;
+		
 		UserDO userDO = null;
 		if(StringUtils.isNotBlank(username))
 			userDO = userDao.findByUser(username);

@@ -31,18 +31,4 @@
         </action>
     </package>  
     
-	<!--package name="p_user" namespace="/" extends="struts-default">
-		<action name="login_input" class="unicom.UserAction" method="login_input">
-			<result name="success">
-				/login.jsp
-			</result>
-		</action>
-		
-		<action name="login" class="unicom.UserAction" method="login">
-			<result name="success">
-				/login_success.jsp
-			</result>
-		</action>
-	</package-->
-	
 </struts>

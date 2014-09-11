@@ -47,8 +47,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <!--li><a href="javascript:;" title=""><i class="icon-tasks"></i><span class="badge badge-warning">4</span></a></li>
           <li><a href="javascript:;" title=""><i class="icon-volume-up"></i><span class="badge badge-important">5</span></a></li>
           <li><a href="javascript:;" title=""><i class="icon-bell-alt"></i><span class="badge badge-success">3</span></a></li>
-          <li><a href="javascript:;" title="系统设置"><i class="icon-cogs"></i></a></li>
-          <li><a href="javascript:;" title="系统退出" onclick="quitLogin()"><i class="icon-signout"></i></a></li-->
+          <li><a href="javascript:;" title="系统设置"><i class="icon-cogs"></i></a></li-->
+          <li><a href="javascript:;" title="退出系统" onclick="quitLogin()"><i class="icon-signout"></i></a></li>
         </ul>
         <!--div class="date-box-bar">
           <i class="icon-time"></i> 系统日期：<span id="timedate"></span>
@@ -102,7 +102,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         function quitLogin(){
           $.messager.confirm('系统提示', '确认退出当前系统？', function(data){
             if(data){
-               window.location.href="member/logout";
+               window.location.href="logout";
             }
           });
         }

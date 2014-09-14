@@ -4,8 +4,10 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
   
 <configuration>
+
 	<typeAliases>
         <typeAlias alias="biUser" type="com.intellbi.dataobject.UserDO"/>
+        <typeAlias alias="consumerBill" type="com.intellbi.dataobject.ConsumerBillDO"/>
     </typeAliases>
     
 	<!-- environments default="development">
@@ -22,5 +24,7 @@
 	
 	<mappers>
 		<mapper resource="sqlmap/userSqlMapper.xml" />
+		<mapper resource="sqlmap/consumerBillSqlMapper.xml" />
 	</mappers>
+	
 </configuration>

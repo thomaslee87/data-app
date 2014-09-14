@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>  
+<%@ taglib uri ="/struts-tags" prefix ="s" %>
 
 <%
 	String path = request.getContextPath();
@@ -119,31 +120,38 @@
 						<th>合约到期时间</th>
 						<th>合约剩余</th>
 						<th>当前套餐</th>
+						<th>任务状态</th>
 						<th>操作</th>
     				</tr>
     			</thead>
     			<tbody>
-    			<c:forEach var="flag" items="${userPager.pageList}" varStatus="status">
-    				<c:choose>
-    					<c:when test="${status.index % 2 ==0 }">
-    						<tr>
-    					</c:when>
-    					<c:otherwise>
-    						<tr class="even">
-    					</c:otherwise>
-    				</c:choose>
+    			<s:iterator value="bills" status="status">
+	    			<s:if test="#status.even">
+	    				<tr class="even">
+	    			</s:if>
+	    			<s:else>
+	    				<tr>
+	    			</s:else>
+    					<tr>
     							<td class="tc"><input type='checkbox' name='ck' value='${flag.id}' /></td>
-								<td>${flag.id}</td>
-								<td>${flag.username}</td>
-								<td>${flag.email}</td>
-								<td>${flag.userGroup.name}</td>
-								<td>${flag.lastLoginTime}</td>
+								<td><s:property value="phoneNo"/></td>
+								<td><s:property value="contractFrom.longValue()"/></td>
+								<td><s:property value="contractTo.longValue()"/></td>
+								<td>合约剩余</td>
+								<td><s:property value="package"/></td>
+								
+					<s:if test="#status.even">
+	    				<td color="green">待处理</td>
+	    			</s:if>
+	    			<s:else>
+	    				<td color="red">已处理</td>
+	    			</s:else>
 								<td>
-									<a class="btn" href="member/v_update.do?id=${flag.id}">修改</a>
-									<a href="javascript:;" class="btn" onclick="optDelete(${flag.id});">删除</a>
+									<a class="btn" href="member/v_update.do?id=${flag.id}">查看</a>
+									<!--a href="javascript:;" class="btn" onclick="optDelete(${flag.id});">删除</a-->
 								</td>
 	    					</tr>
-    			</c:forEach>
+    			</s:iterator>
     			</tbody>
     		</table>
 			</div>

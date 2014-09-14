@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.intellbi.dao.ConsumerBillDAO">
+
+   <select id="findAll" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="consumerBill">
+       select	id as id,
+       			phone_no as phoneNo,
+       			<!--the_month as yearMonth,-->
+       			package_id as packageId,
+				<!--income as income,
+				monthly_rental as monthlyRental,
+				local_voice_fee as localVoiceFee,
+				roaming_fee as roamingFee,
+				long_distance_voice_fee as longDistanceVoiceFee,
+				value_added_fee as valueAddedFee,
+				other_fee as otherFee,
+				grant_fee as grantFee,
+				call_number as callNumber,
+				local_call_duration as lcoalCallDuration,
+				roam_call_duration as roamCallDuration,
+				long_distance_call_duration as longDistanceCallDuration,
+				internal_call_duration as internalCallDuration,
+				international_call_duration as internationlCallDuration,
+				sms as sms,
+				gprs as gprs,-->
+				is_group_user as isGroupUser,
+				network as network,
+				status as status,
+				contract_from as contractFrom,
+				contract_to as contractTo
+       from bi_bills_${yearMonth}
+       <where>
+        	<if test="userId != null and userId > 0">
+        		user_id = #{userId}
+        	</if>
+       </where>
+       order by income desc
+       limit 200
+   </select>
+   
+   <select id="get" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="consumerBill">
+    	select  id as id,
+       		   phone_no as phoneNo,
+       		   the_month as yearMonth,
+				package_id as packageId,
+				income as income,
+				monthly_rental as monthlyRental,
+				local_voice_fee as localVoiceFee,
+				roaming_fee as roamingFee,
+				long_distance_voice_fee as longDistanceVoiceFee,
+				value_added_fee as valueAddedFee,
+				other_fee as otherFee,
+				grant_fee as grantFee,
+				call_number as callNumber,
+				local_call_duration as lcoalCallDuration,
+				roam_call_duration as roamCallDuration,
+				long_distance_call_duration as longDistanceCallDuration,
+				internal_call_duration as internalCallDuration,
+				international_call_duration as internationlCallDuration,
+				sms as sms,
+				gprs as gprs,
+				is_group_user as isGroupUser,
+				network as network,
+				status as status,
+				contract_from as contractFrom,
+				contract_to as contractTo
+        from bi_bills_${yearMonth}
+        <where>
+        	<if test="userId != null and userId > 0 ">
+        		user_id = #{userId}
+        	</if>
+        	<if test="phoneNo != null and phoneNo != '' and phoneNo > 0 ">
+        		and phone_no = #{phoneNo}
+        	</if>
+       	</where>
+   </select>
+    
+</mapper>

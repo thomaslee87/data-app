@@ -15,7 +15,12 @@
                     </a>
                     <ul class="sub-nav" style="display:block">
                       <li>
-                        <a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/dailyTask.jsp">
+                        <a  href="javascript:;" data-url="<%=basePath%>getConsumerBills">
+                          <i class="icon icon-caret-right"></i>
+                          <span class="txt">日常任务1</span>
+                        </a>
+                        
+                         <a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/dailyTask.jsp">
                           <i class="icon icon-caret-right"></i>
                           <span class="txt">日常任务</span>
                         </a>

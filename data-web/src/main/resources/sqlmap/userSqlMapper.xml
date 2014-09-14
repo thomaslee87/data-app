@@ -27,7 +27,7 @@
         where id=#{id}
    </select>
    
-   <select id="findByUser" parameterType="java.lang.String" resultType="biUser">
+   <select id="findByUser" parameterType="biUser" resultType="biUser">
     	select  id as id,
        		   group_id as groupId,
                staff_id as staffId,
@@ -35,7 +35,7 @@
                password as password,
                gmt_create as gmtCreate,
                gmt_modified as gmtModified 
-        from bi_users 
+        from bi_users
         where username=#{username}
    </select>
     

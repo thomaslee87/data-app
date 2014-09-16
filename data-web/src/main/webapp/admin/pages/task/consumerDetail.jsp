@@ -19,7 +19,7 @@
     	window.location.href = "<%=basePath%>login.jsp";
         window.parent.location.href = "<%=basePath%>login.jsp";
     </script>
-</shiro:notAuthenticated>
+    </shiro:notAuthenticated>
     
 <head>
 	<base href="<%=basePath%>" />
@@ -32,8 +32,6 @@
 	
 	<link rel="stylesheet" type="text/css" href="admin/assets/css/datePicker.css"/>
 	<link rel="stylesheet" type="text/css" href="admin/assets/css/textbox.css"/>
-	<link rel="stylesheet" type="text/css" href="admin/assets/css/window.css"/>
-	<link rel="stylesheet" type="text/css" href="admin/assets/css/datagrid.css"/>
 	<style type="text/css"> 
 		*{ margin:0; padding:0;}
 		body { font:12px/1.5 Arial; color:#666; background:#fff;}
@@ -45,11 +43,42 @@
     <script type="text/javascript" src="admin/assets/js/libs/jquery.date_input.pack.js"></script>
     <script type="text/javascript" src="admin/assets/js/libs/jquery.textbox.js"></script>
     
-    <!--script type="text/javascript" src="admin/assets/js/libs/jquery.datagrid.js"></script-->
-    <script type="text/javascript" src="admin/assets/js/libs/datagrid-detailview.js"></script>
-    
+	<script type="text/javascript">
+		//删除一个数据
+		function optDelete(id) {
+			if(Pony.checkedCount("ck") <= 0) {
+				alert("请选择您要操作的数据!");
+				return;
+			}
+			if(!confirm("您确定删除吗？")) {
+				return;
+			}
+			window.location = "<%=basePath%>member/o_delete.do?id="+id;
+		}
+		
+	</script>
 </head>
 <body>
+<script type="text/javascript">
+	$(function(){
+		$('#datePicker').date_input();
+		d = new Date();
+		month = d.getMonth() + 1;
+		if(month < 10)
+			month = "0" + month;
+		date = d.getDate();
+		if(date < 10)
+			date = "0" + date;
+		dateString = d.getFullYear()+"-"+ month + "-" + date; 
+		$('#datePicker').val(dateString);
+		$('#currentMonth').html(d.getFullYear()+"年"+ month +"月");
+		
+		$('#datePicker').bind('change', function(e){
+			yearMonth = $('#datePicker').val().split('-');
+			$('#currentMonth').html(yearMonth[0] + "年" + yearMonth[1] + "月");
+		});
+	});
+</script>
 	<div class="container">
 		<div class="toolbar">
 			<div class="crumbs">
@@ -72,13 +101,13 @@
 		</div>
 		<div class="mod">
 			<div class="bd">
-    		<table id="consumer_grid" class="ui-table">
+    		<table class="ui-table">
     			<thead>
     				<tr>
-						<!--<th width="30">
+						<th width="30">
 							<input type="checkbox" name="ck_all" id="ck_all" onclick="Pony.checkboxSlt('ck',this.checked);"/>
 						</th>
-						<th>ID</th>
+						<!--<th>ID</th>
 						<th>用户名</th>
 						<th>电子邮箱</th>
 						<th>会员组</th>
@@ -86,7 +115,6 @@
 						<th>登录</th>
 						<th>禁用</th>
 						<th width="140">操作选项</th>-->
-						<th width="30">保</th>
 						<th>手机号</th>
 						<th>合约开始时间</th>
 						<th>合约到期时间</th>
@@ -104,16 +132,23 @@
 	    			<s:else>
 	    				<tr>
 	    			</s:else>
-    							<!--td class="tc"><input type='checkbox' name='ck' value='${flag.id}' /></td-->
-    							<td>高</td>
+    					<tr>
+    							<td class="tc"><input type='checkbox' name='ck' value='${flag.id}' /></td>
 								<td><s:property value="phoneNo"/></td>
 								<td><s:property value="contractFrom.longValue()"/></td>
 								<td><s:property value="contractTo.longValue()"/></td>
 								<td>合约剩余</td>
 								<td><s:property value="package"/></td>
-	    						<td>已处理</td>
+								
+					<s:if test="#status.even">
+	    				<td color="green">待处理</td>
+	    			</s:if>
+	    			<s:else>
+	    				<td color="red">已处理</td>
+	    			</s:else>
 								<td>
-									<a class="btn" href="javascript:void(0)" onclick="$('#w').window('open');ajax_get_consumer_data(<s:property value='phoneNo'/>,201303);">查看</a>
+									<a class="btn" href="member/v_update.do?id=${flag.id}">查看</a>
+									<!--a href="javascript:;" class="btn" onclick="optDelete(${flag.id});">删除</a-->
 								</td>
 	    					</tr>
     			</s:iterator>
@@ -157,50 +192,8 @@
 			<!-- /.mod-ft -->
 		</div>
 		<!-- /.mod -->
-		
-		<div id="w" class="easyui-window" title="<i class='icon icon-inbox'></i>用户消费详情" collapsible="false" minimizable="false"
-		 data-options="modal:true,closed:true" style="width:90%;height:500px;padding:10px;">
-		 	<div style="padding:5px">
-				<div style="float:left;padding:5px">
-				
-				</div>
-				<div class="action" style="float:left;">
-				
-				</div>
-				<div style="text-align:center;float:left;width:50%;padding:7px">
-					<b><span id="currentMonth" style="font-size:20px;"></span></b>
-				</div>
-				<div style="float:right; width:200px;">
-					<input type="checkbox" name="ck_all" id="ck"/><span style="font-size:12px">显示最近6个月的消费细节</span>
-				</div>
-			</div>
-			 <div>
-				<table id="tt" title="消费细节" style="width:100%;height:90px">
-				</table>
-			</div>
-			<div>
-				<table id="trecent" title="消费细节" style="width:100%;height:300px">
-				</table>
-			</div>
-			<div>
-				<table id="textend" title="波动信息" style="width:100%;height:90px">
-				</table>
-			</div>
-			<div style="float:right; padding:5px">
-				<a class="btn" href="javascript:void(0)" onclick="$('#w').window('close')" >关闭</a>
-			</div>
-			
-			<div id="ccc">
-			
-			</div>
-		</div>
-		
 	</div>
 	<!-- /.container  -->
 	
-	<script type="text/javascript" src="admin/assets/js/biz.js"></script>
-
 </body>
 </html>
-
-

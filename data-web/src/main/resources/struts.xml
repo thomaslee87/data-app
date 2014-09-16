@@ -9,7 +9,7 @@
     <constant name="struts.devMode" value="true" />
     <constant name="struts.action.extension" value=","></constant>
     
-    <package name="default" extends="struts-default">  
+    <package name="default" extends="struts-default,json-default">  
     
      	<interceptors>  
             <interceptor name="authority"  
@@ -44,6 +44,18 @@
         
         <action name="getConsumerBills" class="com.intellbi.web.ConsumerTaskAction" method="getConsumerBills">
         	<result>admin/pages/task/dailyTask.jsp</result>
+        </action>
+        
+        <action name="getConsumerBillsJson" class="com.intellbi.web.ConsumerTaskAction" method="getConsumerBillsJson">
+        	<result type="json">
+        		<param name="root">consumerBillDO</param>
+        	</result>
+        </action>
+        
+        <action name="getRecentConsumerBillsJson" class="com.intellbi.web.ConsumerTaskAction" method="getRecentConsumerBillsJson">
+        	<result type="json">
+        		<param name="root">recentBills</param>
+        	</result>
         </action>
         
     </package>  

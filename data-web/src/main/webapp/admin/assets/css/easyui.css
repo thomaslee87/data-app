@@ -477,6 +477,7 @@ a:hover.l-btn-plain-selected {
   padding: 0;
   padding-top: 2px;
   overflow: hidden;
+  height:35px;
 }
 .tabs-header-plain {
   border: 0;
@@ -987,7 +988,8 @@ a:hover.l-btn-plain-selected {
 --------------------------------------------------------*/
 .window{padding: 0px;border: 1px solid #fff;}
 .window .window-header{padding: 12px;background-color: #F3F3F3;}
-.window .window-header .panel-title{padding-left: 15px;font-size: 18px;color: #017EF3;font-weight: normal;background: url(../images/easyui/title_dot.png) 0 50% no-repeat;}
+/*.window .window-header .panel-title{padding-left: 15px;font-size: 18px;color: #017EF3;font-weight: normal;background: url(../images/easyui/title_dot.png) 0 50% no-repeat;}*/
+.window .window-header .panel-title{padding-left: 5px;font-size: 14px;color: #C00;font-weight: normal;}
 .window .window-body{border-width: 0;}
 .window .window-header .panel-tool{padding-right: 9px;}
 .window .window-header .panel-icon, .window .window-header .panel-tool{margin-top: -9px;}

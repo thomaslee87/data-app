@@ -22,8 +22,11 @@ public class ConsumerBillServiceImpl implements ConsumerBillService {
 	}
 
 	public List<ConsumerBillDO> getAllMonthBills(int yearMonth, String phoneNo,
-			int userId) {
-		return consumerBillDao.findAll(new BillQueryParameter(yearMonth, phoneNo, userId));
+			int userId, int page, int pageSize) {
+		BillQueryParameter param = new BillQueryParameter(yearMonth, phoneNo, userId);
+		param.setPageBegin(page);
+		param.setPageSize(pageSize);
+		return consumerBillDao.findAll(param);
 	}
 
 }

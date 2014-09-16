@@ -32,12 +32,18 @@
 				contract_to as contractTo
        from bi_bills_${yearMonth}
        <where>
-        	<if test="userId != null and userId > 0">
+        	<if test="userId != null and userId &gt; 0">
         		user_id = #{userId}
         	</if>
        </where>
        order by income desc
-       limit 200
+       limit 
+       		<if test="pageBegin &gt;=0 and pageSize &gt; 0">
+       			#{pageBegin}, #{pageSize}		
+       		</if>
+       		<if test="pageBegin &lt; 0 or pageSize &lt;= 0">
+       			50
+       		</if>
    </select>
    
    <select id="get" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="consumerBill">
@@ -54,7 +60,7 @@
 				other_fee as otherFee,
 				grant_fee as grantFee,
 				call_number as callNumber,
-				local_call_duration as lcoalCallDuration,
+				local_call_duration as localCallDuration,
 				roam_call_duration as roamCallDuration,
 				long_distance_call_duration as longDistanceCallDuration,
 				internal_call_duration as internalCallDuration,
@@ -68,13 +74,14 @@
 				contract_to as contractTo
         from bi_bills_${yearMonth}
         <where>
-        	<if test="userId != null and userId > 0 ">
+        	<if test="userId &gt; 0 ">
         		user_id = #{userId}
         	</if>
-        	<if test="phoneNo != null and phoneNo != '' and phoneNo > 0 ">
+        	<if test="phoneNo != null and phoneNo != '' ">
         		and phone_no = #{phoneNo}
         	</if>
        	</where>
+       	limit 1
    </select>
     
 </mapper>

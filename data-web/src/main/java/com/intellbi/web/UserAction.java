@@ -1,7 +1,5 @@
 package com.intellbi.web;
 
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -16,9 +14,7 @@ import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.intellbi.dao.UserDao;
-import com.intellbi.dataobject.ConsumerBillDO;
 import com.intellbi.dataobject.UserDO;
-import com.intellbi.service.ConsumerBillService;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class UserAction extends ActionSupport {

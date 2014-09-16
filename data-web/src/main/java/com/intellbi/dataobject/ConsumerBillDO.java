@@ -19,7 +19,7 @@ public class ConsumerBillDO implements Serializable {
 	private double otherFee;
 	private double grantFee;
 	private double callNumber;
-	private int lcoalCallDuration;
+	private int localCallDuration;
 	private int roamCallDuration;
 	private int longDistanceCallDuration;
 	private int internalCallDuration;
@@ -131,11 +131,11 @@ public class ConsumerBillDO implements Serializable {
 	public void setCallNumber(double callNumber) {
 		this.callNumber = callNumber;
 	}
-	public int getLcoalCallDuration() {
-		return lcoalCallDuration;
+	public int getLocalCallDuration() {
+		return localCallDuration;
 	}
-	public void setLcoalCallDuration(int lcoalCallDuration) {
-		this.lcoalCallDuration = lcoalCallDuration;
+	public void setLocalCallDuration(int localCallDuration) {
+		this.localCallDuration = localCallDuration;
 	}
 	public int getRoamCallDuration() {
 		return roamCallDuration;

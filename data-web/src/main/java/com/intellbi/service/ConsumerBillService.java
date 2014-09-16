@@ -8,5 +8,5 @@ public interface ConsumerBillService {
 
 	ConsumerBillDO getMonthBill(int yearMonth, String phoneNo, int userId) ;
 	
-	List<ConsumerBillDO> getAllMonthBills(int yearMonth, String phoneNo, int userId);
+	List<ConsumerBillDO> getAllMonthBills(int yearMonth, String phoneNo, int userId, int page, int pageSize);
 }

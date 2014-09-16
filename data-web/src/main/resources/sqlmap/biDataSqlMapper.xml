@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.intellbi.dao.BiDataDao">
+   
+   <select id="findAll" resultType="biData">
+       select	
+       		id as id,
+       		the_month as theMonth,
+       		status as status
+       from 
+       		bi_data
+       	order by the_month desc
+   </select>
+   
+   <select id="findRecent" resultType="biData">
+   		select	
+       		id as id,
+       		the_month as theMonth,
+       		status as status
+       from 
+       		bi_data
+       order by the_month desc limit 1 
+   </select>
+   
+</mapper>

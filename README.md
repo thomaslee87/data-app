@@ -2,6 +2,8 @@
 
 ---
 
+A tool for telecom CRM written by Java. Includes:
+
 - data app: web application
     
 what we used:
@@ -13,4 +15,6 @@ what we used:
     - easyui  
 
 - data analysis: background analysis program
+
+    - periodic run in background, and load data into mysql
 

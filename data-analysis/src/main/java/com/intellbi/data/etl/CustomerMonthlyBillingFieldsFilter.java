@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import com.intellbi.data.record.AttributeEntity;
 import com.intellbi.data.record.IDataRecord;
 import com.intellbi.data.record.RecordDataset;
-import com.intellbi.utils.Constants;
+import com.intellbi.utils.ColumnConstants;
 
 
 /**
@@ -44,7 +44,7 @@ public class CustomerMonthlyBillingFieldsFilter implements IDataETLTask {
 			public IDataRecord dealWithRecord(IDataRecord record) {
 				// TODO Auto-generated method stub
 				int size = record.getDataset().getAttributes().size();
-				AttributeEntity yearMonthAttr = new AttributeEntity("integer", Constants.COL_YEAR_MONTH, "数据日期", "", false, size);
+				AttributeEntity yearMonthAttr = new AttributeEntity("integer", ColumnConstants.COL_YEAR_MONTH, "数据日期", "", false, size);
 				record.addColumn(yearMonthAttr, m_YearMonth);
 				return record;
 			}

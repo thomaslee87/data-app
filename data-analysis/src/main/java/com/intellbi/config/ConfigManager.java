@@ -3,6 +3,7 @@ package com.intellbi.config;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 public class ConfigManager {
@@ -16,7 +17,8 @@ public class ConfigManager {
 	private ConfigManager() {
 		properties = new Properties();
 		try {
-			properties.load(new FileInputStream(ClassLoader.getSystemResource(Constants.CONFIG_FILE).getFile()));
+//			properties.load(new FileInputStream(ClassLoader.getSystemResource(Constants.CONFIG_FILE).getFile()));
+			properties.load(new InputStreamReader(ClassLoader.getSystemResourceAsStream(Constants.CONFIG_FILE), "utf-8"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -30,16 +32,32 @@ public class ConfigManager {
 		return ConfigManagerSingletonHolder.instance;
 	}
 	
+	public String getMysqlConnStatment() {
+		return properties.getProperty("intellbi.mysql.conn");
+	}
+	
+	public String getMysqlUsername() {
+		return properties.getProperty("intellbi.mysql.username");
+	}
+	
+	public String getMysqlPassword() {
+		return properties.getProperty("intellbi.mysql.password");
+	}
+	
 	public String getDataLocation() {
-		return properties.getProperty("intellbi.data.location").toString();
+		return properties.getProperty("intellbi.data.location");
 	}
 	
 	public String getVipCustomersFile() {
-		return properties.get("intellbi.vip.customers").toString();
+		return properties.getProperty("intellbi.vip.customers");
 	}
 	
 	public String getPackageFile() {
-		return properties.getProperty("intellbi.3g.packages").toString();
+		return properties.getProperty("intellbi.3g.packages");
+	}
+	
+	public String getDataFileFormat(){
+		return properties.getProperty("intellbi.data.fileformat").toLowerCase();
 	}
 	
 	public static void main(String[] args) {

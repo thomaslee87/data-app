@@ -7,15 +7,17 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.intellbi.config.ConfigManager;
+import com.intellbi.data.dataobject.VipMgrInfo;
 
 public class VIPManagerConfig {
 	
@@ -39,8 +41,18 @@ public class VIPManagerConfig {
 		}
 	}
 	
+	private Logger logger = Logger.getLogger(VIPManagerConfig.class);
+	
+	private Pattern p = Pattern.compile("(.+?)\\[(.+)\\]", Pattern.CASE_INSENSITIVE);
+	
 	private Set<String> vipCustomerSet = new HashSet<String>();
 	private Map<String,Set<String>> vipManagerCustomersMap = new HashMap<String,Set<String>>();
+	
+	private Map<String,VipMgrInfo> vip2MgrMap = new HashMap<String,VipMgrInfo>();
+	
+	public Map<String,VipMgrInfo> getVip2MgrMap() {
+		return vip2MgrMap;
+	}
 	
 	public Set<String> getCustomerSet() {
 		return vipCustomerSet;
@@ -63,42 +75,42 @@ public class VIPManagerConfig {
 		else
 			throw new IOException("vip customer file should be xls or xlsx");
 		sheet = book.getSheetAt(0);
+		vipCustomerSet.clear();
 		for (int i = 1; i <= sheet.getLastRowNum(); i++) {
 			Row row = sheet.getRow(i);
-			Cell cell = row.getCell(0);
+			
 			DecimalFormat df = new DecimalFormat("0");  
-			String phoneNo = df.format(cell.getNumericCellValue());
+			String phoneNo = df.format(row.getCell(0).getNumericCellValue());
 			
 			if(vipCustomerSet.add(phoneNo)) {
-				cell = row.getCell(1);
-				String vipManagerName = cell.getStringCellValue();
-				
-				Set<String> customerSet = vipManagerCustomersMap.get(vipManagerName);
-				if(customerSet == null) {
-					customerSet = new HashSet<String>();
-					vipManagerCustomersMap.put(vipManagerName, customerSet);
+				String vipMgrString = row.getCell(1).toString();
+				Matcher m = p.matcher(vipMgrString);
+				if(m.find()) {
+					VipMgrInfo vipMgr = new VipMgrInfo();
+					vipMgr.setUsername(m.group(1).trim());
+					vipMgr.setRealname(m.group(2).trim());
+					
+					Set<String> customerSet = vipManagerCustomersMap.get(vipMgr.getUsername());
+					if(customerSet == null) {
+						customerSet = new HashSet<String>();
+						vipManagerCustomersMap.put(vipMgr.getUsername(), customerSet);
+					}
+					customerSet.add(phoneNo);
+					
+					vip2MgrMap.put(phoneNo, vipMgr);
 				}
-				customerSet.add(phoneNo);
 			}
-			else
-				throw new IOException("phone number " + phoneNo + "。 Duplicated row in vip customer excel file。");
+			else {
+				logger.warn("phone number " + phoneNo + ": Duplicated row in vip customer excel file.\t" + row.getCell(1).toString() + "\t" + vip2MgrMap.get(phoneNo));
+			}
 		}
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException, IOException {
 		VIPManagerConfig vipManager = VIPManagerConfig.getInstance();
-		try {
-			vipManager.loadVipCustomersFromExcel();
-			Map<String,Set<String>> map = vipManager.getVipManagerCustomerMap();
-			for(String manager: map.keySet()) {
-				System.out.println(manager + "  " + map.get(manager).size());
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Map<String,Set<String>> map = vipManager.getVipManagerCustomerMap();
+		for(String manager: map.keySet()) {
+			System.out.println(manager + "  " + map.get(manager).size());
 		}
 	}
 

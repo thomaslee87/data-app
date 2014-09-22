@@ -17,7 +17,7 @@ import org.apache.commons.lang.time.DateUtils;
 import com.intellbi.data.record.AttributeEntity;
 import com.intellbi.data.record.IDataRecord;
 import com.intellbi.data.record.RecordUtils;
-import com.intellbi.utils.Constants;
+import com.intellbi.utils.ColumnConstants;
 import com.intellbi.utils.MyDateUtils;
 
 /**

@@ -6,4 +6,5 @@ public class Constants {
 	
 	public static final double CONSUMER_TYPE_VOICE_THEREHOLD = 0.8;
 	public static final double CONSUMER_TYPE_GPRS_THEREHOLD = 0.8;
+	
 }

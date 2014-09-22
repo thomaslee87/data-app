@@ -3,6 +3,11 @@
  */
 package com.intellbi.utils;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +18,33 @@ import java.util.regex.Pattern;
 public class MyDateUtils {
 
 	private static Pattern p = Pattern.compile("^(\\d{6})($|\\d{2}$)");
+	
+	public static boolean checkMonthFormat(String theMonth, String format){
+		boolean ret = true;
+		DateFormat ff = new SimpleDateFormat(format);
+		try {
+			ff.parse(theMonth);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			ret = false;
+		}
+		return ret;
+	}
+	
+	public static String getMonthByDelta(String theMonth, int delta) {
+		DateFormat format = new SimpleDateFormat("yyyyMMdd");
+		Date dateObj = null;
+		try {
+			dateObj = format.parse(theMonth + "01");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Calendar c = Calendar.getInstance();
+		c.setTime(dateObj);
+		c.add(Calendar.MONTH, delta);
+		return format.format(c.getTime()).substring(0, 6);
+	}
 	
 	/**
 	 * @param date1 起始日期 YYYYMM

@@ -19,7 +19,7 @@ import com.intellbi.data.io.MdbFileIterator;
 import com.intellbi.data.record.Attributes;
 import com.intellbi.data.record.IDataRecord;
 import com.intellbi.data.record.RecordDataset;
-import com.intellbi.utils.Constants;
+import com.intellbi.utils.ColumnConstants;
 import com.intellbi.utils.ProjectConfiguration;
 
 /**
@@ -97,9 +97,9 @@ public class PartitionCustomerMonthlyBillingJob implements IDataETLJob {
 			Matcher m = p.matcher(mdbPath);
 			if(m.find()) {
 				RecordDataset dataset = new RecordDataset(m_ReservedAttributes);
-				int phoneNoIdx         = m_ReservedAttributes.getAttrIdxByName(Constants.COL_PHONE_NO);
-				int joinNetTimeIdx     = m_ReservedAttributes.getAttrIdxByName(Constants.COL_JOIN_NET_TIME);
-				int isGroupCustomerIdx = m_ReservedAttributes.getAttrIdxByName(Constants.COL_IS_GROUP_CUSTOMER);
+				int phoneNoIdx         = m_ReservedAttributes.getAttrIdxByName(ColumnConstants.COL_PHONE_NO);
+				int joinNetTimeIdx     = m_ReservedAttributes.getAttrIdxByName(ColumnConstants.COL_JOIN_NET_TIME);
+				int isGroupCustomerIdx = m_ReservedAttributes.getAttrIdxByName(ColumnConstants.COL_IS_GROUP_CUSTOMER);
 				
 				IFileIterator reader = new MdbFileIterator(dataset, mdbPath);
 			

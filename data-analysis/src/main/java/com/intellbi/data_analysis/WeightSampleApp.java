@@ -5,9 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -20,34 +18,13 @@ import com.healthmarketscience.jackcess.Table;
 import com.intellbi.config.ConfigManager;
 import com.intellbi.config.PackageConfig;
 import com.intellbi.config.VIPManagerConfig;
+import com.intellbi.data.dataobject.ConsumerBillDetail;
+import com.intellbi.data.dataobject.ConsumerBillDetailWrapper;
 import com.intellbi.data.dataobject.ConsumerSessionMap;
-import com.intellbi.data.dataobject.ConsumerSessionNode;
+import com.intellbi.data.dataobject.TelecomPackage;
+import com.intellbi.utils.Utils;
 
 public class WeightSampleApp {
-	
-	private static double parseDouble(Object str) {
-		double res = 0.0;
-		if(str != null) {
-			try {
-				res = Double.parseDouble(str.toString());
-			} catch(NumberFormatException e) {
-				res = 0.0;
-			}
-		}
-		return res;
-	}
-	
-	private static long parseLong(Object str) {
-		long res = 0;
-		if(str != null) {
-			try {
-				res = Long.parseLong(str.toString());
-			} catch(NumberFormatException e) {
-				res = 0;
-			}
-		}
-		return res;
-	}
 	
 	private static Pattern pBase = Pattern.compile("(\\d+)元/月基本套餐([A-C]?)", Pattern.CASE_INSENSITIVE);
 	private static Pattern pIphone = Pattern.compile("(iPhone) (\\d+)元/月套餐", Pattern.CASE_INSENSITIVE);
@@ -79,18 +56,18 @@ public class WeightSampleApp {
 							continue;
 					}
 					
-					double income  = parseDouble(row.get("收入").toString());
-					double callAmount = parseDouble(row.get("通话次数").toString());
+					double income  = Utils.parseDouble(row.get("收入").toString());
+					double callAmount = Utils.parseDouble(row.get("通话次数").toString());
 					
-					double localCallTime    = parseDouble(row.get("非漫游本地计费时长"));
-					double roamCallTime     = parseDouble(row.get("漫游计费时长"));
-					double distanceCallTime = parseDouble(row.get("长途计费时长"));
+					double localCallTime    = Utils.parseDouble(row.get("非漫游本地计费时长"));
+					double roamCallTime     = Utils.parseDouble(row.get("漫游计费时长"));
+					double distanceCallTime = Utils.parseDouble(row.get("长途计费时长"));
 					double callTime = localCallTime  + roamCallTime + distanceCallTime;
 					
-					long contractFrom = parseLong(row.get("合约计划生效时间"));
-					long contractTo   = parseLong(row.get("合约计划失效时间"));
+					long contractFrom = Utils.parseInteger(row.get("合约计划生效时间"));
+					long contractTo   = Utils.parseInteger(row.get("合约计划失效时间"));
 					
-					double gprs = parseDouble(row.get("GPRS流量"));
+					double gprs = Utils.parseDouble(row.get("GPRS流量"));
 					
 					i++;
 //					if(contractTo >= 20131200 && contractTo <= 20131231){
@@ -121,7 +98,7 @@ public class WeightSampleApp {
 		
 		//load packages
 		PackageConfig packageManager = PackageConfig.getInstance();
-		Map<String, com.intellbi.config.PackageConfig.Package> packages = packageManager.getPackages();
+		Map<String, TelecomPackage> packages = packageManager.getPackages();
 		
 		ConsumerSessionMap consumerSessionMap = new ConsumerSessionMap();
 		
@@ -160,32 +137,32 @@ public class WeightSampleApp {
 								continue;
 						}
 						
-						double income  = parseDouble(row.get("收入").toString());
-						double callAmount = parseDouble(row.get("通话次数").toString());
+						double income  = Utils.parseDouble(row.get("收入").toString());
+						int callAmount = Utils.parseInteger(row.get("通话次数").toString());
 						
-						double localCallTime    = parseDouble(row.get("非漫游本地计费时长"));
-						double roamCallTime     = parseDouble(row.get("漫游计费时长"));
-						double distanceCallTime = parseDouble(row.get("长途计费时长"));
-						double callTime = localCallTime  + roamCallTime + distanceCallTime;
+						int localCallTime    = Utils.parseInteger(row.get("非漫游本地计费时长"));
+						int roamCallTime     = Utils.parseInteger(row.get("漫游计费时长"));
+						int distanceCallTime = Utils.parseInteger(row.get("长途计费时长"));
+						int callTime = localCallTime  + roamCallTime + distanceCallTime;
 						
-						long contractFrom = parseLong(row.get("合约计划生效时间"));
-						long contractTo   = parseLong(row.get("合约计划失效时间"));
+						long contractFrom = Utils.parseInteger(row.get("合约计划生效时间"));
+						long contractTo   = Utils.parseInteger(row.get("合约计划失效时间"));
 						
-						double gprs = parseDouble(row.get("GPRS流量"));
+						double gprs = Utils.parseDouble(row.get("GPRS流量"));
 						
 //						System.out.println(phoneNo + ","  + packageName + "," + income + "," + callAmount
 //								+ "," + localCallTime + "," + roamCallTime + "," + distanceCallTime);
 						
-						com.intellbi.config.PackageConfig.Package _package = packages.get(packageName);
+						TelecomPackage _package = packages.get(packageName);
 						
-						List<Double> values = new ArrayList<Double>();
-						values.add(income);
-						values.add(callAmount);
-						values.add(callTime);
-						values.add(gprs);
+						ConsumerBillDetail detail = new ConsumerBillDetail();
+						detail.setIncome(income);
+						detail.setCallAmount(callAmount);
+						detail.setCallTime(callTime);
+						detail.setGprs(gprs);
 						
-						ConsumerSessionNode consumerSessionNode = 
-								new ConsumerSessionNode(yearMonth, _package, contractFrom, contractTo, values);
+						ConsumerBillDetailWrapper consumerSessionNode = null; 
+//								new consumerBillDetailWrapper(yearMonth, _package, contractFrom, contractTo, detail);
 						
 						consumerSessionMap.add(phoneNo, consumerSessionNode);
 						
@@ -205,13 +182,13 @@ public class WeightSampleApp {
 		OutputStreamWriter osw = null;
 		try {
 			osw = new OutputStreamWriter(new FileOutputStream("score.csv"));
-			for(String phoneNo: consumerSessionMap.getMap().keySet()) {
-				if(consumerSessionMap.getMap().get(phoneNo).getPackage().getFee() < 286)//过滤286以下
+			for(String phoneNo: consumerSessionMap.getConsumerSession().keySet()) {
+				if(consumerSessionMap.getConsumerSession().get(phoneNo).getPackage().getFee() < 286)//过滤286以下
 					continue;
 				
-				consumerSessionMap.getMap().get(phoneNo).calc();
-				System.out.println(phoneNo + "," + consumerSessionMap.getMap().get(phoneNo).toString(false));
-				osw.write(phoneNo + "," + consumerSessionMap.getMap().get(phoneNo).toString(false) + "\n");
+				consumerSessionMap.getConsumerSession().get(phoneNo).calc();
+				System.out.println(phoneNo + "," + consumerSessionMap.getConsumerSession().get(phoneNo).toString(false));
+				osw.write(phoneNo + "," + consumerSessionMap.getConsumerSession().get(phoneNo).toString(false) + "\n");
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

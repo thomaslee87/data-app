@@ -28,7 +28,7 @@ import com.intellbi.data.record.AttributeEntity;
 import com.intellbi.data.record.Attributes;
 import com.intellbi.data.record.IDataRecord;
 import com.intellbi.data.record.RecordDataset;
-import com.intellbi.utils.Constants;
+import com.intellbi.utils.ColumnConstants;
 import com.intellbi.utils.ProjectConfiguration;
 
 /**
@@ -124,7 +124,7 @@ public class App
 			
 			Attributes attributes = new Attributes();
 			attributes.loadFromXML(m_ETLConf , "reserved_fields");
-			AttributeEntity yearMonthAttr = new AttributeEntity("integer", Constants.COL_YEAR_MONTH, "�������", "", false, attributes.size());
+			AttributeEntity yearMonthAttr = new AttributeEntity("integer", ColumnConstants.COL_YEAR_MONTH, "�������", "", false, attributes.size());
 			attributes.add(yearMonthAttr);
 			
 			RecordDataset dataset = new RecordDataset(attributes);

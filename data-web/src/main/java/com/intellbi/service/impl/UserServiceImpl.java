@@ -1,5 +1,7 @@
 package com.intellbi.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,14 @@ public class UserServiceImpl implements UserService {
 
 	public UserDO getUser(String username) {
 		return userDao.findByUser(username);
+	}
+	
+	public List<UserDO> getAllUsers() {
+		return userDao.findAll();
+	}
+	
+	public void update(UserDO userDO){
+		userDao.update(userDO);
 	}
 	
 }

@@ -46,7 +46,6 @@
     <script type="text/javascript" src="admin/assets/js/libs/jquery.textbox.js"></script>
     
     <!--script type="text/javascript" src="admin/assets/js/libs/jquery.datagrid.js"></script-->
-    <script type="text/javascript" src="admin/assets/js/libs/datagrid-detailview.js"></script>
     
 </head>
 <body>
@@ -170,8 +169,8 @@
 				<div style="text-align:center;float:left;width:50%;padding:7px">
 					<b><span id="currentMonth" style="font-size:20px;"></span></b>
 				</div>
-				<div style="float:right; width:200px;">
-					<input type="checkbox" name="ck_all" id="ck"/><span style="font-size:12px">显示最近6个月的消费细节</span>
+				<div style="float:right; width:180px;">
+					<input type="checkbox" name="ck_all" id="ck"/><span style="font-size:12px">查看近期消费</span>
 				</div>
 			</div>
 			 <div>

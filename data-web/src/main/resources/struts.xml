@@ -42,8 +42,10 @@
             <result name="success" type="redirect">/login.jsp</result>
         </action>
         
-        <action name="getConsumerBills" class="com.intellbi.web.ConsumerTaskAction" method="getConsumerBills">
-        	<result>admin/pages/task/dailyTask.jsp</result>
+        <action name="getContractConsumerBills" class="com.intellbi.web.ConsumerTaskAction" method="getContractConsumerBills">
+        	<result name="success">admin/pages/task/contractTask.jsp</result>
+        	<result name="error">admin/pages/exception.jsp</result>
+        	<result name="login">login.jsp</result>
         </action>
         
         <action name="getConsumerBillsJson" class="com.intellbi.web.ConsumerTaskAction" method="getConsumerBillsJson">
@@ -56,6 +58,10 @@
         	<result type="json">
         		<param name="root">recentBills</param>
         	</result>
+        </action>
+        
+        <action name="getAllUsers" class="com.intellbi.web.UserManageAction" method="getAllUsers">
+        	<result name="success">admin/pages/user/showUser.jsp</result>
         </action>
         
     </package>  

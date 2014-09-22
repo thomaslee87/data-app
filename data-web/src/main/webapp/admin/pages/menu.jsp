@@ -15,20 +15,20 @@
                     </a>
                     <ul class="sub-nav" style="display:block">
                       <li>
-                        <a  href="javascript:;" data-url="<%=basePath%>getConsumerBills">
-                          <i class="icon icon-caret-right"></i>
-                          <span class="txt">日常任务1</span>
-                        </a>
-                        
-                         <a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/dailyTask.jsp">
-                          <i class="icon icon-caret-right"></i>
-                          <span class="txt">日常任务</span>
-                        </a>
-                        
-                        <a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/contractTask.jsp">
+                        <a  href="javascript:;" data-url="<%=basePath%>getContractConsumerBills">
                           <i class="icon icon-caret-right"></i>
                           <span class="txt">保有任务</span>
                         </a>
+                        
+                         <a  href="javascript:;" data-url="<%=basePath%>getConsumerBills">
+                          <i class="icon icon-caret-right"></i>
+                          <span class="txt">专项任务</span>
+                        </a>
+                        
+                        <!--a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/contractTask.jsp">
+                          <i class="icon icon-caret-right"></i>
+                          <span class="txt">保有任务</span>
+                        </a-->
                       </li>
                      </ul>
                 </li>
@@ -61,7 +61,7 @@
                     </a>
                     <ul class="sub-nav">
                       <li>
-                        <a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/dailyTask.jsp">
+                        <a  href="javascript:;" data-url="<%=basePath%>getAllUsers">
                           <i class="icon icon-caret-right"></i>
                           <span class="txt">用户管理</span>
                         </a>

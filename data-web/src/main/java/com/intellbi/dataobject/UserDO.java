@@ -14,12 +14,39 @@ public class UserDO implements Serializable {
 	private String username;
 	private String password;
 	private int groupId;
+	private String groupName;
 	private String staffId;
-	private Date gmtCreate=new Date();
-	private Date gmtModified=new Date();
+	private String realname;
+	private Date gmtCreate;
+	private Date gmtModified;
+	private Date gmtLogin;
 	
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
+	public Date getGmtLogin() {
+		return gmtLogin;
+	}
+
+	public void setGmtLogin(Date gmtLogin) {
+		this.gmtLogin = gmtLogin;
+	}
+
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
+	
+	public String getRealname() {
+		return realname;
+	}
+
+	public void setRealname(String realname) {
+		this.realname = realname;
 	}
 	
 	public String getUsername() {

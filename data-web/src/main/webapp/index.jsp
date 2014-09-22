@@ -42,7 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       <div id="header-inner">
         <h1 class="logo"><span>存量用户保有工具</span></h1>
         <ul class="top-nav group">
-      <li><span>你好，<%=session.getAttribute("username")%>  &nbsp;&nbsp;今天是 </span></li>
+      <li><span>你好，<%=session.getAttribute("realname")%>  &nbsp;&nbsp;今天是 </span></li>
       <li><span id="timedate"></span></li>
           <!--li><a href="javascript:;" title=""><i class="icon-tasks"></i><span class="badge badge-warning">4</span></a></li>
           <li><a href="javascript:;" title=""><i class="icon-volume-up"></i><span class="badge badge-important">5</span></a></li>

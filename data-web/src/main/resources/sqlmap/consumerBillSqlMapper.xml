@@ -4,11 +4,23 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.intellbi.dao.ConsumerBillDAO">
 
+	<select id="getCnt" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="Integer">
+       select count(1)
+       from bi_bills_${yearMonth}
+       <where>
+        	<if test="userId != null and userId &gt; 0">
+        		user_id = #{userId}
+        	</if>
+        	and contract_to>0
+       </where>
+   </select>
+
    <select id="findAll" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="consumerBill">
        select	id as id,
        			phone_no as phoneNo,
        			<!--the_month as yearMonth,-->
        			package_id as packageId,
+       			package_name as packageName,
 				<!--income as income,
 				monthly_rental as monthlyRental,
 				local_voice_fee as localVoiceFee,
@@ -29,14 +41,20 @@
 				network as network,
 				status as status,
 				contract_from as contractFrom,
-				contract_to as contractTo
+				contract_to as contractTo,
+				regular_score as regularScore,
+				value_change as valueChange
        from bi_bills_${yearMonth}
        <where>
         	<if test="userId != null and userId &gt; 0">
         		user_id = #{userId}
         	</if>
+        	<if test="phoneNo != null and phoneNo != '' ">
+        		and phone_no = #{phoneNo}
+        	</if>
+        	and contract_to>0
        </where>
-       order by income desc
+       order by ${orderField} desc
        limit 
        		<if test="pageBegin &gt;=0 and pageSize &gt; 0">
        			#{pageBegin}, #{pageSize}		
@@ -51,7 +69,8 @@
        		   phone_no as phoneNo,
        		   the_month as yearMonth,
 				package_id as packageId,
-				income as income,
+				package_name as packageName,
+				ROUND(income,2) as income,
 				monthly_rental as monthlyRental,
 				local_voice_fee as localVoiceFee,
 				roaming_fee as roamingFee,
@@ -66,12 +85,30 @@
 				internal_call_duration as internalCallDuration,
 				international_call_duration as internationlCallDuration,
 				sms as sms,
-				gprs as gprs,
+				ROUND(gprs,2) as gprs,
 				is_group_user as isGroupUser,
 				network as network,
 				status as status,
 				contract_from as contractFrom,
-				contract_to as contractTo
+				contract_to as contractTo,
+				consumer_type as consumerType,
+				ROUND(income6,2) as income6,
+				ROUND(income3,2) as income3,
+				voice6 as voice6,
+				voice3 as voice3,
+				ROUND(gprs6,2) as gprs6,
+				ROUND(gprs3,2) as gprs3,
+				ROUND(package_spill,2) as packageSpill,
+				ROUND(voice_spill,2) as voiceSpill,
+				ROUND(gprs_spill,2) as gprsSpill,
+				ROUND(income_fluctuation,2) as incomeFluctuation,
+				ROUND(voice_fluctuation,2) as voiceFluctuation , 
+				ROUND(gprs_fluctuation,2) gprsFluctuation ,
+				ROUND(score,2) as score,
+				recommend as recommend,
+				ROUND(regular_score,2) as regularScore,
+				priority as priority,
+				value_change as valueChange
         from bi_bills_${yearMonth}
         <where>
         	<if test="userId &gt; 0 ">

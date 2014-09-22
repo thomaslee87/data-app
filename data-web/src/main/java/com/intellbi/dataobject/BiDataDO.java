@@ -7,7 +7,7 @@ public class BiDataDO implements Serializable {
 	private static final long serialVersionUID = 1018800062340743041L;
 	
 	private int id;
-	private int theMonth;
+	private String theMonth;
 	private int status;//0:不合法；1：已上传；2：已处理（可读）
 	
 	public int getId() {
@@ -18,11 +18,11 @@ public class BiDataDO implements Serializable {
 		this.id = id;
 	}
 
-	public int getTheMonth() {
+	public String getTheMonth() {
 		return theMonth;
 	}
 
-	public void setTheMonth(int theMonth) {
+	public void setTheMonth(String theMonth) {
 		this.theMonth = theMonth;
 	}
 

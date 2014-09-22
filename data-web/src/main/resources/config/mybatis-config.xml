@@ -9,6 +9,7 @@
         <typeAlias alias="biUser" type="com.intellbi.dataobject.UserDO"/>
         <typeAlias alias="consumerBill" type="com.intellbi.dataobject.ConsumerBillDO"/>
         <typeAlias alias="biData" type="com.intellbi.dataobject.BiDataDO"/>
+        <typeAlias alias="telPackage" type="com.intellbi.dataobject.TelecomPackageDO"/>
     </typeAliases>
     
 	<!-- environments default="development">
@@ -27,6 +28,7 @@
 		<mapper resource="sqlmap/userSqlMapper.xml" />
 		<mapper resource="sqlmap/consumerBillSqlMapper.xml" />
 		<mapper resource="sqlmap/biDataSqlMapper.xml" />
+		<mapper resource="sqlmap/packageSqlMapper.xml" />
 	</mappers>
 	
 </configuration>

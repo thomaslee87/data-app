@@ -1,5 +1,7 @@
 package com.intellbi.auth;
 
+import java.util.Date;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -12,7 +14,6 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.intellbi.dataobject.UserDO;
 import com.intellbi.service.UserService;
@@ -53,13 +54,18 @@ public class ShiroRealm extends AuthorizingRealm {
 		String password = String.valueOf(token.getPassword());
 		
 		// 调用操作数据库的方法查询user信息
-		UserDO user = userService.getUser(token.getUsername());
-		if(user != null) {
-			if(password.equals(user.getPassword())) {
+		UserDO userDO = userService.getUser(token.getUsername());
+		if(userDO != null) {
+			if(password.equals(userDO.getPassword())) {
 				Session session =  SecurityUtils.getSubject().getSession();
-				session.setAttribute("username", user.getUsername());
-				session.setAttribute("group", user.getGroupId());
-				return new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());
+				session.setAttribute("userDO", userDO);
+				session.setAttribute("username", userDO.getUsername());
+				session.setAttribute("group", userDO.getGroupId());
+				session.setAttribute("userId", userDO.getId());
+				session.setAttribute("realname", userDO.getRealname());
+				userDO.setGmtLogin(new Date());
+				userService.update(userDO);
+				return new SimpleAuthenticationInfo(userDO.getUsername(), userDO.getPassword(), getName());
 			}
 		}
 		return null;

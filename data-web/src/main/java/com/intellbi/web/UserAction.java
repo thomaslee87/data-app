@@ -43,7 +43,7 @@ public class UserAction extends ActionSupport {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
+	
 	public String login() {
 		
 		String method = ServletActionContext.getRequest().getMethod();
@@ -81,6 +81,7 @@ public class UserAction extends ActionSupport {
 			e.printStackTrace();
 		}
 		subject.getSession().setAttribute("errorMessage", errorMessage);
+		
 		return ERROR;
 	}
 	

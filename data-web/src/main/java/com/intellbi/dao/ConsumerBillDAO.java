@@ -11,4 +11,5 @@ public interface ConsumerBillDAO {
 	
 	ConsumerBillDO get(BillQueryParameter object);
 	
+	int getCnt(BillQueryParameter object);
 }

@@ -16,17 +16,21 @@ public class ConsumerBillServiceImpl implements ConsumerBillService {
 	@Autowired
 	ConsumerBillDAO consumerBillDao;
 
-	public ConsumerBillDO getMonthBill(int yearMonth, String phoneNo, int userId) {
+	public ConsumerBillDO getMonthBill(String yearMonth, String phoneNo, int userId,String order) {
 		// TODO Auto-generated method stub
-		return consumerBillDao.get(new BillQueryParameter(yearMonth, phoneNo, userId));
+		return consumerBillDao.get(new BillQueryParameter(yearMonth, phoneNo, userId,order));
 	}
 
-	public List<ConsumerBillDO> getAllMonthBills(int yearMonth, String phoneNo,
-			int userId, int page, int pageSize) {
-		BillQueryParameter param = new BillQueryParameter(yearMonth, phoneNo, userId);
-		param.setPageBegin(page);
+	public List<ConsumerBillDO> getAllMonthBills(String yearMonth, String phoneNo,
+			int userId, int page, int pageSize,String order) {
+		BillQueryParameter param = new BillQueryParameter(yearMonth, phoneNo, userId,order);
+		param.setPageBegin((page-1)*pageSize);
 		param.setPageSize(pageSize);
 		return consumerBillDao.findAll(param);
+	}
+	
+	public int getTotalCount(String yearMonth, String phoneNo, int userId){
+		return consumerBillDao.getCnt(new BillQueryParameter(yearMonth, phoneNo, userId,null));
 	}
 
 }

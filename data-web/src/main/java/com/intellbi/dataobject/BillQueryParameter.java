@@ -2,11 +2,13 @@ package com.intellbi.dataobject;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class BillQueryParameter implements Serializable{
 
 	private static final long serialVersionUID = 6299533418312460724L;
 	
-	private long yearMonth;
+	private String yearMonth;
 	private String phoneNo;
 	private long userId;
 	
@@ -15,6 +17,16 @@ public class BillQueryParameter implements Serializable{
 	
 	private int pageEnd;
 	
+	private String orderField;
+	
+	public String getOrderField() {
+		return orderField;
+	}
+
+	public void setOrderField(String orderField) {
+		this.orderField = orderField;
+	}
+
 	public int getPageEnd() {
 		return pageEnd;
 	}
@@ -39,19 +51,26 @@ public class BillQueryParameter implements Serializable{
 		this.pageSize = pageSize;
 	}
 
-	public BillQueryParameter(long yearMonth, String phoneNo, long userId){//, int page) {
+	public BillQueryParameter(String yearMonth, String phoneNo, long userId, String orderField){//, int page) {
 		setYearMonth(yearMonth);
 		setPhoneNo(phoneNo);
 		setUserId(userId);
 		
+		if(StringUtils.isBlank(orderField) 
+				|| (!orderField.equals("regular_score") && !orderField.equals("value_change"))) {
+			setOrderField("regular_score");
+		}
+		else {
+			setOrderField(orderField);
+		}
 //		setPageBegin(5 * page);
 //		setPageSize(size);
 	}
 	
-	public long getYearMonth() {
+	public String getYearMonth() {
 		return yearMonth;
 	}
-	public void setYearMonth(long yearMonth) {
+	public void setYearMonth(String yearMonth) {
 		this.yearMonth = yearMonth;
 	}
 	public String getPhoneNo() {

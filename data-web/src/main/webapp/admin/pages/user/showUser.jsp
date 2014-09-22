@@ -1,4 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>  
+<%@ taglib uri ="/struts-tags" prefix ="s" %>
+
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -10,10 +13,18 @@
 <!--[if IE 9]><html class="ie9 lte9" lang="zh-CN"><![endif]-->
 <!--[if IE 7]><html class="ie7 lte9 lte8 lte7" lang="zh-CN"><![endif]-->
 <!--[if !(IE 6) | !(IE 7) | !(IE 8) | !(IE 9)  ]><!--><html lang="zh-CN"><!--<![endif]-->
+
+<shiro:notAuthenticated>
+    <script type="text/javascript">
+    	window.location.href = "<%=basePath%>login.jsp";
+        window.parent.location.href = "<%=basePath%>login.jsp";
+    </script>
+</shiro:notAuthenticated>
+
 <head>
 	<base href="<%=basePath%>" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>会员管理添加</title>
+	<title>用户管理</title>
 	<link rel="stylesheet" type="text/css" href="admin/assets/css/base.css" />
 	<link rel="stylesheet" type="text/css" href="admin/assets/css/style.css" />
 	<script src="admin/assets/js/common.js" type="text/javascript"></script>
@@ -35,7 +46,7 @@
 	<div class="container">
 		<div class="toolbar">
 			<div class="crumbs">
-				<a href="#">用户管理</a> -&gt; <a href="#">会员管理</a> -&gt; <span>添加</span>
+				<a href="#">系统工具</a> -&gt; <a href="#">用户管理</a></span>
 			</div>
 			<div class="action">
 				<a href="member/v_add.do" class="btn" target="_self">添加</a>
@@ -46,43 +57,35 @@
     		<table class="ui-table">
     			<thead>
     				<tr>
-						<th width="30">
-							<input type="checkbox" name="ck_all" id="ck_all" onclick="Pony.checkboxSlt('ck',this.checked);"/>
-						</th>
-						<th>ID</th>
 						<th>用户名</th>
-						<th>电子邮箱</th>
-						<th>会员组</th>
+						<th>姓名</th>
+						<th>类别</th>
+						<th>创建时间</th>
+						<th>修改时间</th>
 						<th>最后登录</th>
-						<th>登录</th>
-						<th>禁用</th>
-						<th width="140">操作选项</th>
+						<th width="200">操作选项</th>
     				</tr>
     			</thead>
     			<tbody>
-    			<c:forEach var="flag" items="${userPager.pageList}" varStatus="status">
-    				<c:choose>
-    					<c:when test="${status.index % 2 ==0 }">
-    						<tr>
-    					</c:when>
-    					<c:otherwise>
-    						<tr class="even">
-    					</c:otherwise>
-    				</c:choose>
-    							<td class="tc"><input type='checkbox' name='ck' value='${flag.id}' /></td>
-								<td>${flag.id}</td>
-								<td>${flag.username}</td>
-								<td>${flag.email}</td>
-								<td>${flag.userGroup.name}</td>
-								<td>${flag.lastLoginTime}</td>
-								<td>${flag.loginCount}</td>
-								<td>${flag.disabled}</td>
+    			<s:iterator value="users" status="status">
+	    			<s:if test="#status.even">
+	    				<tr class="even">
+	    			</s:if>
+	    			<s:else>
+	    				<tr>
+	    			</s:else>
+    							<td><s:property value="username"/></td>
+    							<td><s:property value="realname"/></td>
+    							<td><s:property value="groupName"/></td>
+    							<td><s:date name="gmtCreate" format="yyyy-MM-dd HH:mm:ss"/></td>
+    							<td><s:date name="gmtModified" format="yyyy-MM-dd HH:mm:ss"/></td>
+    							<td><s:date name="gmtLogin" format="yyyy-MM-dd HH:mm:ss"/></td>
 								<td>
 									<a class="btn" href="member/v_update.do?id=${flag.id}">修改</a>
 									<a href="javascript:;" class="btn" onclick="optDelete(${flag.id});">删除</a>
 								</td>
 	    					</tr>
-    			</c:forEach>
+    			</s:iterator>
     			</tbody>
     		</table>
 			</div>

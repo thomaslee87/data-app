@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib uri="/struts-tags" prefix="s"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -29,6 +30,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <body>
 	<div class="exception">
 		<div class="exception-hd">
+			<s:property value="errorMessage"/>
+		</div>
+		<div class="exception-action">
+			<a href="javascript:history.go(-1);">点击返回</a>。
+		</div>	
+	</div>
+
+
+	<!--div class="exception">
+		<div class="exception-hd">
 			<pre>${exception.message}</pre>
 		</div>
 		<div class="exception-action">
@@ -41,6 +52,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		${e }<br />
 			</c:forEach>
 		</div>
-	</div>
+	</div-->
 </body>
 </html>

@@ -33,12 +33,12 @@
         </action-->  
         
         <action name="login" class="com.intellbi.web.UserAction" method="login">  
-        	<result name="error">/error.jsp</result>
+        	<result name="error">admin/pages/exception.jsp</result>
             <result name="success" type="redirect">/index.jsp</result>
         </action>
         
         <action name="logout" class="com.intellbi.web.UserAction" method="logout">
-        	<result name="error">/error.jsp</result>
+        	<result name="error">admin/pages/exception.jsp</result>
             <result name="success" type="redirect">/login.jsp</result>
         </action>
         

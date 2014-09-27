@@ -47,22 +47,31 @@ public class UserAction extends ActionSupport {
 		this.username = username;
 	}
 	
+	private String errorMessage;
+	
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+
 	public String login() {
 		
 		String method = ServletActionContext.getRequest().getMethod();
 		if(!"POST".equalsIgnoreCase(method))
 			return ERROR;
 		
-		UserDO userDO = null;
-		if(StringUtils.isNotBlank(username))
-			userDO = userDao.findByUser(username);
-		
-		if(userDO == null) {
-			return ERROR;
-		}
+//		UserDO userDO = null;
+//		if(StringUtils.isNotBlank(username))
+//			userDO = userDao.findByUser(username);
+//		
+//		if(userDO == null) {
+//			return ERROR;
+//		}
 		
 		log.info("loginName:" + username + ";loginPassword:" + password);
-		String errorMessage = "";
 		
 		AuthenticationToken token = new UsernamePasswordToken(username,password);
 		Subject subject = SecurityUtils.getSubject();
@@ -70,21 +79,19 @@ public class UserAction extends ActionSupport {
 			subject.login(token);
 			return SUCCESS;
 		} catch (UnknownAccountException uae) {
-			errorMessage = "用户认证失败：" + "username wasn't in the system.";
+			errorMessage = "用户不存在或者密码错误";
 			log.info(errorMessage);
 		} catch (IncorrectCredentialsException ice) {
-			errorMessage = "用户认证失败：" + "password didn't match.";
+			errorMessage = "用户不存在或者密码错误";
 			log.info(errorMessage);
 		} catch (LockedAccountException lae) {
-			errorMessage = "用户认证失败：" + "account for that username is locked - can't login.";
+			errorMessage = "用户锁定";
 			log.info(errorMessage);
 		} catch (AuthenticationException e) {
 			errorMessage = "登录失败错误信息：" + e;
 			log.error(errorMessage);
 			e.printStackTrace();
 		}
-		subject.getSession().setAttribute("errorMessage", errorMessage);
-		
 		return ERROR;
 	}
 	

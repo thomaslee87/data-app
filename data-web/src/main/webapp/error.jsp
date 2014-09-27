@@ -15,9 +15,6 @@
 		<tr>
 			<td align=center>登录失败</td>
 		</tr>
-		<tr>
-			<td align=center><%=errorMessage %></td>
-		</tr>
 	</TABLE>
 </body>
 </html>

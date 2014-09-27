@@ -83,7 +83,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <!--javascript start-->
     <script type="text/javascript" src="admin/assets/js/libs/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="admin/assets/js/libs/jquery.easyui.custom.min.js"></script>
-    <script type="text/javascript" src="admin/assets/js/jquery.easyui.extend.js"></script>
     <script type="text/javascript" src="admin/assets/js/jquery.plugins.js"></script>
     <script type="text/javascript" src="admin/assets/js/jquery.syadmin.js"></script>
     <script type="text/javascript">

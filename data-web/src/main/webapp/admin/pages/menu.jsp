@@ -32,7 +32,7 @@
                 </li>
                 
                 <li class="current hasSub">
-                	<a href="javascript:;" data-nbid="1" title="专项任务" class="expand">
+                	<a href="javascript:;" data-nbid="2" title="专项任务" class="expand">
                       <i class="icon icon-tasks"></i>
                       <span class="txt">专项任务</span>
                       <span class="more"><i class="icon-caret-down"></i></span>
@@ -93,8 +93,8 @@
                 	}
                 %>
                 
-                 <li class="current hasSub">
-                	<a href="javascript:;" data-nbid="1" title="我的设置" class="notExpand">
+                 <li class="hasSub">
+                	<a href="javascript:;" data-nbid="4" title="我的设置" class="notExpand">
                       <i class="icon icon-tasks"></i>
                       <span class="txt">我的设置</span>
                       <span class="more"><i class="icon-caret-down"></i></span>

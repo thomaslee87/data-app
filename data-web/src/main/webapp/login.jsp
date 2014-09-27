@@ -57,11 +57,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                        <button class="btn" type="submit">现在登录</button>
 	                    </p>
 	                </form>
-	                <p class="line tc"> 
+	                <!--p class="line tc"> 
 		                <a class="forgot-link" href="member/forgot">找回登录密码?</a>
 		                &emsp;&emsp;
 		                <a id="register" href="member/register">注册新用户?</a>
-	                </p>
+	                </p-->
             	</div>
             </div>
         </div><!-- /#login-inner -->

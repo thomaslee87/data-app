@@ -8,28 +8,42 @@
                 <ul id="navlist" class="nav nav-list">
                 
                 <li class="current hasSub">
-                	<a href="javascript:;" data-nbid="1" title="我的任务" class="expand">
+                	<a href="javascript:;" data-nbid="1" title="任务管理" class="expand">
                       <i class="icon icon-tasks"></i>
                       <span class="txt">任务管理</span>
                       <span class="more"><i class="icon-caret-down"></i></span>
                     </a>
                     <ul class="sub-nav" style="display:block">
+                       <li>
+                    	<a  href="javascript:;" data-url="<%=basePath%>admin/pages/todo.jsp">
+                          <i class="icon icon-caret-right"></i>
+                          <span class="txt">日常任务</span>
+                        </a>
+                       </li>
+                        
                       <li>
                         <a  href="javascript:;" data-url="<%=basePath%>getContractConsumerBills">
                           <i class="icon icon-caret-right"></i>
                           <span class="txt">保有任务</span>
                         </a>
+                       </li>
                         
-                         <a  href="javascript:;" data-url="<%=basePath%>getConsumerBills">
+                     </ul>
+                </li>
+                
+                <li class="current hasSub">
+                	<a href="javascript:;" data-nbid="1" title="专项任务" class="expand">
+                      <i class="icon icon-tasks"></i>
+                      <span class="txt">专项任务</span>
+                      <span class="more"><i class="icon-caret-down"></i></span>
+                    </a>
+                    <ul class="sub-nav" style="display:block">
+                       <li>
+                         <a  href="javascript:;" data-url="<%=basePath%>getSingleHighGprsConsumerBills">
                           <i class="icon icon-caret-right"></i>
-                          <span class="txt">专项任务</span>
+                          <span class="txt">单高流量用户</span>
                         </a>
-                        
-                        <!--a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/contractTask.jsp">
-                          <i class="icon icon-caret-right"></i>
-                          <span class="txt">保有任务</span>
-                        </a-->
-                      </li>
+                       </li>
                      </ul>
                 </li>
 
@@ -45,7 +59,7 @@
                     </a>
                     <ul class="sub-nav">
                       <li>
-                        <a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/dailyTask.jsp">
+                        <a  href="javascript:;" data-url="<%=basePath%>admin/pages/todo.jsp">
                           <i class="icon icon-caret-right"></i>
                           <span class="txt">上传数据</span>
                         </a>
@@ -56,7 +70,7 @@
                 <li class="hasSub">
                 	<a href="javascript:;" data-nbid="3" title="系统工具" class="notExpand">
                       <i class="icon icon-cogs"></i>
-                      <span class="txt">系统工具</span>
+                      <span class="txt">系统设置</span>
                       <span class="more"><i class="icon-caret-down"></i></span>
                     </a>
                     <ul class="sub-nav">
@@ -67,7 +81,7 @@
                         </a>
                       </li>
                       <li>
-                        <a  href="javascript:;" data-url="<%=basePath%>admin/pages/task/dailyTask.jsp">
+                        <a  href="javascript:;" data-url="<%=basePath%>admin/pages/todo.jsp">
                           <i class="icon icon-caret-right"></i>
                           <span class="txt">系统公告</span>
                         </a>
@@ -78,6 +92,22 @@
                 <%
                 	}
                 %>
+                
+                 <li class="current hasSub">
+                	<a href="javascript:;" data-nbid="1" title="我的设置" class="notExpand">
+                      <i class="icon icon-tasks"></i>
+                      <span class="txt">我的设置</span>
+                      <span class="more"><i class="icon-caret-down"></i></span>
+                    </a>
+                    <ul class="sub-nav" style="display:block">
+                       <li>
+                         <a  href="javascript:;" data-url="<%=basePath%>admin/pages/user/myAccount.jsp">
+                          <i class="icon icon-caret-right"></i>
+                          <span class="txt">修改密码</span>
+                        </a>
+                       </li>
+                     </ul>
+                </li>
                 
                   <!--li class="current hasSub">
                     <a href="javascript:;" data-nbid="1" title="用户管理" class="notExpand">

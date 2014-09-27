@@ -42,6 +42,12 @@
             <result name="success" type="redirect">/login.jsp</result>
         </action>
         
+        <action name="setPasswd" class="com.intellbi.web.UserAction" method="setPasswd">
+        	<result type="json">
+        		<param name="root">sysMsg</param>
+        	</result>
+        </action>
+        
         <action name="getContractConsumerBills" class="com.intellbi.web.ConsumerTaskAction" method="getContractConsumerBills">
         	<result name="success">admin/pages/task/contractTask.jsp</result>
         	<result name="error">admin/pages/exception.jsp</result>
@@ -58,6 +64,12 @@
         	<result type="json">
         		<param name="root">recentBills</param>
         	</result>
+        </action>
+        
+        <action name="getSingleHighGprsConsumerBills" class="com.intellbi.web.ConsumerTaskAction" method="getSingleHighGprsConsumerBills">
+        	<result name="success">admin/pages/task/singleHighGprsTask.jsp</result>
+        	<result name="error">admin/pages/exception.jsp</result>
+        	<result name="login">login.jsp</result>
         </action>
         
         <action name="getAllUsers" class="com.intellbi.web.UserManageAction" method="getAllUsers">

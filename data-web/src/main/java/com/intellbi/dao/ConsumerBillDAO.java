@@ -12,4 +12,8 @@ public interface ConsumerBillDAO {
 	ConsumerBillDO get(BillQueryParameter object);
 	
 	int getCnt(BillQueryParameter object);
+	
+	int getSingleHighGprsCnt(BillQueryParameter object);
+	
+	List<ConsumerBillDO> findAllSingleHighGprs(BillQueryParameter object);
 }

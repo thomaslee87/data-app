@@ -11,4 +11,8 @@ public interface ConsumerBillService {
 	List<ConsumerBillDO> getAllMonthBills(String yearMonth, String phoneNo, int userId, int page, int pageSize,String order);
 	
 	int getTotalCount(String yearMonth, String phoneNo, int userId);
+	
+	int getSingleHighGprsTotalCount(String yearMonth, String phoneNo, int userId);
+
+	List<ConsumerBillDO> getAllSingleHighGprsBill(String yearMonth, String phoneNo, int userId, int page, int pageSize,String order);
 }

@@ -33,4 +33,19 @@ public class ConsumerBillServiceImpl implements ConsumerBillService {
 		return consumerBillDao.getCnt(new BillQueryParameter(yearMonth, phoneNo, userId,null));
 	}
 
+	public int getSingleHighGprsTotalCount(String yearMonth, String phoneNo,
+			int userId) {
+		// TODO Auto-generated method stub
+		return consumerBillDao.getSingleHighGprsCnt(new BillQueryParameter(yearMonth, phoneNo, userId, null));
+	}
+
+	public List<ConsumerBillDO> getAllSingleHighGprsBill(String yearMonth,
+			String phoneNo, int userId, int page, int pageSize, String order) {
+		// TODO Auto-generated method stub
+		BillQueryParameter param = new BillQueryParameter(yearMonth, phoneNo, userId,null);
+		param.setPageBegin((page-1)*pageSize);
+		param.setPageSize(pageSize);
+		return consumerBillDao.findAllSingleHighGprs(param);
+	}
+
 }

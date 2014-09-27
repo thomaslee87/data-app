@@ -1,5 +1,7 @@
 package com.intellbi.web;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -14,6 +16,7 @@ import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.intellbi.dao.UserDao;
+import com.intellbi.dataobject.SysMsg;
 import com.intellbi.dataobject.UserDO;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -87,18 +90,72 @@ public class UserAction extends ActionSupport {
 	
 	public String logout(){  
         Subject subject = SecurityUtils.getSubject();  
-		String username = (String) subject.getSession().getAttribute("username");
-        try{  
-            //退出登录（移除当前用户的信息）  
-            subject.logout();  
-            javax.servlet.http.HttpSession session = ServletActionContext.getRequest().getSession();  
-            session.invalidate();  
-            log.info("user " + username + " logout.");
-        }catch(Exception e){  
-            log.error("logout异常：", e);  
-            e.printStackTrace();  
-        }  
-        return SUCCESS;  
-    }  
+        if(subject.isAuthenticated()) {
+			String username = (String) subject.getSession().getAttribute("username");
+	        try{  
+	            //退出登录（移除当前用户的信息）  
+	            subject.logout();  
+	            javax.servlet.http.HttpSession session = ServletActionContext.getRequest().getSession();  
+	            session.invalidate();  
+	            log.info("user " + username + " logout.");
+	        }catch(Exception e){  
+	            log.error("logout异常：", e);  
+	            e.printStackTrace();  
+	        }  
+	        return SUCCESS;  
+        }
+        return LOGIN;
+    }
+	
+	private SysMsg sysMsg;
+	
+	public SysMsg getSysMsg() {
+		return sysMsg;
+	}
+
+	public void setSysMsg(SysMsg sysMsg) {
+		this.sysMsg = sysMsg;
+	}
+
+	private String oldpassword;
+	
+	public String getOldpassword() {
+		return oldpassword;
+	}
+
+	public void setOldpassword(String oldpassword) {
+		this.oldpassword = oldpassword;
+	}
+
+	public String setPasswd(){
+		sysMsg = new SysMsg();
+		sysMsg.setMsgCode(SysMsg.NOTLONGIN);
+		sysMsg.setMsgText("请登录后再操作！");
+		Subject subject = SecurityUtils.getSubject();  
+        if(subject.isAuthenticated()) {
+        	sysMsg.setMsgCode(SysMsg.ERROR);
+        	sysMsg.setMsgText("请确认用户存在且密码不为空！");
+    		String method = ServletActionContext.getRequest().getMethod();
+    		if(!"POST".equalsIgnoreCase(method)){
+    			sysMsg.setMsgText("错误请求，请确认您在合法操作！");
+    			return SUCCESS;
+    		}
+    		
+        	String username = (String) subject.getSession().getAttribute("username");
+        	UserDO userDO = userDao.findByUser(username);
+        	if(userDO != null) {
+        		if(!userDO.getPassword().equals(oldpassword))
+        			sysMsg.setMsgText("原密码不正确！");
+        		else if(StringUtils.isNotBlank(password)) {
+        			userDO.setPassword(password);
+        			userDO.setGmtModified(new Date());
+        			userDao.update(userDO);
+        			sysMsg.setMsgCode(SysMsg.SUCCESS);
+        			sysMsg.setMsgText("密码修改成功!");
+        		}
+        	}
+        }
+        return SUCCESS;
+	}
 	
 }

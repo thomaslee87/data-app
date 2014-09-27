@@ -4,6 +4,66 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.intellbi.dao.ConsumerBillDAO">
 
+	<select id="getSingleHighGprsCnt" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="Integer">
+		select count(1)
+		from bi_bills_${yearMonth}
+		<where>
+			<if test="userId != null and userId &gt; 0">
+				user_id = #{userId}
+			</if>
+			and consumer_type = 2
+		</where>
+	</select>
+	
+	<select id="findAllSingleHighGprs" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="consumerBill">
+       select	id as id,
+       			phone_no as phoneNo,
+       			<!--the_month as yearMonth,-->
+       			package_id as packageId,
+       			package_name as packageName,
+				<!--income as income,
+				monthly_rental as monthlyRental,
+				local_voice_fee as localVoiceFee,
+				roaming_fee as roamingFee,
+				long_distance_voice_fee as longDistanceVoiceFee,
+				value_added_fee as valueAddedFee,
+				other_fee as otherFee,
+				grant_fee as grantFee,
+				call_number as callNumber,
+				local_call_duration as lcoalCallDuration,
+				roam_call_duration as roamCallDuration,
+				long_distance_call_duration as longDistanceCallDuration,
+				internal_call_duration as internalCallDuration,
+				international_call_duration as internationlCallDuration,
+				sms as sms,
+				gprs as gprs,-->
+				is_group_user as isGroupUser,
+				network as network,
+				status as status,
+				contract_from as contractFrom,
+				contract_to as contractTo,
+				regular_score as regularScore,
+				value_change as valueChange
+       from bi_bills_${yearMonth}
+       <where>
+        	<if test="userId != null and userId &gt; 0">
+        		user_id = #{userId}
+        	</if>
+        	<if test="phoneNo != null and phoneNo != '' ">
+        		and phone_no = #{phoneNo}
+        	</if>
+        	and consumer_type = 2
+       </where>
+       order by gprs_spill desc
+       limit 
+       		<if test="pageBegin &gt;=0 and pageSize &gt; 0">
+       			#{pageBegin}, #{pageSize}		
+       		</if>
+       		<if test="pageBegin &lt; 0 or pageSize &lt;= 0">
+       			50
+       		</if>
+   </select>
+
 	<select id="getCnt" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="Integer">
        select count(1)
        from bi_bills_${yearMonth}
@@ -43,6 +103,7 @@
 				contract_from as contractFrom,
 				contract_to as contractTo,
 				regular_score as regularScore,
+				priority as priority,
 				value_change as valueChange
        from bi_bills_${yearMonth}
        <where>

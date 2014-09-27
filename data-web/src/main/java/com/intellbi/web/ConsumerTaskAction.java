@@ -114,6 +114,41 @@ public class ConsumerTaskAction extends ActionSupport {
 		return SUCCESS;
 	}
 	
+	public String getSingleHighGprsConsumerBills() {
+		Subject subject = SecurityUtils.getSubject();
+		if(subject.isAuthenticated() && pageSize > 0 && currPage > 0){
+			UserDO userDO = (UserDO)subject.getSession().getAttribute("userDO");
+			userId = userDO.getId();
+			if(userId == 1) //admin
+				userId = 0;
+			BiDataDO biDataDO = biDataService.getRecentBiDataDO();
+			if(StringUtils.isBlank(theMonth))
+				theMonth = biDataDO.getTheMonth();
+
+			if(!checkTheMonth())
+				return ERROR;
+			
+			try {
+				if(StringUtils.isBlank(ordertype))
+					ordertype = "regular_score";
+					
+				setBills(consumerBillService.getAllSingleHighGprsBill(theMonth.substring(0,6), phoneNo, userId, currPage, pageSize,null));
+				
+				totalNumber = consumerBillService.getSingleHighGprsTotalCount(theMonth.substring(0,6),phoneNo,userId);
+				totalPages = totalNumber / pageSize + (totalNumber % pageSize == 0?0:1);
+				prevPage = currPage - 1;
+				if(prevPage <= 0)
+					prevPage = 0;
+				nextPage = currPage + 1;
+				if(nextPage > totalPages)
+					nextPage = 0;
+			} catch(Exception e) {
+				setBills(null);
+			}
+		}
+		return SUCCESS;
+	}
+	
 	public String getTheMonthString() {
 		return theMonthString;
 	}

@@ -33,6 +33,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <![endif]-->
   <link type="text/css" rel="stylesheet" href="admin/assets/css/base.css"/>
   <link type="text/css" rel="stylesheet" href="admin/assets/css/style.css"/>
+   
+  <link rel="stylesheet" type="text/css" href="admin/assets/css/sweet-alert.css">
 </head>
 <body id="home" class="easyui-layout bg">
     <!--<div id="preloader">
@@ -96,15 +98,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript" src="admin/assets/js/libs/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="admin/assets/js/libs/jquery.easyui.custom.min.js"></script>
     <script type="text/javascript" src="admin/assets/js/jquery.easyui.extend.js"></script>
-    <script type="text/javascript" src="admin/assets/js/jquery.plugins.js"></script>
+    <!--script type="text/javascript" src="admin/assets/js/jquery.plugins.js"></script-->
     <script type="text/javascript" src="admin/assets/js/jquery.syadmin.js"></script>
+    
+    <script src="admin/assets/js/libs/sweet-alert.min.js"></script>
+    
     <script type="text/javascript">
+    			
         function quitLogin(){
+        	swal(
+								{
+				    				title: "系统提示",     
+				    				text: "确认退出当前系统？",     
+				    				type: "warning",     
+				    				confirmButtonText: "确认",  
+				    				cancelButtonText: '取消',
+				    				showCancelButton: true
+								},
+								function() {window.location.href="logout";}
+						);
+        /*
           $.messager.confirm('系统提示', '确认退出当前系统？', function(data){
             if(data){
                window.location.href="logout";
             }
-          });
+          });*/
         }
 
         //测试dialog

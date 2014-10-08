@@ -198,7 +198,7 @@ public class ConsumerSession{
 			if(sb.length() > 0)
 				sb.append(",");
 			sb.append(PackageConfig.getInstance().getIdByFeature(packageCost.telecomPackage.getFeature()))
-			    .append(":").append(packageCost.realCost);
+			    .append(":").append(String.format("%.2f", packageCost.realCost));
 		}
 		recommenedString = sb.toString();
 		valueChange = sortedPackageList.get(0).telecomPackage.getFee() - telecomPackage.getFee();
@@ -280,9 +280,11 @@ public class ConsumerSession{
             
             double realLongDist = realLongDistVoice6;
             double realRoam = realRoamVoice6;
-            voiceCost = realLocal * selPackageEntity.getLocalVoicePrice()
-                    + realLongDist * selPackageEntity.getLongDistVoicePrice()
-                    + realRoam * selPackageEntity.getLongDistVoicePrice();
+            
+            voiceCost = (realLocal + realLongDist + realRoam) * voicePrice;
+//            voiceCost = realLocal * selPackageEntity.getLocalVoicePrice()
+//                    + realLongDist * selPackageEntity.getLongDistVoicePrice()
+//                    + realRoam * selPackageEntity.getLongDistVoicePrice();
         }
         else {//其他套餐都是赠送不区分本地长途的语音
             double realVoiceTime = realLocalVoice6 + realLongDistVoice6 + realRoamVoice6 - selPackageEntity.getVoice(); 

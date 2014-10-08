@@ -45,26 +45,33 @@ public class ConsumerSession{
 	private double voiceSpill = 0;
 	private double gprsSpill = 0;
 	
+	private double localVoiceCost6 = 0;
+	private double longDistVoiceCost6= 0;
+	private double roamVoiceCost6 = 0;
+	
 	private double incomeFluctuation ;
 	private double voiceFluctuation ;
 	private double gprsFluctuation ;
 	
 	private double localVoice6=0;
 	private double longDistVoice6=0;
+	private double roamVoice6=0;
 	
 	private double score;
 	
 	private String recommenedString;
 	private double valueChange;
 	
-	private StringBuilder sb = new StringBuilder();
+	private StringBuilder sb = new StringBuilder(); 
+	
+	private boolean isStandardPackage ;
 	
 	//先调用calc方法再获取各数据
 	public void calc() {
 		int i = 0;
 		
 		TelecomPackage telecomPackage = consumerSession.get(consumerSession.size() - 1).getThePackage();
-		boolean isStandardPackage = telecomPackage != null && telecomPackage.isStandard();
+		isStandardPackage = telecomPackage != null && telecomPackage.isStandard();
 		
 		if(!isStandardPackage) {
 //			System.out.println("consumer [" + phoneNo + "] 's package not match");
@@ -78,6 +85,12 @@ public class ConsumerSession{
 			
 			localVoice6 += node.getBillDetail().getLocalCallTime();
 			longDistVoice6 += node.getBillDetail().getLongDistCallTime();
+			roamVoice6 += node.getBillDetail().getRoamCallTime();
+			
+			//用于计算实际的平均语音消费（由消费根据单价反算时长）
+			localVoiceCost6 += node.getBillDetail().getLocalCallFee();
+			longDistVoiceCost6 += node.getBillDetail().getLongDistCallFee();
+			roamVoiceCost6 += node.getBillDetail().getRoamCallFee();
 			
 //			if(i >= 3) {
 //				income3 += node.getBillDetail().getIncome();
@@ -130,8 +143,16 @@ public class ConsumerSession{
 		voice3 /= (j-1);
 		gprs3  /= (j-1);
 		
+		//通话时长均值
 		localVoice6 /= i;
 		longDistVoice6 /= i;
+		roamVoice6 /= i;
+		
+		//通话费用均值
+		localVoiceCost6 /= i;
+		longDistVoiceCost6 /= i;
+		roamVoiceCost6 /= i;
+		
 //		income3 /= (consumerSession.size() - 3);
 //		voice3 /= (consumerSession.size() - 3);
 //		gprs3  /= (consumerSession.size() - 3);
@@ -173,9 +194,11 @@ public class ConsumerSession{
 		sb.delete(0, sb.length());
 		List<PackageCost> sortedPackageList = getRecommendPackage();
 		for(int k = 0; k < RECOMMENDED_NUMBER; k++) {
+		    PackageCost packageCost = sortedPackageList.get(k);
 			if(sb.length() > 0)
 				sb.append(",");
-			sb.append(PackageConfig.getInstance().getIdByFeature(sortedPackageList.get(k).telecomPackage.getFeature()));
+			sb.append(PackageConfig.getInstance().getIdByFeature(packageCost.telecomPackage.getFeature()))
+			    .append(":").append(packageCost.realCost);
 		}
 		recommenedString = sb.toString();
 		valueChange = sortedPackageList.get(0).telecomPackage.getFee() - telecomPackage.getFee();
@@ -219,48 +242,92 @@ public class ConsumerSession{
 		return selPackages;
 	}
 	
+
+    // 按照长市漫一体化计费 http://3g.10010.com/
 	private double getCostInPackage(TelecomPackage selPackageEntity) {
-		
-		double voiceCost = 0;
-		double gprsCost = 0;
-		
-		//gprs流量
-		double realGprs = gprs6 - selPackageEntity.getGprs();
-		if(realGprs > 0)
-			gprsCost = realGprs * selPackageEntity.getGprsPrice() * 1024;
-		
-		//语音分本地和长途（因为有些套餐赠送的是本地通话），先减去额度得到真实需要付费的语音
-		//长途比本地通话贵，所以如果长途增费不够用时，优先用不区分本地长途的额度去匹配长途
-		//再用剩余的去匹配本地通话
-		//这里有点复杂了，实际上目前的套餐要么赠送本地，要么赠送不区分本地长途，兼容之
-		double realLocal = localVoice6 - selPackageEntity.getLocalVoice();
-		if(realLocal < 0)
-			realLocal = 0;
-		double realLongDist = longDistVoice6 - selPackageEntity.getLongDistVoice();
-		if(realLongDist < 0) {
-			realLongDist = 0;
-			if(realLocal > 0) {
-				realLocal = realLocal - selPackageEntity.getVoice();
-				if(realLocal < 0)
-					realLocal = 0;
-			}
-		}
-		else {
-			//long distance expensive than local
-			realLongDist = realLongDist - selPackageEntity.getVoice();
-			if(realLongDist < 0){
-				realLongDist = 0;
-				if(realLocal > 0) {
-					realLocal = realLocal - (selPackageEntity.getVoice() - realLongDist);
-					if(realLocal < 0)
-						realLocal = 0;
-				}
-			}
-		}
-		voiceCost = realLocal * selPackageEntity.getLocalVoicePrice() + realLongDist * selPackageEntity.getLongDistVoicePrice();
-	
-		//流量和语音超出套餐的付费，加上套餐本身的价值，算作用户使用该套餐的实际支出
-		return gprsCost + voiceCost + selPackageEntity.getFee();
+        double voiceCost = 0;
+        double gprsCost = 0;
+
+        // 采用收入反算出的通话时长
+        double realLocalVoice6 = localVoice6;
+        double realLongDistVoice6 = longDistVoice6;
+        double realRoamVoice6 = roamVoice6; 
+        
+        // 按照长市漫一体化计费，各种单价其实是一样的，这里取本地价格吧，都一样
+        // 事实上，手头的套餐数据中，套餐对超出赠送的语音单价也确实只有一个，没有区分
+        double voicePrice = selPackageEntity.getLocalVoicePrice();
+        
+        /* 标准套餐是有单价信息的，可以用来根据消费反算时长
+           主要是目前消费的计算方法不明确，根据原始数据的时长与单价计算出的消费与数据中的相差过大
+           非标准套餐，由于手头没有套餐数据，不知道单价，所以还是按照原来的计算方法，直接使用原始数据中的时长
+           这种反算的方式，其实也是在不明确如何由原始数据中的计费时长得到消费值的前提下，想到的一种近似处理方法
+        */
+        if(isStandardPackage) {
+            realLocalVoice6 = localVoiceCost6 / voicePrice;
+            realLongDistVoice6 = longDistVoiceCost6 / voicePrice;
+            realRoamVoice6 = roamVoiceCost6 / voicePrice;
+        }
+
+        // gprs流量
+        double realGprs = gprs6 - selPackageEntity.getGprs();
+        if (realGprs > 0)
+            gprsCost = realGprs * selPackageEntity.getGprsPrice() * 1024;
+
+        if(selPackageEntity.getLocalVoice() > 0) {// 实际上，C类套餐是赠送本地通话，这类需特殊处理
+            double realLocal = realLocalVoice6 - selPackageEntity.getLocalVoice();
+            if(realLocal < 0) 
+                realLocal = 0;
+            
+            double realLongDist = realLongDistVoice6;
+            double realRoam = realRoamVoice6;
+            voiceCost = realLocal * selPackageEntity.getLocalVoicePrice()
+                    + realLongDist * selPackageEntity.getLongDistVoicePrice()
+                    + realRoam * selPackageEntity.getLongDistVoicePrice();
+        }
+        else {//其他套餐都是赠送不区分本地长途的语音
+            double realVoiceTime = realLocalVoice6 + realLongDistVoice6 + realRoamVoice6 - selPackageEntity.getVoice(); 
+            voiceCost = realVoiceTime > 0 ? realVoiceTime * voicePrice : 0; 
+        }
+        
+        /* 下边是以前采用的一种通用的匹配方式，将赠送分为三部分“本地”，“长途”，“不区分本地长途”
+           然后将本地和长途的分别扣除后，再将仍超出的部分用不区分本地长途的部分去匹配，比较复杂
+           实际业务其实只有“本地”和“不区分本地长途”两类，而且不重叠，所以改为上边的算法
+        */
+        
+        /*
+        // 语音分本地和长途（因为有些套餐赠送的是本地通话），先减去额度得到真实需要付费的语音
+        // 长途比本地通话贵，所以如果长途增费不够用时，优先用不区分本地长途的额度去匹配长途
+        // 再用剩余的去匹配本地通话
+        // 这里有点复杂了，实际上目前的套餐要么赠送本地，要么赠送不区分本地长途，兼容之
+        double realLocal = realLocalVoice6 - selPackageEntity.getLocalVoice();
+        if (realLocal < 0)
+            realLocal = 0;
+        double realLongDist = realLongDistVoice6 - selPackageEntity.getLongDistVoice();
+        if (realLongDist < 0) {
+            realLongDist = 0;
+            if (realLocal > 0) {
+                realLocal = realLocal - selPackageEntity.getVoice();
+                if (realLocal < 0)
+                    realLocal = 0;
+            }
+        } else {
+            // long distance expensive than local
+            realLongDist = realLongDist - selPackageEntity.getVoice();
+            if (realLongDist < 0) {
+                realLongDist = 0;
+                if (realLocal > 0) {
+                    realLocal = realLocal - (selPackageEntity.getVoice() - realLongDist);
+                    if (realLocal < 0)
+                        realLocal = 0;
+                }
+            }
+        }
+        voiceCost = realLocal * selPackageEntity.getLocalVoicePrice()
+                + realLongDist * selPackageEntity.getLongDistVoicePrice();
+        */
+
+        // 流量和语音超出套餐的付费，加上套餐本身的价值，算作用户使用该套餐的实际支出
+        return gprsCost + voiceCost + selPackageEntity.getFee();
 	}
 	
 	private double calcScore(double[] weight) {

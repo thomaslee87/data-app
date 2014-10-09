@@ -15,9 +15,9 @@
                     </a>
                     <ul class="sub-nav" style="display:block">
                        <li>
-                    	<a  href="javascript:;" data-url="<%=basePath%>admin/pages/todo.jsp">
+                    	<a  href="javascript:;" data-url="<%=basePath%>getAllContractConsumerBills">
                           <i class="icon icon-caret-right"></i>
-                          <span class="txt">日常任务</span>
+                          <span class="txt">我的客户</span>
                         </a>
                        </li>
                         

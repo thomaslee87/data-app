@@ -64,6 +64,59 @@ public class ConsumerTaskAction extends ActionSupport {
 		recentBills = new ArrayList<ConsumerBillDO>();
 	}
 	
+	public String getAllContractConsumerBills(){
+	    Subject subject = SecurityUtils.getSubject();
+        if(subject.isAuthenticated() && pageSize > 0 && currPage > 0){
+            UserDO userDO = (UserDO)subject.getSession().getAttribute("userDO");
+            userId = userDO.getId();
+            if(userId == 1) //admin
+                userId = 0;
+            BiDataDO biDataDO = biDataService.getRecentBiDataDO();
+            if(StringUtils.isBlank(theMonth))
+                theMonth = biDataDO.getTheMonth();
+
+            if(!checkTheMonth())
+                return ERROR;
+            
+            try {
+                if(StringUtils.isBlank(ordertype))
+                    ordertype = "regular_score";
+                    
+                setBills(consumerBillService.getAllMonthBills(theMonth.substring(0,6), phoneNo, userId, currPage, pageSize,ordertype,-1));
+                for(ConsumerBillDO consumerBillDO: bills) {
+                    int contractTo = (int)(consumerBillDO.getContractTo());
+                    consumerBillDO.setContractRemain(MyDateUtils.getMonthsBetween(Integer.parseInt(theMonth.substring(0,6)), contractTo));
+                        
+                    if(consumerBillDO.getPriority() <= 3)
+                      consumerBillDO.setPriorityDesc("高");
+                    else if(consumerBillDO.getPriority() >=8 )
+                      consumerBillDO.setPriorityDesc("低");
+                    else
+                      consumerBillDO.setPriorityDesc("中");
+                    
+                    if(consumerBillDO.getValueChange() > 10)
+                      consumerBillDO.setValueChangeDesc("升值");
+                    else if(consumerBillDO.getValueChange() < -10)
+                      consumerBillDO.setValueChangeDesc("贬值");
+                    else
+                      consumerBillDO.setValueChangeDesc("持平");
+                }
+                
+                totalNumber = consumerBillService.getTotalCount(theMonth.substring(0,6),phoneNo,userId,-1);
+                totalPages = totalNumber / pageSize + (totalNumber % pageSize == 0?0:1);
+                prevPage = currPage - 1;
+                if(prevPage <= 0)
+                    prevPage = 0;
+                nextPage = currPage + 1;
+                if(nextPage > totalPages)
+                    nextPage = 0;
+            } catch(Exception e) {
+                setBills(null);
+            }
+        }
+        return SUCCESS;
+	}
+	
 	public String getContractConsumerBills() {
 		Subject subject = SecurityUtils.getSubject();
 		if(subject.isAuthenticated() && pageSize > 0 && currPage > 0){

@@ -54,6 +54,12 @@
         	<result name="login">login.jsp</result>
         </action>
         
+         <action name="getAllContractConsumerBills" class="com.intellbi.web.ConsumerTaskAction" method="getAllContractConsumerBills">
+            <result name="success">admin/pages/task/myConsumer.jsp</result>
+            <result name="error">admin/pages/exception.jsp</result>
+            <result name="login">login.jsp</result>
+        </action>
+        
         <action name="getConsumerBillsJson" class="com.intellbi.web.ConsumerTaskAction" method="getConsumerBillsJson">
         	<result type="json">
         		<param name="root">consumerBillDO</param>

@@ -27,19 +27,23 @@ public class ConsumerBillServiceImpl implements ConsumerBillService {
 		BillQueryParameter param = new BillQueryParameter(yearMonth, phoneNo, userId,order);
 		param.setPageBegin((page-1)*pageSize);
 		param.setPageSize(pageSize);
-		param.setMinContract(Integer.parseInt(yearMonth + "00"));
-		param.setMaxContract(-1);
-		if(howLong > 0)
+        param.setMinContract(-1);
+        param.setMaxContract(-1);
+        if(howLong > 0) {
+            param.setMinContract(Integer.parseInt(yearMonth + "00"));
 		    param.setMaxContract(Integer.parseInt(MyDateUtils.getMonthByDelta(yearMonth, howLong) + "99"));
+        }
 		return consumerBillDao.findAll(param);
 	}
 	
 	public int getTotalCount(String yearMonth, String phoneNo, int userId,int howLong){
 	    BillQueryParameter param = new BillQueryParameter(yearMonth, phoneNo, userId,null);
-	    param.setMinContract(Integer.parseInt(yearMonth + "00"));
+	    param.setMinContract(-1);
         param.setMaxContract(-1);
-        if(howLong > 0)
+        if(howLong > 0) {
+            param.setMinContract(Integer.parseInt(yearMonth + "00"));
             param.setMaxContract(Integer.parseInt(MyDateUtils.getMonthByDelta(yearMonth, howLong) + "99"));
+        }
 		return consumerBillDao.getCnt(param);
 	}
 

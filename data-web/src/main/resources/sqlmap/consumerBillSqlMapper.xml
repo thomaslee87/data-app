@@ -77,9 +77,6 @@
           <if test="minContract !=null and minContract &gt; 0">
           and contract_to > #{minContract}
           </if>
-          <if test="minContract == null or minContract &lt;= 0" >
-          and contract_to > 0
-          </if>
        </where>
    </select>
 
@@ -126,9 +123,6 @@
          </if>
          <if test="minContract !=null and minContract &gt; 0">
           and contract_to > #{minContract}
-          </if>
-          <if test="minContract == null or minContract &lt;= 0" >
-          and contract_to > 0
           </if>
        </where>
        order by ${orderField} desc

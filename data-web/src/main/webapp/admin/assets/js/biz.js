@@ -159,14 +159,14 @@ $(function(){
 		columns:[[
 //		          {field:'score',title:'得分'},
 		          {field:'priorityDesc',title:'保有优先级'},
-		          {field:'income6',title:'近6月收入'},
-		          {field:'income3',title:'近3月收入'},
+		          {field:'income6',title:'近6月平均arpu值'},
+		          {field:'income3',title:'近3月平均arpu值'},
 		          {field:'packageSpill',title:'收入/套餐'},
 		          {field:'incomeFluctuation',title:'收入波动水平 '},
-		          {field:'voice6',title:'近6月通话时长'},
-		          {field:'voice3',title:'近3月通话时长'},
-		          {field:'voiceSpill',title:'通话/套餐额度'},
-		          {field:'voiceFluctuation',title:'语音波动水平'},
+		     //     {field:'voice6',title:'近6月通话时长'},
+		     //     {field:'voice3',title:'近3月通话时长'},
+		     //     {field:'voiceSpill',title:'通话/套餐额度'},
+		     //     {field:'voiceFluctuation',title:'语音波动水平'},
 		          {field:'gprs6',title:'近6月流量(M)'},
 		          {field:'gprs3',title:'近3月流量(M)'},
 		          {field:'gprsSpill',title:'流量/套餐额度'},
@@ -193,9 +193,9 @@ function load_consumer_detail(phone,data) {
 		$('#tt').datagrid({height:"90px"});
 		$('#textend').datagrid('loadData',eval("({\"total\" : 1,\"rows\" : ["+JSON.stringify(data)+"]})"));
 		
-		$('#rcmd1').text('● ' + data['recommend1']);
-		$('#rcmd2').text('● ' + data['recommend2']);
-		$('#rcmd3').text('● ' + data['recommend3']);
+		$('#rcmd1').text('● ' + data['recommend1'] + ", 预计语音流量消费约 " + Math.round(data['recommendCost1']) + " 元，平均每月可节省约 "  + Math.round((data['income6'] - Math.round(data['recommendCost1'])))+ " 元");
+		$('#rcmd2').text('● ' + data['recommend2'] + ", 预计语音流量消费约 " + Math.round(data['recommendCost2']) + " 元，平均每月可节省约 "  + Math.round((data['income6'] - Math.round(data['recommendCost2'])))+ " 元");
+		$('#rcmd3').text('● ' + data['recommend3'] + ", 预计语音流量消费约 " + Math.round(data['recommendCost3']) + " 元，平均每月可节省约 "  + Math.round((data['income6'] - Math.round(data['recommendCost3'])))+ " 元");
 	}
 	else{
 		$('#tt').datagrid('loadData',eval("({\"total\" : " + data.length + ",\"rows\" : "+JSON.stringify(data)+"})")); 
@@ -203,9 +203,9 @@ function load_consumer_detail(phone,data) {
 //		alert(JSON.stringify(data[0]));只显示第一个即可
 		$('#textend').datagrid('loadData',eval("({\"total\" : 1,\"rows\" : ["+JSON.stringify(data[0])+"]})"));
 		
-		$('#rcmd1').text('● ' + data[0]['recommend1']);
-		$('#rcmd2').text('● ' + data[0]['recommend2']);
-		$('#rcmd3').text('● ' + data[0]['recommend3']);
+		$('#rcmd1').text('● ' + data[0]['recommend1'] + ", 预计语音流量消费约 " + Math.round(data[0]['recommendCost1']) + " 元，平均每月可节省约 "  +  Math.round((data[0]['income6'] - Math.round(data[0]['recommendCost1'])))+ " 元");
+		$('#rcmd2').text('● ' + data[0]['recommend2'] + ", 预计语音流量消费约 " + Math.round(data[0]['recommendCost2']) + " 元，平均每月可节省约 "  +  Math.round((data[0]['income6'] - Math.round(data[0]['recommendCost2'])))+ " 元");
+		$('#rcmd3').text('● ' + data[0]['recommend3'] + ", 预计语音流量消费约 " + Math.round(data[0]['recommendCost3']) + " 元，平均每月可节省约 "  +  Math.round((data[0]['income6'] - Math.round(data[0]['recommendCost3'])))+ " 元");
 	}
 	
 }

@@ -266,6 +266,15 @@ background:url('../images/combo-arrow.png') no-repeat center center
 						style="border-radius: 3px; width: 80%; font-size: 14px; padding: 7px"
 						placeholder="请简单填写实际采取的措施，如电话沟通，实际套餐推荐">&nbsp;&nbsp;
 			</div-->
+			<div style="margin:10px">
+			 <a class="btn" href="javascript:void(0)" >流量套餐推荐</a>
+			</div>
+			<div style="margin:10px">
+				<a class="btn" href="javascript:void(0)">加油包推荐</a>
+			</div>
+			<div style="margin:10px">
+				<a class="btn" href="javascript:void(0)">带宽升级-3G到4G</a>
+			</div>
 			<div style="float: right; padding: 5px">
 				<!--a class="btn" href="javascript:void(0)"
 					onclick="$('#w').window('close')">确定并关闭</a-->

@@ -242,19 +242,34 @@ public class ConsumerTaskAction extends ActionSupport {
 					String[] rcmdPackageIds = consumerDo.getRecommend().split(",");
 					int rcmdNumber = rcmdPackageIds.length;
 					if(rcmdNumber >= 1){
-						String rcmd1 = idPkgMap.get(rcmdPackageIds[0]);
-						if(StringUtils.isNotBlank(rcmd1))
-							consumerDo.setRecommend1(rcmd1);
+					    String[] rcmdPackagePair = rcmdPackageIds[0].split(":");
+					    if(rcmdPackagePair.length == 2) {
+    						String rcmd1 = idPkgMap.get(rcmdPackagePair[0]);
+    						if(StringUtils.isNotBlank(rcmd1)) {
+    							consumerDo.setRecommend1(rcmd1);
+    							consumerDo.setRecommendCost1(Double.parseDouble(rcmdPackagePair[1]));
+    						}
+					    }
 					}
 					if(rcmdNumber >= 2){
-						String rcmd2 = idPkgMap.get(rcmdPackageIds[1]);
-						if(StringUtils.isNotBlank(rcmd2))
-							consumerDo.setRecommend2(rcmd2);
+					    String[] rcmdPackagePair = rcmdPackageIds[1].split(":");
+					    if(rcmdPackagePair.length == 2) {
+    						String rcmd2 = idPkgMap.get(rcmdPackagePair[0]);
+    						if(StringUtils.isNotBlank(rcmd2)) {
+    							consumerDo.setRecommend2(rcmd2);
+    							consumerDo.setRecommendCost2(Double.parseDouble(rcmdPackagePair[1]));
+    						}
+					    }
 					}
 					if(rcmdNumber >= 3){
-						String rcmd3 = idPkgMap.get(rcmdPackageIds[2]);
-						if(StringUtils.isNotBlank(rcmd3))
-							consumerDo.setRecommend3(rcmd3);
+					    String[] rcmdPackagePair = rcmdPackageIds[2].split(":");
+                        if(rcmdPackagePair.length == 2) {
+    						String rcmd3 = idPkgMap.get(rcmdPackagePair[0]);
+    						if(StringUtils.isNotBlank(rcmd3)) {
+    							consumerDo.setRecommend3(rcmd3);
+    							consumerDo.setRecommendCost3(Double.parseDouble(rcmdPackagePair[1]));
+    						}
+                        }
 					}
 					
 					if(consumerDo.getPriority() <= 3)

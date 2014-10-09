@@ -49,8 +49,30 @@ public class ConsumerBillDO implements Serializable {
 	private String recommend2;
 	private String recommend3;
 	
+	private double recommendCost1;
+	private double recommendCost2;
+	private double recommendCost3;
 	
-	public double getValueChange() {
+	
+	public double getRecommendCost1() {
+        return recommendCost1;
+    }
+    public void setRecommendCost1(double recommendCost1) {
+        this.recommendCost1 = recommendCost1;
+    }
+    public double getRecommendCost2() {
+        return recommendCost2;
+    }
+    public void setRecommendCost2(double recommendCost2) {
+        this.recommendCost2 = recommendCost2;
+    }
+    public double getRecommendCost3() {
+        return recommendCost3;
+    }
+    public void setRecommendCost3(double recommendCost3) {
+        this.recommendCost3 = recommendCost3;
+    }
+    public double getValueChange() {
 		return valueChange;
 	}
 	public void setValueChange(double valueChange) {

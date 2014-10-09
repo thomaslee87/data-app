@@ -17,7 +17,26 @@ public class BillQueryParameter implements Serializable{
 	
 	private int pageEnd;
 	
-	private String orderField;
+	private int minContract;
+	private int maxContract;
+
+    public int getMinContract() {
+        return minContract;
+    }
+
+    public void setMinContract(int minContract) {
+        this.minContract = minContract;
+    }
+
+    public int getMaxContract() {
+        return maxContract;
+    }
+
+    public void setMaxContract(int maxContract) {
+        this.maxContract = maxContract;
+    }
+
+    private String orderField;
 	
 	public String getOrderField() {
 		return orderField;

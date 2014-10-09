@@ -36,7 +36,10 @@ public class MyDateUtils {
 		DateFormat format = new SimpleDateFormat("yyyyMMdd");
 		Date dateObj = null;
 		try {
-			dateObj = format.parse(theMonth + "01");
+		    if(theMonth.length() == 6)
+		        dateObj = format.parse(theMonth + "01");
+		    else if(theMonth.length() == 8)
+		        dateObj = format.parse(theMonth);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -90,7 +93,7 @@ public class MyDateUtils {
 			month2 = d2 % 100;
 		}
 		else if(bits2 == 8) {
-			year2  = d2 / 100;
+			year2  = d2 / 10000;
 			month2 = (d2 / 100) % 100;
 		}
 		else {

@@ -32,7 +32,15 @@ public class ConsumerBillDO implements Serializable {
 	private double contractFrom;
 	private double contractTo;
 	
-	private String packageName;
+	private int contractRemain;
+	
+	public int getContractRemain() {
+        return contractRemain;
+    }
+    public void setContractRemain(int contractRemain) {
+        this.contractRemain = contractRemain;
+    }
+    private String packageName;
 	
 	private int consumerType;
 	

@@ -9,6 +9,7 @@ import com.intellbi.dao.ConsumerBillDAO;
 import com.intellbi.dataobject.BillQueryParameter;
 import com.intellbi.dataobject.ConsumerBillDO;
 import com.intellbi.service.ConsumerBillService;
+import com.intellbi.utils.MyDateUtils;
 
 @Service("consumerBillService")
 public class ConsumerBillServiceImpl implements ConsumerBillService {
@@ -22,15 +23,24 @@ public class ConsumerBillServiceImpl implements ConsumerBillService {
 	}
 
 	public List<ConsumerBillDO> getAllMonthBills(String yearMonth, String phoneNo,
-			int userId, int page, int pageSize,String order) {
+			int userId, int page, int pageSize,String order,int howLong) {
 		BillQueryParameter param = new BillQueryParameter(yearMonth, phoneNo, userId,order);
 		param.setPageBegin((page-1)*pageSize);
 		param.setPageSize(pageSize);
+		param.setMinContract(Integer.parseInt(yearMonth + "00"));
+		param.setMaxContract(-1);
+		if(howLong > 0)
+		    param.setMaxContract(Integer.parseInt(MyDateUtils.getMonthByDelta(yearMonth, howLong) + "99"));
 		return consumerBillDao.findAll(param);
 	}
 	
-	public int getTotalCount(String yearMonth, String phoneNo, int userId){
-		return consumerBillDao.getCnt(new BillQueryParameter(yearMonth, phoneNo, userId,null));
+	public int getTotalCount(String yearMonth, String phoneNo, int userId,int howLong){
+	    BillQueryParameter param = new BillQueryParameter(yearMonth, phoneNo, userId,null);
+	    param.setMinContract(Integer.parseInt(yearMonth + "00"));
+        param.setMaxContract(-1);
+        if(howLong > 0)
+            param.setMaxContract(Integer.parseInt(MyDateUtils.getMonthByDelta(yearMonth, howLong) + "99"));
+		return consumerBillDao.getCnt(param);
 	}
 
 	public int getSingleHighGprsTotalCount(String yearMonth, String phoneNo,

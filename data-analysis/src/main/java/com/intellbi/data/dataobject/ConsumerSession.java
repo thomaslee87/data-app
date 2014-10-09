@@ -221,9 +221,9 @@ public class ConsumerSession{
 	private class ComparatorPackageCost implements Comparator<PackageCost>{
 		@Override
 		public int compare(PackageCost arg0, PackageCost arg1) {
-			if(arg0.realCost > arg1.realCost + 0.1)
+			if(arg0.realCost > arg1.realCost + 0.001)
 				return 1;
-			else if(arg0.realCost < arg1.realCost - 0.1)
+			else if(arg0.realCost < arg1.realCost - 0.001)
 				return -1;
 			return 0;
 		}
@@ -492,4 +492,18 @@ public class ConsumerSession{
 //				+ "network,status,contract_from,contract_to) values (%s,%d,%d,%d,%f,%f,%f,"
 //				+ "%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d,%f,%d,%d,%s,%d,%d)"; 
 //	}
+	
+	public static void main(String[] args) {
+	    ConsumerSession session = new ConsumerSession();
+	    session.income6 = 766.43;
+	    session.gprs6 = 6637.33;
+	    session.localVoiceCost6 = (91.5+90.47+90.47+89.76+90.94+90.22)/6;
+	    session.longDistVoiceCost6 = (59.28+45.67+48.87+45.38+45.6+46.65)/6;
+	    session.roamVoiceCost6 = (37.42+39.05+110.09+40.06+38.66+281.95)/6;
+        session.isStandardPackage = true;
+        List<PackageCost> list = session.getRecommendPackage();
+        for(PackageCost p:list) {
+            System.out.println(p.telecomPackage.getName() + "\t" + p.realCost);
+        }
+	}
 }

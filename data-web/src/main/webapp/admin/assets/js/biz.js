@@ -167,6 +167,9 @@ $(function(){
 		     //     {field:'voice3',title:'近3月通话时长'},
 		     //     {field:'voiceSpill',title:'通话/套餐额度'},
 		     //     {field:'voiceFluctuation',title:'语音波动水平'},
+//		          {field:'localVoiceCost6',title:'近6月平均本地话费'},
+//		          {field:'longDistVoiceCost6',title:'近6月平均长途费'},
+//		          {field:'roamVoiceCost6',title:'近6月平均漫游费'},
 		          {field:'gprs6',title:'近6月流量(M)'},
 		          {field:'gprs3',title:'近3月流量(M)'},
 		          {field:'gprsSpill',title:'流量/套餐额度'},
@@ -193,9 +196,21 @@ function load_consumer_detail(phone,data) {
 		$('#tt').datagrid({height:"90px"});
 		$('#textend').datagrid('loadData',eval("({\"total\" : 1,\"rows\" : ["+JSON.stringify(data)+"]})"));
 		
-		$('#rcmd1').text('● ' + data['recommend1'] + ", 预计语音流量消费约 " + Math.round(data['recommendCost1']) + " 元，平均每月可节省约 "  + Math.round((data['income6'] - Math.round(data['recommendCost1'])))+ " 元");
-		$('#rcmd2').text('● ' + data['recommend2'] + ", 预计语音流量消费约 " + Math.round(data['recommendCost2']) + " 元，平均每月可节省约 "  + Math.round((data['income6'] - Math.round(data['recommendCost2'])))+ " 元");
-		$('#rcmd3').text('● ' + data['recommend3'] + ", 预计语音流量消费约 " + Math.round(data['recommendCost3']) + " 元，平均每月可节省约 "  + Math.round((data['income6'] - Math.round(data['recommendCost3'])))+ " 元");
+		change1 = Math.round((data['income6'] - Math.round(data['recommendCost1'])));
+		change2 = Math.round((data['income6'] - Math.round(data['recommendCost2'])));
+		chagne3 = Math.round((data['income6'] - Math.round(data['recommendCost3'])));
+		$('#rcmd1').text('');
+		$('#rcmd2').text('');
+		$('#rcmd3').text('');
+		if(change1 <= 0) {
+			$('#rcmd1').text('● 暂无更合适的套餐推荐方案');
+		} else {
+			$('#rcmd1').text('● ' + data['recommend1'] + ", 预计语音流量消费约 " + Math.round(data['recommendCost1']) + " 元，平均每月可节省约 "  + change1 + " 元");
+			if(change2 > 0)
+				$('#rcmd2').text('● ' + data['recommend2'] + ", 预计语音流量消费约 " + Math.round(data['recommendCost2']) + " 元，平均每月可节省约 "  + change2 + " 元");
+			if(change3 > 0)
+				$('#rcmd3').text('● ' + data['recommend3'] + ", 预计语音流量消费约 " + Math.round(data['recommendCost3']) + " 元，平均每月可节省约 "  + change3 + " 元");
+		}
 	}
 	else{
 		$('#tt').datagrid('loadData',eval("({\"total\" : " + data.length + ",\"rows\" : "+JSON.stringify(data)+"})")); 
@@ -203,9 +218,21 @@ function load_consumer_detail(phone,data) {
 //		alert(JSON.stringify(data[0]));只显示第一个即可
 		$('#textend').datagrid('loadData',eval("({\"total\" : 1,\"rows\" : ["+JSON.stringify(data[0])+"]})"));
 		
-		$('#rcmd1').text('● ' + data[0]['recommend1'] + ", 预计语音流量消费约 " + Math.round(data[0]['recommendCost1']) + " 元，平均每月可节省约 "  +  Math.round((data[0]['income6'] - Math.round(data[0]['recommendCost1'])))+ " 元");
-		$('#rcmd2').text('● ' + data[0]['recommend2'] + ", 预计语音流量消费约 " + Math.round(data[0]['recommendCost2']) + " 元，平均每月可节省约 "  +  Math.round((data[0]['income6'] - Math.round(data[0]['recommendCost2'])))+ " 元");
-		$('#rcmd3').text('● ' + data[0]['recommend3'] + ", 预计语音流量消费约 " + Math.round(data[0]['recommendCost3']) + " 元，平均每月可节省约 "  +  Math.round((data[0]['income6'] - Math.round(data[0]['recommendCost3'])))+ " 元");
+		change1 = Math.round(data[0]['income6'] - Math.round(data[0]['recommendCost1']));
+		change2 = Math.round(data[0]['income6'] - Math.round(data[0]['recommendCost2']));
+		change3 = Math.round(data[0]['income6'] - Math.round(data[0]['recommendCost3']));
+		$('#rcmd1').text('');
+		$('#rcmd2').text('');
+		$('#rcmd3').text('');
+		if(change1 <= 0){
+			$('#rcmd1').text('● 暂无更合适的套餐推荐方案');
+		} else {
+			$('#rcmd1').text('● ' + data[0]['recommend1'] + ", 预计语音流量消费约 " + Math.round(data[0]['recommendCost1']) + " 元，平均每月可节省约 "  +  change1 + " 元");
+			if(change2 > 0)
+				$('#rcmd2').text('● ' + data[0]['recommend2'] + ", 预计语音流量消费约 " + Math.round(data[0]['recommendCost2']) + " 元，平均每月可节省约 "  +  change2 + " 元");
+			if(change3 > 0)
+				$('#rcmd3').text('● ' + data[0]['recommend3'] + ", 预计语音流量消费约 " + Math.round(data[0]['recommendCost3']) + " 元，平均每月可节省约 "  + change3+ " 元");
+		}
 	}
 	
 }

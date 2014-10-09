@@ -170,7 +170,7 @@ background:url('../images/combo-arrow.png') no-repeat center center
 								<td><s:property value="contractTo.longValue()" /></td>
 							</s:else>
 
-							<td>合约剩余</td>
+							<td><s:property value="contractRemain"/> 个月</td>
 							<td><s:property value="packageName" /></td>
 							<td><s:property value="status"/></td>
 							<td><a class="btn" href="javascript:void(0)"

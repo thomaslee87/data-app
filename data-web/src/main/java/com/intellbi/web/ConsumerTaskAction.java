@@ -82,24 +82,44 @@ public class ConsumerTaskAction extends ActionSupport {
 				if(StringUtils.isBlank(ordertype))
 					ordertype = "regular_score";
 					
-				setBills(consumerBillService.getAllMonthBills(theMonth.substring(0,6), phoneNo, userId, currPage, pageSize,ordertype));
-				for(ConsumerBillDO consumerBillDO : bills) {
-					if(consumerBillDO.getPriority() <= 3)
-						consumerBillDO.setPriorityDesc("高");
-					else if(consumerBillDO.getPriority() >=8 )
-						consumerBillDO.setPriorityDesc("低");
-					else
-						consumerBillDO.setPriorityDesc("中");
-					
-					if(consumerBillDO.getValueChange() > 10)
-						consumerBillDO.setValueChangeDesc("升值");
-					else if(consumerBillDO.getValueChange() < -10)
-						consumerBillDO.setValueChangeDesc("贬值");
-					else
-						consumerBillDO.setValueChangeDesc("持平");
+				setBills(consumerBillService.getAllMonthBills(theMonth.substring(0,6), phoneNo, userId, currPage, pageSize,ordertype,6));
+				for(ConsumerBillDO consumerBillDO: bills) {
+				    int contractTo = (int)(consumerBillDO.getContractTo());
+				    consumerBillDO.setContractRemain(MyDateUtils.getMonthsBetween(Integer.parseInt(theMonth.substring(0,6)), contractTo));
+				        
+			        if(consumerBillDO.getPriority() <= 3)
+                      consumerBillDO.setPriorityDesc("高");
+	                else if(consumerBillDO.getPriority() >=8 )
+	                  consumerBillDO.setPriorityDesc("低");
+	                else
+	                  consumerBillDO.setPriorityDesc("中");
+	                
+	                if(consumerBillDO.getValueChange() > 10)
+	                  consumerBillDO.setValueChangeDesc("升值");
+	                else if(consumerBillDO.getValueChange() < -10)
+	                  consumerBillDO.setValueChangeDesc("贬值");
+	                else
+	                  consumerBillDO.setValueChangeDesc("持平");
 				}
 				
-				totalNumber = consumerBillService.getTotalCount(theMonth.substring(0,6),phoneNo,userId);
+//				setBills(consumerBillService.getAllMonthBills(theMonth.substring(0,6), phoneNo, userId, currPage, pageSize,ordertype));
+//				for(ConsumerBillDO consumerBillDO : bills) {
+//					if(consumerBillDO.getPriority() <= 3)
+//						consumerBillDO.setPriorityDesc("高");
+//					else if(consumerBillDO.getPriority() >=8 )
+//						consumerBillDO.setPriorityDesc("低");
+//					else
+//						consumerBillDO.setPriorityDesc("中");
+//					
+//					if(consumerBillDO.getValueChange() > 10)
+//						consumerBillDO.setValueChangeDesc("升值");
+//					else if(consumerBillDO.getValueChange() < -10)
+//						consumerBillDO.setValueChangeDesc("贬值");
+//					else
+//						consumerBillDO.setValueChangeDesc("持平");
+//				}
+				
+				totalNumber = consumerBillService.getTotalCount(theMonth.substring(0,6),phoneNo,userId,6);
 				totalPages = totalNumber / pageSize + (totalNumber % pageSize == 0?0:1);
 				prevPage = currPage - 1;
 				if(prevPage <= 0)

@@ -71,7 +71,15 @@
         	<if test="userId != null and userId &gt; 0">
         		user_id = #{userId}
         	</if>
-        	and contract_to>0
+        	<if test="maxContract != null and maxContract &gt; 0">
+          and contract_to &lt; #{maxContract}
+          </if>
+          <if test="minContract !=null and minContract &gt; 0">
+          and contract_to > #{minContract}
+          </if>
+          <if test="minContract == null or minContract &lt;= 0" >
+          and contract_to > 0
+          </if>
        </where>
    </select>
 
@@ -113,7 +121,15 @@
         	<if test="phoneNo != null and phoneNo != '' ">
         		and phone_no = #{phoneNo}
         	</if>
-        	and contract_to>0
+         <if test="maxContract != null and maxContract &gt; 0">
+             and contract_to &lt; #{maxContract}
+         </if>
+         <if test="minContract !=null and minContract &gt; 0">
+          and contract_to > #{minContract}
+          </if>
+          <if test="minContract == null or minContract &lt;= 0" >
+          and contract_to > 0
+          </if>
        </where>
        order by ${orderField} desc
        limit 

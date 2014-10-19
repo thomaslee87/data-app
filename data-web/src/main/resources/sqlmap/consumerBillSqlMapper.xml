@@ -102,6 +102,7 @@
 				international_call_duration as internationlCallDuration,
 				sms as sms,
 				gprs as gprs,-->
+				ROUND(income6,2) as income6,
 				is_group_user as isGroupUser,
 				network as network,
 				status as status,
@@ -109,7 +110,8 @@
 				contract_to as contractTo,
 				regular_score as regularScore,
 				priority as priority,
-				value_change as valueChange
+				value_change as valueChange,
+				recommend as recommend
        from bi_bills_${yearMonth}
        <where>
         	<if test="userId != null and userId &gt; 0">

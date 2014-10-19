@@ -1,0 +1,31 @@
+<html>
+<head>
+<script type="text/javascript" src="jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="jquery.hovercard.js"></script>
+</head>
+<body>
+ <p>jQuery by <label id="demo-basic">John Resig</label> is a cross-browser JS
+library designed to simplify the client-side scripting of HTML. It was released in January of 2006 at BarCamp NYC. Used by over 46% of the 10,000 
+most visited websites, it's the most popular JavaScript library in use today.</p>
+
+<p>jQuery is free, open source software, dual-licensed under the MIT License and GNU General Public License, Version 2.[4] jQuery's syntax is designed to make 
+it easier to navigate a document, select DOM elements, create animations, handle events, and develop Ajax applications.</p>
+
+//plugin script for basic hovercard---
+</body>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    var hoverHTMLDemoBasic = '<p>' +
+                        'John Resig is an application developer at Khan Academy.He was a ' +
+                        'JavaScript tool developer for the Mozilla Corporation.He is also the' +
+                        'creator and lead developer of the jQuery JavaScript library.<p>';
+
+    $("#demo-basic").hovercard({
+        detailsHTML: hoverHTMLDemoBasic,
+        width: 400,
+        cardImgSrc: 'http://ejohn.org/files/short.sm.jpg'
+    });
+});
+</script>
+</html>

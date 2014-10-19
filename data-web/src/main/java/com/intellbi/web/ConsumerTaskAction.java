@@ -134,6 +134,13 @@ public class ConsumerTaskAction extends ActionSupport {
 			try {
 				if(StringUtils.isBlank(ordertype))
 					ordertype = "regular_score";
+				
+				//读数据库加载一次
+		        Map<String,String> idPkgMap = new HashMap<String, String>();
+		        List<TelecomPackageDO> packages = telPakcageDao.getAll();
+		        for(TelecomPackageDO pkg: packages) {
+		            idPkgMap.put(String.valueOf(pkg.getId()), pkg.getName());
+		        }
 					
 				setBills(consumerBillService.getAllMonthBills(theMonth.substring(0,6), phoneNo, userId, currPage, pageSize,ordertype,6));
 				for(ConsumerBillDO consumerBillDO: bills) {
@@ -153,6 +160,24 @@ public class ConsumerTaskAction extends ActionSupport {
 	                  consumerBillDO.setValueChangeDesc("贬值");
 	                else
 	                  consumerBillDO.setValueChangeDesc("持平");
+	                
+	                consumerBillDO.setRecommend1("暂无更合适套餐推荐.");
+                    consumerBillDO.setRecommendCost1(0);
+	                String[] rcmdPackageIds = consumerBillDO.getRecommend().split(",");
+                    int rcmdNumber = rcmdPackageIds.length;
+                    if(rcmdNumber >= 1){
+                        String[] rcmdPackagePair = rcmdPackageIds[0].split(":");
+                        if(rcmdPackagePair.length == 2) {   
+                            String rcmd1 = idPkgMap.get(rcmdPackagePair[0]);
+                            if(StringUtils.isNotBlank(rcmd1)) {
+                                double costSave = Math.round(consumerBillDO.getIncome6()) - Math.round(Double.parseDouble(rcmdPackagePair[1]));
+                                if(costSave > 0) {
+                                    consumerBillDO.setRecommend1(rcmd1);
+                                    consumerBillDO.setRecommendCost1(costSave);
+                                }
+                            }
+                        }
+                    }
 				}
 				
 //				setBills(consumerBillService.getAllMonthBills(theMonth.substring(0,6), phoneNo, userId, currPage, pageSize,ordertype));

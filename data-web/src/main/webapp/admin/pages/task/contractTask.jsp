@@ -37,6 +37,8 @@
 <link rel="stylesheet" type="text/css"	href="admin/assets/css/window.css" />
 <link rel="stylesheet" type="text/css"	href="admin/assets/css/datagrid.css" />
 
+<link rel="stylesheet" type="text/css"  href="admin/assets/css/jquery.tooltip.css" />
+
 <style type="text/css">
 * {
 	margin: 0;
@@ -67,13 +69,32 @@ img {
 background:url('../images/combo-arrow.png') no-repeat center center
 }
 
+#tooltip.pretty {
+    font-family: Arial;
+    border: none;
+    width: 210px;
+    padding:20px;
+    height: 135px;
+    opacity: 0.95;
+    background: url('admin/assets/images/shadow.png');
+}
+#tooltip.pretty h3 {
+    margin-bottom: 0.75em;
+    font-size: 12pt;
+    width: 220px;
+    text-align: center;
+}
+#tooltip.pretty div { width: 220px; text-align: left; }
+
 </style>
 <script type="text/javascript" src="admin/assets/js/libs/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="admin/assets/js/libs/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="admin/assets/js/libs/jquery.date_input.pack.js"></script>
 <script type="text/javascript" src="admin/assets/js/libs/jquery.textbox.js"></script>
 <script type="text/javascript" src="admin/assets/js/jquery.scrollTo.js"></script>
+<!--script type="text/javascript" src="admin/assets/js/libs/jquery.hovercard.js"></script-->
 
+<script type="text/javascript" src="admin/assets/js/libs/jquery.tooltip.min.js"></script>
 <!--script type="text/javascript" src="admin/assets/js/libs/jquery.datagrid.js"></script-->
 
 </head>
@@ -132,7 +153,7 @@ background:url('../images/combo-arrow.png') no-repeat center center
 							<th>合约到期时间</th>
 							<th>合约剩余</th>
 							<th>当前套餐</th>
-							<th>用户状态</th>
+							<!--th>用户状态</th-->
 							<th>操作</th>
 						</tr>
 					</thead>
@@ -172,9 +193,14 @@ background:url('../images/combo-arrow.png') no-repeat center center
 
 							<td><s:property value="contractRemain"/> 个月</td>
 							<td><s:property value="packageName" /></td>
-							<td><s:property value="status"/></td>
-							<td><a class="btn" href="javascript:void(0)"
-								onclick="showDetail('<s:property value="packageName"/>');ajax_get_consumer_data(<s:property value='phoneNo'/>);">查看</a>
+							<!--td><s:property value="status"/></td-->
+							<td><a id='hover<s:property value="#status.index"/>' 
+							  title='套餐推荐 - 
+							     <li style="color: #FF6633;font-weight: bold;"><s:property value="recommend1"/></li> 
+							     <br/>
+							     <li>预计平均每月可节省 <span style="color: #FF6633;font-weight: bold;"><s:property value="recommendCost1"/></span> 元</li>'
+							  class="btn" href="javascript:void(0)"
+							  onclick="showDetail('<s:property value="packageName"/>');ajax_get_consumer_data(<s:property value='phoneNo'/>);">查看</a>
 							</td>
 							</tr>
 						</s:iterator>
@@ -347,7 +373,22 @@ background:url('../images/combo-arrow.png') no-repeat center center
 					window.location.href = "getContractConsumerBills?theMonth=" + theMonth + "&phoneNo=" + phoneNo + "&ordertype="+order;
 			    }
 			});
-		
+			
+			$(document).ready(function () {
+			    var tr_obj = document.getElementsByTagName('tr');  
+			    for (var i = 0; i <= tr_obj.length; i++) {   
+			        $('#hover'+i).tooltip({ 
+	                    track: true, 
+	                    delay: 0, 
+	                    showURL: false, 
+	                    showBody: " - ", 
+	                    extraClass: "pretty", 
+	                    fixPNG: true, 
+	                    opacity: 0.95, 
+	                    left: -120 
+	                });
+			    }  
+			});
 	</script>
 
 </body>

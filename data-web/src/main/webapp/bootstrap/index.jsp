@@ -33,6 +33,7 @@
     <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
     <script src="js/googleapis/html5.js"></script>
+    <script src="js/googleapis/respond.js"></script>
     <![endif]-->
 
     <!-- The fav icon -->
@@ -51,7 +52,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html"> <!--img alt="Charisma Logo" src="img/logo20.png" class="hidden-xs"/-->
+            <a class="navbar-brand" href="index.jsp"> <!--img alt="Charisma Logo" src="img/logo20.png" class="hidden-xs"/-->
                 <span style="font-size:25px;width:300px">IntellBI客户保有工具</span></a>
 
             <!-- user dropdown starts -->
@@ -131,7 +132,7 @@
                         <li class="nav-header" >任务管理</li>
                         <li><a class="ajax-link" href="index.jsp"><i class="glyphicon glyphicon-home"></i><span> 我的工作台</span></a>
                         </li>
-                        <li><a class="ajax-link" href="ui.html"><i class="glyphicon glyphicon-eye-open"></i><span> 保有任务</span></a>
+                        <li><a class="ajax-link" href="ui.html"><i class="glyphicon glyphicon-list-alt"></i><span> 保有任务</span></a>
                         </li>
                         <li><a class="ajax-link" href="form.html"><i
                                     class="glyphicon glyphicon-edit"></i><span> Forms</span></a></li>
@@ -153,7 +154,7 @@
                         </li>
                         <li><a class="ajax-link" href="calendar.html"><i class="glyphicon glyphicon-calendar"></i><span> Calendar</span></a>
                         </li>
-                        <li><a class="ajax-link" href="grid.html"><i
+                        <li><a class="ajax-link" href="grid.jsp"><i
                                     class="glyphicon glyphicon-th"></i><span> Grid</span></a></li>
                         <li><a href="tour.html"><i class="glyphicon glyphicon-globe"></i><span> Tour</span></a></li>
                         <li><a class="ajax-link" href="icon.html"><i
@@ -265,7 +266,7 @@
                         </a>位，请进入
                         <a data-toggle="tooltip" title="点击进入合约用户保有任务" href="http://www.baidu.com">
                             <big><b>保有任务</b></big>
-                        </a>菜单：
+                        </a>菜单管理进行管理：
                     </p>
                     <ul>
                         <li><b>本日（<span id="timedate-day"></span>）</b>待处理的合约用户位，已处理位，剩余位</li>
@@ -280,7 +281,7 @@
                         </a>位，请进入
                         <a data-toggle="tooltip" title="点击进入专项任务之单高流量用户" href="http://www.baidu.com">
                             <big><b>专项任务&nbsp;/&nbsp;单高流量用户</b></big>
-                        </a>任务菜单
+                        </a>任务菜单进行管理.
                     </p>
                     <!--p class="center-block download-buttons">
                         <a href="http://usman.it/free-responsive-admin-template/" class="btn btn-primary btn-lg"><i

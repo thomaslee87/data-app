@@ -1,28 +1,16 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
+<%@ taglib uri="/struts-tags" prefix="s"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--
-        ===
-        This comment should NOT be removed.
-
-        Charisma v2.0.0
-
-        Copyright 2012-2014 Muhammad Usman
-        Licensed under the Apache License v2.0
-        http://www.apache.org/licenses/LICENSE-2.0
-
-        http://usman.it
-        http://twitter.com/halalit_usman
-        ===
-    -->
     <meta charset="utf-8">
-    <title>Free HTML5 Bootstrap Admin Template</title>
+    <title>客户保有工具</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Charisma, a fully featured, responsive, HTML5, Bootstrap admin template.">
-    <meta name="author" content="Muhammad Usman">
 
     <!-- The styles -->
-    <link id="bs-css" href="css/bootstrap-cerulean.min.css" rel="stylesheet">
+    <!--link id="bs-css" href="css/bootstrap-cerulean.min.css" rel="stylesheet"-->
+    <link id="bs-css" href="css/bootstrap-simplex.min.css" rel="stylesheet">
 
     <link href="css/charisma-app.css" rel="stylesheet">
     <link href='bower_components/fullcalendar/dist/fullcalendar.css' rel='stylesheet'>
@@ -40,11 +28,12 @@
     <link href='css/animate.min.css' rel='stylesheet'>
 
     <!-- jQuery -->
-    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script src="js/jquery-1.8.3.min.js"></script>
 
     <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="js/googleapis/html5.js"></script>
+    <script src="js/googleapis/respond.js"></script>
     <![endif]-->
 
     <!-- The fav icon -->
@@ -139,7 +128,7 @@
                     </div>
                     <ul class="nav nav-pills nav-stacked main-menu">
                         <li class="nav-header">Main</li>
-                        <li><a class="ajax-link" href="index.html"><i class="glyphicon glyphicon-home"></i><span> Dashboard</span></a>
+                        <li><a class="ajax-link" href="index.jsp"><i class="glyphicon glyphicon-home"></i><span> Dashboard</span></a>
                         </li>
                         <li><a class="ajax-link" href="ui.html"><i class="glyphicon glyphicon-eye-open"></i><span> UI Features</span></a>
                         </li>
@@ -163,7 +152,7 @@
                         </li>
                         <li><a class="ajax-link" href="calendar.html"><i class="glyphicon glyphicon-calendar"></i><span> Calendar</span></a>
                         </li>
-                        <li><a class="ajax-link" href="grid.html"><i
+                        <li><a class="ajax-link" href="grid.jsp"><i
                                     class="glyphicon glyphicon-th"></i><span> Grid</span></a></li>
                         <li><a href="tour.html"><i class="glyphicon glyphicon-globe"></i><span> Tour</span></a></li>
                         <li><a class="ajax-link" href="icon.html"><i

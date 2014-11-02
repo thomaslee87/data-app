@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.intellbi.dao.UserDao">
+   
+   <select id="findAll" resultType="biUser">
+       select  a.id as id,
+       		   a.group_id as groupId,
+               a.staff_id as staffId,
+               a.username as username,
+               a.realname as realname,
+               a.password as password,
+               a.gmt_create as gmtCreate,
+               a.gmt_modified as gmtModified ,
+               a.gmt_login as gmtLogin,
+               b.name as groupName
+       from bi_users a
+       join bi_groups b	
+       on a.group_id = b.id
+       order by a.group_id,a.id
+   </select>
+   
+   <select id="get" parameterType="java.lang.Integer" resultType="biUser">
+    	select  a.id as id,
+       		   a.group_id as groupId,
+               a.staff_id as staffId,
+               a.username as username,
+               a.realname as realname,
+               a.password as password,
+               a.gmt_create as gmtCreate,
+               a.gmt_modified as gmtModified ,
+               a.gmt_login as gmtLogin,
+               b.name as groupName
+       from bi_users a
+       join bi_groups b	
+       on a.group_id = b.id
+       where a.id=#{id}
+   </select>
+   
+   <select id="findByUser" parameterType="biUser" resultType="biUser">
+    	select  a.id as id,
+       		   a.group_id as groupId,
+               a.staff_id as staffId,
+               a.username as username,
+               a.realname as realname,
+               a.password as password,
+               a.gmt_create as gmtCreate,
+               a.gmt_modified as gmtModified ,
+               a.gmt_login as gmtLogin,
+               b.name as groupName
+       from bi_users a
+       join bi_groups b	
+       on a.group_id = b.id
+        where a.username=#{username}
+   </select>
+    
+    <insert id="save" parameterType="biUser" useGeneratedKeys="true" keyProperty="id">
+		insert into bi_users (
+			group_id,
+			staff_id,
+			username,
+			realname,
+			password,
+			gmt_create,
+			gmt_modified
+		) values(#{groupId},#{staffId},#{username},#{password},now(),now());
+	</insert>
+
+
+	<update id="update" parameterType="biUser">
+	   update bi_users set 
+		   group_id=#{groupId},
+		   staff_id=#{staffId},
+		   username=#{username},
+		   realname=#{realname},
+		   password=#{password},
+		   gmt_modified=#{gmtModified},
+		   gmt_login=#{gmtLogin}
+	   where id=#{id} 
+	</update>
+    
+</mapper>

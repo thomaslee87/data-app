@@ -190,7 +190,7 @@ int i = 0;
 						consumerSessionMap.add(billDetailWrapper.getPhoneNo(), billDetailWrapper);
 						logger.debug(gson.toJson(billDetailWrapper));
 i ++;
-//if(i > 10000)
+//if(i > 1000)
 //	break;
 					}
 				}
@@ -236,12 +236,13 @@ i ++;
 				+ " `is_group_user`, `network`, `status`, `contract_from`, `contract_to`,"
 				+ "`consumer_type`,`income6`,`income3`,`voice6`,`voice3`,`gprs6`,`gprs3`,"
 				+ "`package_spill`,`voice_spill`,`gprs_spill`,`income_fluctuation`,"
-				+ "`voice_fluctuation`,`gprs_fluctuation`,`score`,`recommend`,`value_change`"
+				+ "`voice_fluctuation`,`gprs_fluctuation`,`score`,`recommend`,`value_change`,"
+				+ "`recommend_4g`, `value_change_4g`"
 				+ ")"
 				+ " values " ;
 		String sqlArgs = "('%s',%d,%d,%d,'%s',%f,%f,%f,"
 				+ "%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d,%f,%d,%d,'%s',%d,%d,"
-				+ "%d,%f,%f,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,'%s',%f"
+				+ "%d,%f,%f,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,'%s',%f,'%s',%f"
 				+ ")";
 		
 		int number = 0;
@@ -288,7 +289,8 @@ i ++;
 					consumerSession.getGprs6(),consumerSession.getGprs3(),consumerSession.getPackageSpill(),
 					consumerSession.getVoiceSpill(),consumerSession.getGprsSpill(),consumerSession.getIncomeFluctuation(),
 					consumerSession.getVoiceFluctuation(),consumerSession.getGprsFluctuation(),consumerSession.getScore(),
-					consumerSession.getRecommenedString(),consumerSession.getValueChange()
+					consumerSession.getRecommenedString(),consumerSession.getValueChange(),consumerSession.getRecommened4GString(),
+					consumerSession.getValueChange4G()
 				);
 				
 				if(sb.length() > 0)
@@ -348,7 +350,7 @@ i ++;
 	}
 	
 	public static void main(String args[]) {
-		String month = "201301";
+		String month = "201306";
 		
 		while(Integer.parseInt(month) <= 201312) {
 			DataAnalyzer dataAnalyzer = new DataAnalyzer(month);

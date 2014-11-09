@@ -3,6 +3,7 @@ package com.intellbi.data.dataobject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -45,6 +46,9 @@ public class ConsumerSession{
 	private double voiceSpill = 0;
 	private double gprsSpill = 0;
 	
+	private double valueAdded3 = 0;
+	private double valueAdded6 = 0;
+	
 	private double localVoiceCost6 = 0;
 	private double longDistVoiceCost6= 0;
 	private double roamVoiceCost6 = 0;
@@ -60,17 +64,30 @@ public class ConsumerSession{
 	private double score;
 	
 	private String recommenedString;
+	private String recommened4GString;
 	private double valueChange;
+	private double valueChange4G;
 	
+	
+	public String getRecommened4GString() {
+		return recommened4GString;
+	}
+
+	public double getValueChange4G() {
+		return valueChange4G;
+	}
+
 	private StringBuilder sb = new StringBuilder(); 
 	
 	private boolean isStandardPackage ;
+	
+	private TelecomPackage telecomPackage;//当前套餐
 	
 	//先调用calc方法再获取各数据
 	public void calc() {
 		int i = 0;
 		
-		TelecomPackage telecomPackage = consumerSession.get(consumerSession.size() - 1).getThePackage();
+		telecomPackage = consumerSession.get(consumerSession.size() - 1).getThePackage();
 		isStandardPackage = telecomPackage != null && telecomPackage.isStandard();
 		
 		if(!isStandardPackage) {
@@ -86,6 +103,8 @@ public class ConsumerSession{
 			localVoice6 += node.getBillDetail().getLocalCallTime();
 			longDistVoice6 += node.getBillDetail().getLongDistCallTime();
 			roamVoice6 += node.getBillDetail().getRoamCallTime();
+			
+			valueAdded6 += node.getBillDetail().getValueAddedFee();
 			
 			//用于计算实际的平均语音消费（由消费根据单价反算时长）
 			localVoiceCost6 += node.getBillDetail().getLocalCallFee();
@@ -134,6 +153,8 @@ public class ConsumerSession{
 			income3 += consumerSession.get(idx).getBillDetail().getIncome();
 			voice3 += consumerSession.get(idx).getBillDetail().getCallTime();
 			gprs3 += consumerSession.get(idx).getBillDetail().getGprs();
+			
+			valueAdded3 += consumerSession.get(idx).getBillDetail().getValueAddedFee();
 		}
 		
 		income6 /= i;
@@ -142,6 +163,9 @@ public class ConsumerSession{
 		income3 /= (j-1);
 		voice3 /= (j-1);
 		gprs3  /= (j-1);
+		
+		valueAdded6 /= i;
+		valueAdded3 /= (j-1);
 		
 		//通话时长均值
 		localVoice6 /= i;
@@ -201,7 +225,22 @@ public class ConsumerSession{
 			    .append(":").append(String.format("%.2f", packageCost.realCost));
 		}
 		recommenedString = sb.toString();
-		valueChange = sortedPackageList.get(0).telecomPackage.getFee() - telecomPackage.getFee();
+//		valueChange = sortedPackageList.get(0).telecomPackage.getFee() - telecomPackage.getFee();
+		valueChange = income6 - sortedPackageList.get(0).realCost ;//- telecomPackage.getFee();
+		
+		//4G推荐
+		sb.delete(0, sb.length());
+		List<Package4GCost> sorted4GPackList = getRecommend4GPackage();
+		for(int k = 0; k < RECOMMENDED_NUMBER; k++) {
+		    Package4GCost packageCost = sorted4GPackList.get(k);
+			if(sb.length() > 0)
+				sb.append(",");
+			
+			sb.append(packageCost.telecomPackage.getId())
+			    .append(":").append(String.format("%.2f", packageCost.realCost));
+		}
+		recommened4GString = sb.toString();
+		valueChange4G = income6 - sorted4GPackList.get(0).realCost;//telecomPackage.getFee();
 	}
 	
 	private void transferScoreToPriority(){
@@ -242,7 +281,69 @@ public class ConsumerSession{
 		return selPackages;
 	}
 	
+	
+	private static class Package4GCost{
+		public double realCost;
+		public TelecomPackage4G telecomPackage;
+		
+		public Package4GCost(double realCost, TelecomPackage4G telecomPackage){
+			this.realCost = realCost;
+			this.telecomPackage = telecomPackage;
+		}
+	}
+	
+	private class ComparatorPackageCost4G implements Comparator<Package4GCost>{
+		@Override
+		public int compare(Package4GCost arg0, Package4GCost arg1) {
+			if(arg0.realCost > arg1.realCost + 0.001)
+				return 1;
+			else if(arg0.realCost < arg1.realCost - 0.001)
+				return -1;
+			return 0;
+		}
+	}
+	
+	private List<Package4GCost> getRecommend4GPackage(){
+		
+        // 采用收入反算出的通话时长
+        double realLocalVoice6 = localVoice6;
+        double realLongDistVoice6 = longDistVoice6;
+        double realRoamVoice6 = roamVoice6; 
+        
+        double voicePrice = 0.15;//默认取4G套餐的单价
+        
+        //反算
+        if(isStandardPackage) {
+        	double curVoicePrice = telecomPackage.getLocalVoicePrice();
+        	
+            realLocalVoice6 = localVoiceCost6 / curVoicePrice;
+            realLongDistVoice6 = longDistVoiceCost6 / curVoicePrice;
+            realRoamVoice6 = roamVoiceCost6 / curVoicePrice;
+            
+        }
+        else {
+	        realLocalVoice6 = localVoiceCost6 / voicePrice;
+	        realLongDistVoice6 = longDistVoiceCost6 / voicePrice;
+	        realRoamVoice6 = roamVoiceCost6 / voicePrice;
+        }
+        
+        double voiceUsed = realLocalVoice6 + realLongDistVoice6 + realRoamVoice6 + telecomPackage.getVoice();
 
+        // 也改成用增值费反算 20141102
+    	double gprsPrice = 0.0003;//所有套餐单价都一样
+        double gprsUsed = valueAdded6 / (gprsPrice * 1000) + telecomPackage.getGprs();
+        
+		List<Package4GCost> selPackages = new ArrayList<ConsumerSession.Package4GCost>();
+		Map<String, TelecomPackage> packages = PackageConfig.getInstance().getPackages();
+		for(Entry<Integer, TelecomPackage4G> entry: pkg4GMap.entrySet()) {
+			TelecomPackage4G selPackageEntity = entry.getValue();
+			double selCost = getCostIn4GPackage(selPackageEntity,voiceUsed,gprsUsed);
+			selPackages.add(new Package4GCost(selCost, selPackageEntity));
+		}
+		Collections.sort(selPackages, new ComparatorPackageCost4G());
+		return selPackages;
+	}
+	
     // 按照长市漫一体化计费 http://3g.10010.com/
 	private double getCostInPackage(TelecomPackage selPackageEntity) {
         double voiceCost = 0;
@@ -263,18 +364,40 @@ public class ConsumerSession{
            这种反算的方式，其实也是在不明确如何由原始数据中的计费时长得到消费值的前提下，想到的一种近似处理方法
         */
         if(isStandardPackage) {
-            realLocalVoice6 = localVoiceCost6 / voicePrice;
-            realLongDistVoice6 = longDistVoiceCost6 / voicePrice;
-            realRoamVoice6 = roamVoiceCost6 / voicePrice;
+        	double curVoicePrice = telecomPackage.getLocalVoicePrice();
+        	
+            realLocalVoice6 = localVoiceCost6 / curVoicePrice;
+            realLongDistVoice6 = longDistVoiceCost6 / curVoicePrice;
+            realRoamVoice6 = roamVoiceCost6 / curVoicePrice;
+            
+        }
+        else {
+	        realLocalVoice6 = localVoiceCost6 / voicePrice;
+	        realLongDistVoice6 = longDistVoiceCost6 / voicePrice;
+	        realRoamVoice6 = roamVoiceCost6 / voicePrice;
         }
 
-        // gprs流量
+        /*// gprs流量
         double realGprs = gprs6 - selPackageEntity.getGprs();
         if (realGprs > 0)
             gprsCost = realGprs * selPackageEntity.getGprsPrice() * 1024;
-
+*/
+        // 也改成用增值费反算 20141102
+//        double realGprs6 = gprs6;
+//        if(isStandardPackage) {
+        	double gprsPrice = 0.0003;//telecomPackage.getGprsPrice();
+            double realGprs6 = valueAdded6 / (gprsPrice * 1000);
+//        }
+        
+        double realGprs = realGprs6 - selPackageEntity.getGprs() + telecomPackage.getGprs();
+        if (realGprs > 0)
+            gprsCost = realGprs * selPackageEntity.getGprsPrice() * 1024;
+        
         if(selPackageEntity.getLocalVoice() > 0) {// 实际上，C类套餐是赠送本地通话，这类需特殊处理
-            double realLocal = realLocalVoice6 - selPackageEntity.getLocalVoice();
+        	//还要加上原套餐赠送的部分，非标准套餐由于没数据，按默认0处理了
+        	realLocalVoice6 += telecomPackage.getLocalVoice();
+        	
+        	double realLocal = realLocalVoice6 - selPackageEntity.getLocalVoice();
             if(realLocal < 0) 
                 realLocal = 0;
             
@@ -288,6 +411,8 @@ public class ConsumerSession{
         }
         else {//其他套餐都是赠送不区分本地长途的语音
             double realVoiceTime = realLocalVoice6 + realLongDistVoice6 + realRoamVoice6 - selPackageEntity.getVoice(); 
+            //还要加上原套餐赠送部分
+            realVoiceTime += telecomPackage.getVoice(); 
             voiceCost = realVoiceTime > 0 ? realVoiceTime * voicePrice : 0; 
         }
         
@@ -330,6 +455,24 @@ public class ConsumerSession{
 
         // 流量和语音超出套餐的付费，加上套餐本身的价值，算作用户使用该套餐的实际支出
         return gprsCost + voiceCost + selPackageEntity.getFee();
+	}
+	
+	private static Map<Integer,TelecomPackage4G> pkg4GMap;
+	static {
+		pkg4GMap = new HashMap<Integer, TelecomPackage4G>();
+		pkg4GMap.put(1, new TelecomPackage4G(1,76,"76元套餐",200,400));
+		pkg4GMap.put(2, new TelecomPackage4G(2,106,"106元套餐",300,800));
+		pkg4GMap.put(3, new TelecomPackage4G(3,136,"136元套餐",500,1000));
+		pkg4GMap.put(4, new TelecomPackage4G(4,166,"166元套餐",500,2000));
+		pkg4GMap.put(5, new TelecomPackage4G(5,196,"196元套餐",500,3000));
+		pkg4GMap.put(6, new TelecomPackage4G(6,296,"296元套餐",1000,4000));
+		pkg4GMap.put(7, new TelecomPackage4G(7,396,"396元套餐",2000,6000));
+		pkg4GMap.put(8, new TelecomPackage4G(8,596,"596元套餐",3000,11000));
+	}
+	private double getCostIn4GPackage(TelecomPackage4G selPackageEntity, double voiceUsed, double gprsUsed) {
+		return selPackageEntity.getFee() +
+				selPackageEntity.calcVoiceCost(voiceUsed) +
+				selPackageEntity.calcGprsCost(gprsUsed);
 	}
 	
 	private double calcScore(double[] weight) {
@@ -495,12 +638,13 @@ public class ConsumerSession{
 	
 	public static void main(String[] args) {
 	    ConsumerSession session = new ConsumerSession();
-	    session.income6 = 766.43;
-	    session.gprs6 = 6637.33;
-	    session.localVoiceCost6 = (91.5+90.47+90.47+89.76+90.94+90.22)/6;
-	    session.longDistVoiceCost6 = (59.28+45.67+48.87+45.38+45.6+46.65)/6;
-	    session.roamVoiceCost6 = (37.42+39.05+110.09+40.06+38.66+281.95)/6;
-        session.isStandardPackage = true;
+	    session.telecomPackage = new TelecomPackage();
+	    session.income6 = 386;
+	    session.gprs6 = 124;
+	    session.localVoiceCost6 = (57.81+58.64+58.64+57.76+58.11+56.98)/6;
+	    session.longDistVoiceCost6 = (30.15+29.75+29.75+28.96+29.14+30.47)/6;
+	    session.roamVoiceCost6 = (26.74+26.31+26.31+27.98+27.45+27.24)/6;
+        session.isStandardPackage = false;
         List<PackageCost> list = session.getRecommendPackage();
         for(PackageCost p:list) {
             System.out.println(p.telecomPackage.getName() + "\t" + p.realCost);

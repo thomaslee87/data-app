@@ -223,7 +223,7 @@ public class CustomerAction extends ActionSupport{
 		
 		for(String theMonth: theMonthList) {
 			try{
-				ConsumerBillDO consumerDo = consumerBillService.getConsumerMonthBill(thePhoneNo, theMonth);
+				ConsumerBillDO consumerDo = consumerBillService.getConsumerMonthBill(thePhoneNo, theMonth,-1);
 				if(consumerDo != null){
 					
 						if(flag) {

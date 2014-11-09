@@ -10,4 +10,6 @@ public interface TelecomPackageDao {
 	
 	List<TelecomPackageDO> getAll();
 	
+	List<TelecomPackageDO> getAll4G();
+	
 }

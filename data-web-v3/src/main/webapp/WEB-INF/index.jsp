@@ -65,11 +65,11 @@
                         <i class="fa fa-user fa-fw"></i><%=session.getAttribute("realname")%>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> 我的信息</a>
+                        <!-- <li><a href="#"><i class="fa fa-user fa-fw"></i> 我的信息</a>
                         </li>
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> 设置</a>
-                        </li>
-                        <li class="divider"></li>
+                        </li> 
+                        <li class="divider"></li>-->
                         <li><a href="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
                         </li>
                     </ul>
@@ -82,6 +82,18 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
+                     	<%-- <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="搜索号码...">
+                                <span class="input-group-btn">
+                                <a class="btn btn-default" type="button" href="" target=_blank>
+                                    <i class="fa fa-search"></i>
+                                </a>
+                            </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li> --%>
+                    
                         <li>
                             <a class="active" href="my"><i class="fa fa-dashboard fa-fw"></i> 我的工作台</a>
                         </li>
@@ -97,6 +109,23 @@
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="brandUp">4G带宽升级</a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="#"><i class="fa fa-cog fa-fw"></i> 我的设置<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+									<%
+										Object group = session.getAttribute("group");
+										if (group != null && group.toString().equals("0")) {
+									%> 
+									<a href="userManager">用户管理</a> 
+									<%
+									 	}
+									 %> 
+									 <a href="myProfile">我的信息</a>
                                 </li>
                             </ul>
                         </li>
@@ -217,7 +246,30 @@
 	                    <h2><%=session.getAttribute("realname")%>，您好！
 	                        <small>今天是<span id="timedate"></span></small>
 	                    </h2>
-	                    <p>当前您的名下有
+	                    <p>
+	                    	<i class="fa fa-hand-o-right">&nbsp;</i> 
+	                    	<a data-toggle="tooltip" data-placement="top" title="点击进入合约用户保有任务" href="contractTask">
+	                            <big><b>保有任务</b></big>
+	                        </a>
+	                        
+	                       <%--  <ul>
+		                        <li><b>本日（<span id="timedate-day"></span>）</b>待处理的合约用户位，已处理位，剩余位</li>
+		                        <li><b>本周（<span id="timedate-week-start"></span>~<span id="timedate-week-end"></span>）</b>待处理的合约用户位，已处理位，剩余位</li>
+			                    <li><b>本月（<span id="timedate-month-start"></span>~<span id="timedate-month-end"></span>）</b>待处理的合约用户位，已处理位，剩余位</li>
+	                    	</ul> --%>
+	                    </p>
+	                    
+	                    <p>
+	                        <i class="fa fa-hand-o-right">&nbsp;</i> 
+	                        <!-- &nbsp;&nbsp;&nbsp;&nbsp;单高流量用户 -->
+	                        <%-- <a data-toggle="tooltip" data-placement="top" title="点击查看" href="http://www.baidu.com" target="_blank">
+	                            <big><strong><s:property value="vipNumber"/>10</strong></big>
+	                        </a>位，请进入 --%>
+	                        <a data-toggle="tooltip" data-placement="top" title="点击进入专项任务之带宽升级" href="brandUp">
+	                            <big><b>专项任务&nbsp;/&nbsp;4G带宽升级</b></big>
+	                        </a><!-- 任务菜单进行管理. -->
+	                    </p>
+<%-- 	                    <p>当前您的名下有
 	                        <a data-toggle="tooltip" data-placement="top" title="点击查看" href="http://www.baidu.com" target="_blank">
 	                            <big><strong><s:property value="vipNumber"/>10</strong></big>
 	                        </a>位VIP客户，其中：
@@ -245,7 +297,7 @@
 	                        <a data-toggle="tooltip" data-placement="top" title="点击进入专项任务之单高流量用户" href="http://www.baidu.com">
 	                            <big><b>专项任务&nbsp;/&nbsp;单高流量用户</b></big>
 	                        </a>任务菜单进行管理.
-	                    </p>
+	                    </p> --%>
 	                    <!--p class="center-block download-buttons">
 	                        <a href="http://usman.it/free-responsive-admin-template/" class="btn btn-primary btn-lg"><i
 	                                class="glyphicon glyphicon-chevron-left glyphicon-white"></i> Back to article</a>

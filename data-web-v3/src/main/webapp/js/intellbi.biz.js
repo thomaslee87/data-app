@@ -466,10 +466,17 @@ $(document).ready(function() {
 	               {
 	            	   
 	            	   "mRender":function(mData){
+	            		   sv4g = '预计平均每月可节省 ' + mData.save4g;
+	            		   if(mData.save4g < 0)
+	            			   sv4g = '预计平均每月将多消费 ' + -1 *mData.save4g;   
+	            			   
 	            		   return '<a href="billDetail?theBizMonth='+ mData.month+'&phoneNo='+mData.phone +'" target=_blank class="btn btn-primary btn-xs" data-toggle="popover-left" ' +
-	            		   	'data-content="预计平均每月可节省 ' + mData.save + '元" ' + 
-	            		   	'title=\'<span class="label label-warning">荐:</span>' + mData.rmd + '\'>' +
-	            		   	'<i class="glyphicon glyphicon-zoom-in icon-white"></i>详情</span></a>';
+	            		   	'data-content=\'<p><i class="fa fa-hand-o-right">&nbsp;</i><span class="label label-success">续约套餐:</span> <ul><li><span class="label label-danger">' + mData.rmd + 
+	            		   	'</span></li><li>预计平均每月可节省 ' + mData.save + '元 </li></ul></p><p> <i class="fa fa-hand-o-right">&nbsp;</i><span class="label label-success">带宽升级:</span> <ul><li>' + 
+	            		   	'<span class="label label-danger">（4G）' + mData.rmd4g + '</span></li><li>' + sv4g + '元</li></ul></p>\''+
+	            		   	'title=\'<center><span class="label label-warning">套餐推荐</span></center>\'' + // + mData.rmd + '\'>' +
+	            		   	'<i class="glyphicon glyphicon-zoom-in icon-white"></i>详情</span></a>'
+	            		   	;
 //		            		   '<a href="#" class="btn btn-primary btn-xs" data-toggle="popover-left"' + 
 //		            		   'data-content="预计平均每月可节省 "' + mData + '"/>元"' +
 //		            		   'title=\'<span class="label label-warning">荐</span>/>\'>' +
@@ -547,8 +554,11 @@ $(document).ready(function() {
 		    autoclose: true
 		}).on('changeDate',function(ev){
 			refreshDate(ev.target.value);
-			if(contract_table != null) {
+			if($('#dt-contract').length > 0) {
 				contract_table.fnDraw();//重新加载数据
+			}
+			if($('#dt-brandup').length > 0){
+				brandup_table.fnDraw();
 			}
 		});
 		
@@ -584,14 +594,18 @@ $(document).ready(function() {
 	
 	if($('#orderby').length > 0) {
 		$('select').on('change', function (e) {
-		    if(contract_table != null) {
+			
+			if($('#dt-contract').length > 0) {
 				contract_table.fnDraw();//重新加载数据
+			}
+			if($('#dt-brandup').length > 0){
+				brandup_table.fnDraw();
 			}
 		});	
 	}
 	
 	if($('#dt-brandup').length > 0) {
-	    contract_table = $('#dt-brandup').dataTable({
+	    brandup_table = $('#dt-brandup').dataTable({
 	          "sPaginationType": "intellbi_numbers",
 	          "bSort":false,
 	          "bFilter" : false,
@@ -618,8 +632,12 @@ $(document).ready(function() {
 	               {
 	            	   
 	            	   "mRender":function(mData){
+	            		   sv = '预计平均每月可节省 ' + mData.save;
+	            		   if(mData.save < 0)
+	            			   sv = '预计平均每月将多消费 ' + -1 *mData.save; 
+	            		   
 	            		   return '<a href="brandUpDetail?theBizMonth='+ mData.month+'&phoneNo='+mData.phone +'" target=_blank class="btn btn-primary btn-xs" data-toggle="popover-left" ' +
-	            		   	'data-content="预计平均每月可节省 ' + mData.save + '元" ' + 
+	            		   	'data-content="' + sv + '元" ' + 
 	            		   	'title=\'<span class="label label-warning">荐:</span>' + mData.rmd + '\'>' +
 	            		   	'<i class="glyphicon glyphicon-zoom-in icon-white"></i>带宽升级</span></a>';
 //		            		   '<a href="#" class="btn btn-primary btn-xs" data-toggle="popover-left"' + 
@@ -652,6 +670,8 @@ $(document).ready(function() {
 	                    	  alert(errMsg);
 	                      }
 	                    	  
+	                      $('div.dtInfo').addClass('alert alert-warning').html('最新数据来自：<b><span id="dataDesc" style="font-size:16px">' + resp['theDataMonth'] + '</span></b>');
+	                      
 	        			  $('[data-toggle="popover-left"]').popover({placement:'left',trigger: 'hover',html:true});
 	                  }  
 	              });
@@ -676,7 +696,7 @@ $(document).ready(function() {
 	          }
 	      });
 	    
-	    $('div.dtInfo').addClass('alert alert-warning').html('数据来自：<b><span id="dataDesc" style="font-size:16px"></span></b>');
+//	    $('div.dtInfo').addClass('alert alert-warning').html('数据来自：<b><span id="dataDesc" style="font-size:16px"></span></b>');
 	}
 
 });

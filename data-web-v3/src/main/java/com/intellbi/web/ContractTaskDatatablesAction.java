@@ -148,15 +148,40 @@ public class ContractTaskDatatablesAction extends ActionSupport{
 	            
 	            Period cQueryWindow = getQueryWindow(taskTimeWindow, taskview);
 	            
-	            int cConsumerCnt = consumerBillService.getContractCnt(userId, theMonth, cQueryWindow);
-	            
 	//            int recordsTotal = consumerBillService.getTotalCount(theMonth, phoneNo,userId,-1);
 	            
 	            dataMap.put("draw", sEcho);
-	            dataMap.put("recordsTotal", String.valueOf(cConsumerCnt));
-	            dataMap.put("recordsFiltered", String.valueOf(cConsumerCnt));
-	//            List<ConsumerBillDO>
-	            dataMap.put("data", getDataList(userId,bizdate,theMonth,cQueryWindow,orderby,iDisplayStart,iDisplayLength));
+	            
+	            
+	            if(taskview.equals(Constants.TASK_VIEW_MONTH)){
+	            	int cConsumerCnt = consumerBillService.getContractCnt(userId, theMonth, cQueryWindow, -1);
+		            dataMap.put("recordsTotal", String.valueOf(cConsumerCnt));
+		            dataMap.put("recordsFiltered", String.valueOf(cConsumerCnt));
+	            	dataMap.put("data", getDataList(userId,-1, bizdate,theMonth,cQueryWindow,orderby,iDisplayStart,iDisplayLength));
+	            }
+	            //打个补丁，日/周视图推荐
+	            else if(taskview.equals(Constants.TASK_VIEW_DAY)) {
+	            	int cConsumerCnt = consumerBillService.getContractCnt(userId, theMonth, cQueryWindow, 0);
+	            	
+	            	int cnt = cConsumerCnt > 5 ? 5 : cConsumerCnt;
+	            	
+	            	dataMap.put("recordsTotal", String.valueOf(cnt));
+		            dataMap.put("recordsFiltered", String.valueOf(cnt));
+		            
+		            dataMap.put("data", getDataList(userId, 0, bizdate,theMonth,cQueryWindow,orderby,0,5));
+		            
+	            }
+	            else if(taskview.equals(Constants.TASK_VIEW_WEEK)) {
+	            	int cConsumerCnt = consumerBillService.getContractCnt(userId, theMonth, cQueryWindow, 0);
+	            	
+	            	int cnt = cConsumerCnt > 20 ? 20 : cConsumerCnt;
+	            	
+	            	dataMap.put("recordsTotal", String.valueOf(cnt));
+		            dataMap.put("recordsFiltered", String.valueOf(cnt));
+		            
+		            dataMap.put("data", getDataList(userId, 0, bizdate,theMonth,cQueryWindow,orderby,iDisplayStart,iDisplayLength));
+	            }
+	            	
 	            return SUCCESS;
 	        }
 		} catch (Exception e) {
@@ -213,7 +238,7 @@ public class ContractTaskDatatablesAction extends ActionSupport{
 		}
 */	}
 	
-	private List<List<Object>> getDataList(int userId, String bizdate,String theMonth, Period cQueryWindow, String orderby, int pageStart, int pageSize){
+	private List<List<Object>> getDataList(int userId, int contractTaskState, String bizdate,String theMonth, Period cQueryWindow, String orderby, int pageStart, int pageSize){
 		List<List<Object>> dataList = new ArrayList<List<Object>>();
         try {
         	//读数据库加载一次
@@ -223,11 +248,18 @@ public class ContractTaskDatatablesAction extends ActionSupport{
 	            idPkgMap.put(String.valueOf(pkg.getId()), pkg.getName());
 	        }
 	        
+	        Map<String,String> idPkgMap4G = new HashMap<String, String>();
+	        List<TelecomPackageDO> packages4G = telPakcageDao.getAll4G();
+	        for(TelecomPackageDO pkg : packages4G) {
+	        	idPkgMap4G.put(String.valueOf(pkg.getId()), pkg.getName());
+	        }
+	        
+	        
             if(StringUtils.isBlank(orderby) || (!orderby.equals(Constants.ORDER_BY_REGULAR_SCORE) && !orderby.equals(Constants.ORDER_BY_VALUD_CHANGE)))
                 orderby = Constants.ORDER_BY_REGULAR_SCORE;
             
             Pagination pagination = new Pagination(pageStart, pageSize, orderby);
-            List<ConsumerBillDO> bills = consumerBillService.getContractConsumers(userId, theMonth, cQueryWindow, pagination);
+            List<ConsumerBillDO> bills = consumerBillService.getContractConsumers(userId, theMonth, cQueryWindow, pagination, contractTaskState);
             
 //            List<ConsumerBillDO> bills = null = consumerBillService.getAllMonthBills(theMonth.substring(0,6), phoneNo, userId, currPage, pageSize,ordertype,-1);
             
@@ -243,13 +275,13 @@ public class ContractTaskDatatablesAction extends ActionSupport{
                   consumerBillDO.setPriorityDesc("中");
                 
                 if(consumerBillDO.getValueChange() > 10)
-                  consumerBillDO.setValueChangeDesc("升值");
+                  consumerBillDO.setValueChangeDesc("节省");
                 else if(consumerBillDO.getValueChange() < -10)
-                  consumerBillDO.setValueChangeDesc("贬值");
+                  consumerBillDO.setValueChangeDesc("增加");
                 else
                   consumerBillDO.setValueChangeDesc("持平");
                 
-                consumerBillDO.setRecommend1("暂无更合适套餐推荐.");
+                consumerBillDO.setRecommend1("暂无更合适套餐，可保持原套餐.");
                 consumerBillDO.setRecommendCost1(0);
                 String[] rcmdPackageIds = consumerBillDO.getRecommend().split(",");
                 int rcmdNumber = rcmdPackageIds.length;
@@ -267,6 +299,22 @@ public class ContractTaskDatatablesAction extends ActionSupport{
                     }
                 }
                 
+                String rmd4g = "";
+                double save4g = 0.0;
+                
+                String[] rmd4GPacageIds = consumerBillDO.getRecommend4G().split(",");
+                if(rmd4GPacageIds.length >= 1) {
+                	String[] rcmd4GPackagePair = rmd4GPacageIds[0].split(":");
+                	if(rcmd4GPackagePair.length == 2) {
+                		String rcmd14G = idPkgMap4G.get(rcmd4GPackagePair[0]);
+                		if(StringUtils.isNotBlank(rcmd14G)) {
+                			double costSave = Math.round(consumerBillDO.getIncome6()) - Math.round(Double.parseDouble(rcmd4GPackagePair[1]));
+                			rmd4g = rcmd14G;
+                			save4g = costSave;
+                		}
+                	}
+                }
+                
                 List<Object> _dtList = new ArrayList<Object>();
                 _dtList.add(consumerBillDO.getPhoneNo());
                 if(orderby.equals(Constants.ORDER_BY_REGULAR_SCORE))
@@ -277,13 +325,21 @@ public class ContractTaskDatatablesAction extends ActionSupport{
                 _dtList.add(consumerBillDO.getContractTo());
 //                _dtList.add(consumerBillDO.getContractRemain());
                 _dtList.add(consumerBillDO.getPackageName());
-                _dtList.add(consumerBillDO.getPhoneNo());
+                
+                if(consumerBillDO.getTaskStateContract() == 0)
+                	_dtList.add("<span class=\"label label-danger\">未处理</span>");
+//                	_dtList.add("<span id=\"btn" + consumerBillDO.getPhoneNo() + "\" class=\"btn btn-warning btn-xs\" value=\""+consumerBillDO.getPhoneNo()+"\">未处理</span>");
+                else
+                	_dtList.add("<span class=\"label label-success\">已查看</span>");
+//                	_dtList.add("<span id=\"btn" + consumerBillDO.getPhoneNo() + "\" class=\"btn btn-warning btn-xs\" value=\""+consumerBillDO.getPhoneNo()+"\">已处理</span>");
                 
                 Map<String,String> _map = new HashMap<String,String>();
                 _map.put("month", bizdate.substring(0,6));
                 _map.put("phone", consumerBillDO.getPhoneNo());
                 _map.put("save", consumerBillDO.getRecommendCost1()+"");
                 _map.put("rmd", consumerBillDO.getRecommend1());
+                _map.put("rmd4g", rmd4g);
+                _map.put("save4g",String.valueOf(save4g));
                 _dtList.add(_map);
                 dataList.add(_dtList);
             }

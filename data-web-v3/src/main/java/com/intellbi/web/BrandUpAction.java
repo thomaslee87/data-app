@@ -48,6 +48,16 @@ public class BrandUpAction extends ActionSupport{
 	private String phoneNo;
 	private String ordertype;
 	
+	private String theDataMonth;
+	
+	public String getTheDataMonth() {
+		return theDataMonth;
+	}
+
+	public void setTheDataMonth(String theDataMonth) {
+		this.theDataMonth = theDataMonth;
+	}
+
 	private String aoData;
 	
 	public String getAoData() {
@@ -140,9 +150,11 @@ public class BrandUpAction extends ActionSupport{
 	            	}
 	            }
 	            
+	            theDataMonth = theMonth;
+	            
 	            Period cQueryWindow = getQueryWindow(taskTimeWindow,Constants.TASK_VIEW_MONTH);
 	            
-	            int cConsumerCnt = consumerBillService.getBrandUpCnt(userId, theMonth, cQueryWindow);
+	            int cConsumerCnt = consumerBillService.getBrandUpCnt(userId, theMonth, cQueryWindow,-1);
 	            
 	//            int recordsTotal = consumerBillService.getTotalCount(theMonth, phoneNo,userId,-1);
 	            
@@ -151,6 +163,7 @@ public class BrandUpAction extends ActionSupport{
 	            dataMap.put("recordsFiltered", String.valueOf(cConsumerCnt));
 	//            List<ConsumerBillDO>
 	            dataMap.put("data", getDataList(userId,bizdate,theMonth,cQueryWindow,orderby,iDisplayStart,iDisplayLength));
+	            dataMap.put("theDataMonth", theDataMonth.substring(0,4) + "年" + theDataMonth.substring(4) + "月");
 	            return SUCCESS;
 	        }
 		} catch (Exception e) {
@@ -212,16 +225,16 @@ public class BrandUpAction extends ActionSupport{
         try {
         	//读数据库加载一次
 	        Map<String,String> idPkgMap = new HashMap<String, String>();
-	        List<TelecomPackageDO> packages = telPakcageDao.getAll();
+	        List<TelecomPackageDO> packages = telPakcageDao.getAll4G();
 	        for(TelecomPackageDO pkg: packages) {
 	            idPkgMap.put(String.valueOf(pkg.getId()), pkg.getName());
 	        }
 	        
-            if(StringUtils.isBlank(orderby) || (!orderby.equals(Constants.ORDER_BY_GPRS6) && !orderby.equals(Constants.ORDER_BY_VALUD_CHANGE)))
+            if(StringUtils.isBlank(orderby) || (!orderby.equals(Constants.ORDER_BY_GPRS6) && !orderby.equals(Constants.ORDER_BY_VALUD_CHANGE_4G)))
                 orderby = Constants.ORDER_BY_GPRS6;
             
             Pagination pagination = new Pagination(pageStart, pageSize, orderby);
-            List<ConsumerBillDO> bills = consumerBillService.getBrandUpConsumers(userId, theMonth, cQueryWindow, pagination);
+            List<ConsumerBillDO> bills = consumerBillService.getBrandUpConsumers(userId, theMonth, cQueryWindow, pagination, -1);
             
 //            List<ConsumerBillDO> bills = null = consumerBillService.getAllMonthBills(theMonth.substring(0,6), phoneNo, userId, currPage, pageSize,ordertype,-1);
             
@@ -236,16 +249,16 @@ public class BrandUpAction extends ActionSupport{
                 else
                   consumerBillDO.setPriorityDesc("中");
                 
-                if(consumerBillDO.getValueChange() > 10)
-                  consumerBillDO.setValueChangeDesc("升值");
-                else if(consumerBillDO.getValueChange() < -10)
-                  consumerBillDO.setValueChangeDesc("贬值");
+                if(consumerBillDO.getValueChange4G() > 10)
+                  consumerBillDO.setValueChangeDesc("节省");
+                else if(consumerBillDO.getValueChange4G() < -10)
+                  consumerBillDO.setValueChangeDesc("增加");
                 else
                   consumerBillDO.setValueChangeDesc("持平");
                 
                 consumerBillDO.setRecommend1("暂无更合适套餐推荐.");
                 consumerBillDO.setRecommendCost1(0);
-                String[] rcmdPackageIds = consumerBillDO.getRecommend().split(",");
+                String[] rcmdPackageIds = consumerBillDO.getRecommend4G().split(",");
                 int rcmdNumber = rcmdPackageIds.length;
                 if(rcmdNumber >= 1){
                     String[] rcmdPackagePair = rcmdPackageIds[0].split(":");
@@ -253,18 +266,31 @@ public class BrandUpAction extends ActionSupport{
                         String rcmd1 = idPkgMap.get(rcmdPackagePair[0]);
                         if(StringUtils.isNotBlank(rcmd1)) {
                             double costSave = Math.round(consumerBillDO.getIncome6()) - Math.round(Double.parseDouble(rcmdPackagePair[1]));
-                            if(costSave > 0) {
+//                            if(costSave > 0) {
                                 consumerBillDO.setRecommend1(rcmd1);
                                 consumerBillDO.setRecommendCost1(costSave);
-                            }
+//                            }
                         }
                     }
                 }
                 
                 List<Object> _dtList = new ArrayList<Object>();
                 _dtList.add(consumerBillDO.getPhoneNo());
-                if(orderby.equals(Constants.ORDER_BY_GPRS6))
-                	_dtList.add(consumerBillDO.getGprs6());
+                if(orderby.equals(Constants.ORDER_BY_GPRS6)) {
+//                	_dtList.add(consumerBillDO.getGprs6());
+                	double g = consumerBillDO.getGprs6();
+                	if(g > 1000) 
+                		_dtList.add("大于1000M");
+                	else if(g > 500)
+                		_dtList.add("500~1000M");
+                	else if(g > 200)
+                		_dtList.add("200~500M");
+                	else if(g > 100)
+                		_dtList.add("100~200M");
+                	else
+                		_dtList.add("小于100M");
+                		
+                }
                 else
                 	_dtList.add(consumerBillDO.getValueChangeDesc());	
                 _dtList.add(consumerBillDO.getIncome());
@@ -279,7 +305,7 @@ public class BrandUpAction extends ActionSupport{
                 _map.put("month", bizdate.substring(0,6));
                 _map.put("phone", consumerBillDO.getPhoneNo());
                 _map.put("save", consumerBillDO.getRecommendCost1()+"");
-                _map.put("rmd", consumerBillDO.getRecommend1());
+                _map.put("rmd", "（4G）"+consumerBillDO.getRecommend1());
                 _dtList.add(_map);
                 dataList.add(_dtList);
             }

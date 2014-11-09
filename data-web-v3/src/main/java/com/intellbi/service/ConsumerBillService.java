@@ -25,7 +25,7 @@ public interface ConsumerBillService {
 	 * @param cQueryWindow
 	 * @return 合约用户个数
 	 */
-	public int getContractCnt(int userId, String theMonth, Period cQueryWindow);
+	public int getContractCnt(int userId, String theMonth, Period cQueryWindow, int contractState);
 	
 	/**
 	 * @param userId
@@ -34,14 +34,14 @@ public interface ConsumerBillService {
 	 * @param contractTo
 	 * @return 合约用户列表
 	 */
-	public List<ConsumerBillDO> getContractConsumers(int userId, String theMonth, Period cQueryWindow, Pagination pagination);
+	public List<ConsumerBillDO> getContractConsumers(int userId, String theMonth, Period cQueryWindow, Pagination pagination, int contractState);
 	
 	/**
 	 * @param phoneNo
 	 * @param yearMonth
 	 * @return 从指定月表中取用户的消费信息
 	 */
-	ConsumerBillDO getConsumerMonthBill(String phoneNo, String theMonth) ;
+	ConsumerBillDO getConsumerMonthBill(String phoneNo, String theMonth, int contractState) ;
 	
 //	List<ConsumerBillDO> getAllConsumers(int userId, String theMonth);
 	
@@ -52,7 +52,10 @@ public interface ConsumerBillService {
 	 * @param pagination
 	 * @return 返回除了合约期6个月到期的其他用户
 	 */
-	List<ConsumerBillDO> getBrandUpConsumers(int userId, String theMonth,Period cQueryWindow, Pagination pagination);
+	List<ConsumerBillDO> getBrandUpConsumers(int userId, String theMonth,Period cQueryWindow, Pagination pagination, int contractState);
 	
-	int getBrandUpCnt(int userId, String theMonth,Period cQueryWindow);
+	int getBrandUpCnt(int userId, String theMonth,Period cQueryWindow, int contractState);
+	
+	
+	void updateContractStatus(String phoneNo, String theMonth, int contractState);
 }

@@ -40,4 +40,6 @@ public interface ConsumerBillDAO {
 	public List<ConsumerBillDO> getBrandUpConsumers(BillQuery billQuery);
 	public int getBrandUpCnt(BillQuery billQuery);
 	
+	public void updateContractStatus(BillQuery billQuery);
+	
 }

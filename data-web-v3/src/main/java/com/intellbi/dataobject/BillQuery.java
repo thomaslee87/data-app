@@ -1,5 +1,7 @@
 package com.intellbi.dataobject;
 
+import java.util.Date;
+
 import com.intellbi.utils.MyDateUtils.Period;
 
 public class BillQuery {
@@ -29,14 +31,42 @@ public class BillQuery {
 	 */
 	private Period contractQuery;
 	
-	public BillQuery(int userId, String phoneNo, String theMonth, Period contractQuery, Pagination pagination){
+	private int taskStateContract;
+	
+	private Date viewDate;
+	
+	
+	public Date getViewDate() {
+		return viewDate;
+	}
+
+
+	public void setViewDate(Date viewDate) {
+		this.viewDate = viewDate;
+	}
+
+
+	public BillQuery(int userId, String phoneNo, String theMonth, Period contractQuery, Pagination pagination, int taskStateContract){
 		setUserId(userId);
 		setPhoneNo(phoneNo);
 		setTheMonth(theMonth);
 		setContractQuery(contractQuery);
 		setPagination(pagination);
+		setTaskStateContract(taskStateContract);
 	}
 	
+
+	public int getTaskStateContract() {
+		return taskStateContract;
+	}
+
+
+
+	public void setTaskStateContract(int taskStateContract) {
+		this.taskStateContract = taskStateContract;
+	}
+
+
 
 	public String getPhoneNo() {
 		return phoneNo;

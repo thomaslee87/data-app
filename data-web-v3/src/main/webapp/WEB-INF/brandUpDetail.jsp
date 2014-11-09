@@ -77,9 +77,9 @@
 						<i class="fa fa-caret-down"></i>
 				</a>
 					<ul class="dropdown-menu dropdown-user">
-						<li><a href="#"><i class="fa fa-user fa-fw"></i> 我的信息</a></li>
+						<!-- <li><a href="#"><i class="fa fa-user fa-fw"></i> 我的信息</a></li>
 						<li><a href="#"><i class="fa fa-gear fa-fw"></i> 设置</a></li>
-						<li class="divider"></li>
+						<li class="divider"></li> -->
 						<li><a href="logout"><i class="fa fa-sign-out fa-fw"></i>
 								退出</a></li>
 					</ul> <!-- /.dropdown-user --></li>
@@ -201,7 +201,7 @@
 											id="dt-extra">
 											<thead>
 												<tr class="info">
-													<th>保有优先级</th>
+													<!-- <th>保有优先级</th> -->
 													<th>近6月平均arpu值</th>
 													<th>近3月平均arpu值</th>
 													<th>收入套餐比</th>
@@ -216,7 +216,7 @@
 												<s:iterator value="recentBillList" status="status">
 													<s:if test="#status.index <= 0">
 														<tr>
-															<td><s:property value="priorityDesc" /></td>
+															<%-- <td><s:property value="priorityDesc" /></td> --%>
 															<td><s:property value="income6" /></td>
 															<td><s:property value="income3" /></td>
 															<td><s:property value="packageSpill" /></td>
@@ -310,10 +310,43 @@
 												<div class="panel-heading">
 													<h4 class="panel-title">
 														<a data-toggle="collapse" data-parent="#accordion"
-															href="#collapseTwo">4G带宽升级</a>
+															href="#">4G带宽升级</a>
 													</h4>
 												</div>
-												<div id="collapseTwo" class="panel-collapse collapse">
+												<div id="collapseTwo" class="panel-collapse collapse in">
+													<ul class="list-group">
+														<li class="list-group-item"><span
+															class="label label-warning">荐</span>
+																<button type="button" class="btn btn-danger btn-xs" data-toggle="popover-left" data-content='<s:property value="rcmd1pkg4G"/>' title="" data-original-title="<center><span class=&quot;label label-warning&quot;>4G套餐资费</span></center>">	
+																	（4G）<s:property value="recommend1_4G" />
+																</button>
+																预计平均每月消费<s:property value="recommendCost1_4G" />元，
+																<s:if test="recommendSave1_4G > 0"> 
+																 平均每月可节省<s:property value="recommendSave1_4G" />元
+																 </s:if>
+																 <s:else>
+																 平均每月多消费<s:property value="-1*recommendSave1_4G" />元，可享受更快的4G网速。
+																 </s:else>
+																 </li>
+														<s:if test="recommend2_4G != '' && recommendSave2_4G > 0">
+															<li class="list-group-item"><span
+																class="label label-warning">荐</span> 
+																<button type="button" class="btn btn-danger btn-xs" data-toggle="popover-left" data-content='<s:property value="rcmd2pkg4G"/>' title="" data-original-title="<center><span class=&quot;label label-warning&quot;>4G套餐资费</span></center>">	
+																	（4G）<s:property value="recommend2_4G" />
+																</button>
+																 预计平均每月消费<s:property value="recommendCost2_4G" />元，
+																  平均每月可节省<s:property value="recommendSave2_4G" />元</li>
+														</s:if>
+														<s:if test="recommend3_4G != '' && recommendSave3_4G > 0"> 
+															<li class="list-group-item"><span
+																class="label label-warning">荐</span> 
+																<button type="button" class="btn btn-danger btn-xs" data-toggle="popover-left" data-content='<s:property value="rcmd3pkg4G"/>' title="" data-original-title="<center><span class=&quot;label label-warning&quot;>4G套餐资费</span></center>">	
+																	（4G）<s:property value="recommend3_4G" />
+																</button>
+																 预计平均每月消费<s:property value="recommendCost3_4G" />元，
+																  平均每月可节省<s:property value="recommendSave3_4G" />元</li>
+														</s:if>
+													</ul>
 
 												</div>
 											</div>
@@ -768,6 +801,7 @@
 					};
 					$.plot($("#callnumber-placeholder"), datasetCall, options);
 
+					$('[data-toggle="popover-left"]').popover({placement:'left',trigger: 'hover',html:true});
 		});
 	</script>
 </body>

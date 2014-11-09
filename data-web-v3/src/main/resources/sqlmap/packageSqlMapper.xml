@@ -3,6 +3,26 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.intellbi.dao.TelecomPackageDao">
+
+	<select id="getAll4G" resultType="telPackage">
+   select
+   		id as id,
+   		name as name,
+   		fee as fee,
+   		voice as voice,
+   		local_voice as localVoice,
+   		long_dist_voice as longDistVoice,
+   		gprs as gprs,
+   		sms as sms,
+   		mms as mms,
+   		local_voice_price as localVoicePrice,
+   		long_dist_voice_price as longDistVoicePrice,
+   		gprs_price as gprsPrice,
+   		sms_price as smsPrice,
+   		feature as feature
+   	from
+   		bi_4g_package
+   </select>
    
    <select id="findById" parameterType="java.lang.Integer" resultType="telPackage">
    select

@@ -74,11 +74,11 @@
                         <i class="fa fa-user fa-fw"></i><%=session.getAttribute("realname")%>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> 我的信息</a>
+                        <!-- <li><a href="#"><i class="fa fa-user fa-fw"></i> 我的信息</a>
                         </li>
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> 设置</a>
                         </li>
-                        <li class="divider"></li>
+                        <li class="divider"></li> -->
                         <li><a href="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
                         </li>
                     </ul>
@@ -105,6 +105,22 @@
                             <ul class="nav nav-second-level collapse in">
                                 <li>
                                     <a class="active" href="brandUp">4G带宽升级</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-cog fa-fw"></i> 我的设置<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+									<%
+										Object group = session.getAttribute("group");
+										if (group != null && group.toString().equals("0")) {
+									%> 
+									<a href="userManager">用户管理</a> 
+									<%
+									 	}
+									 %> 
+									 <a href="myProfile">我的信息</a>
                                 </li>
                             </ul>
                         </li>
@@ -145,13 +161,13 @@
 									        <th>
 									        	<select id="orderby" class="form-control" style="font-size:9px">
                                                     <option value="gprs6">流量优先</option>
-                                                    <option value="value_change">推荐价值</option>
+                                                    <option value="value_change_4g">推荐价值</option>
                                                 </select>
                                             </th>
 									        <th>当月收入</th>
 									        <th>近6月平均收入</th>
-									        <th>当月流量</th>
-									        <th>近6月平均流量</th>
+									        <th>当月流量(M)</th>
+									        <th>近6月平均流量(M)</th>
 									        <th>当前套餐</th>
 									        <th>合约用户</th>
 									        <!-- <th>任务状态</th> -->

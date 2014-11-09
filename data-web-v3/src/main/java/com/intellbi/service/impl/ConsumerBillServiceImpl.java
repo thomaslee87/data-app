@@ -1,9 +1,9 @@
 package com.intellbi.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.intellbi.dao.ConsumerBillDAO;
@@ -21,40 +21,41 @@ public class ConsumerBillServiceImpl implements ConsumerBillService {
 	@Autowired
 	ConsumerBillDAO consumerBillDao;
 	
+	
 	@Override
-	public int getBrandUpCnt(int userId, String theMonth, Period cQueryWindow) {
+	public int getBrandUpCnt(int userId, String theMonth, Period cQueryWindow, int contractState) {
 		// TODO Auto-generated method stub
-		BillQuery billQuery = new BillQuery(userId, null, theMonth, cQueryWindow, null);
+		BillQuery billQuery = new BillQuery(userId, null, theMonth, cQueryWindow, null, contractState);
 		return consumerBillDao.getBrandUpCnt(billQuery);
 	}
 
 	@Override
 	public List<ConsumerBillDO> getBrandUpConsumers(int userId,
-			String theMonth, Period cQueryWindow, Pagination pagination) {
+			String theMonth, Period cQueryWindow, Pagination pagination, int contractState) {
 		// TODO Auto-generated method stub
-		BillQuery billQuery = new BillQuery(userId, null, theMonth, cQueryWindow, pagination);
+		BillQuery billQuery = new BillQuery(userId, null, theMonth, cQueryWindow, pagination, contractState);
 		return consumerBillDao.getBrandUpConsumers(billQuery);
 	}
 
 	@Override
-	public ConsumerBillDO getConsumerMonthBill(String phoneNo, String theMonth) {
+	public ConsumerBillDO getConsumerMonthBill(String phoneNo, String theMonth, int contractState) {
 		// TODO Auto-generated method stub
-		BillQuery query = new BillQuery(-1, phoneNo, theMonth, null, null);
+		BillQuery query = new BillQuery(-1, phoneNo, theMonth, null, null,contractState);
 		return consumerBillDao.getConsumerMonthBill(query);
 	}
 
 	@Override
-	public int getContractCnt(int userId, String theMonth, Period cQueryWindow) {
+	public int getContractCnt(int userId, String theMonth, Period cQueryWindow,  int contractState) {
 		// TODO Auto-generated method stub
-		BillQuery billQuery = new BillQuery(userId, null, theMonth, cQueryWindow, null);
+		BillQuery billQuery = new BillQuery(userId, null, theMonth, cQueryWindow, null,contractState);
 		return consumerBillDao.getContractCnt(billQuery);
 	}
 	
 	@Override
 	public List<ConsumerBillDO> getContractConsumers(int userId,
-			String theMonth, Period cQueryWindow, Pagination pagination) {
+			String theMonth, Period cQueryWindow, Pagination pagination, int contractState) {
 		// TODO Auto-generated method stub
-		BillQuery billQuery = new BillQuery(userId, null, theMonth, cQueryWindow, pagination);
+		BillQuery billQuery = new BillQuery(userId, null, theMonth, cQueryWindow, pagination,contractState);
 		return consumerBillDao.getContractUsers(billQuery);
 	}
 
@@ -112,6 +113,15 @@ public class ConsumerBillServiceImpl implements ConsumerBillService {
 		param.setPageBegin((page - 1) * pageSize);
 		param.setPageSize(pageSize);
 		return consumerBillDao.findAllSingleHighGprs(param);
+	}
+
+	@Override
+	public void updateContractStatus(String phoneNo, String theMonth,
+			int contractState) {
+		// TODO Auto-generated method stub
+		BillQuery billQuery = new BillQuery(0, phoneNo, theMonth, null, null, contractState);
+		billQuery.setViewDate(new Date());
+		consumerBillDao.updateContractStatus(billQuery);
 	}
 
 }

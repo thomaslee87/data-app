@@ -74,7 +74,7 @@
                         <i class="fa fa-user fa-fw"></i><%=session.getAttribute("realname")%>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                       <!--  <li><a href="#"><i class="fa fa-user fa-fw"></i> 我的信息</a>
+                        <!-- <li><a href="#"><i class="fa fa-user fa-fw"></i> 我的信息</a>
                         </li>
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> 设置</a>
                         </li>
@@ -98,25 +98,25 @@
                             <a href="customers"><i class="fa fa-table fa-fw"></i> 我的客户</a>
                         </li> -->
                         <li>
-                            <a class="active" href="contractTask"><i class="fa fa-table fa-fw"></i> 续约任务</a>
+                            <a href="contractTask"><i class="fa fa-table fa-fw"></i> 续约任务</a>
                         </li>
 						<li>
                             <a href="#"><i class="fa fa-sitemap fa-fw"></i> 专项任务<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level collapse">
                                 <li>
-                                    <a href="brandUp">4G带宽升级</a>
+                                    <a class="active" href="brandUp">4G带宽升级</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-cog fa-fw"></i> 我的设置<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level collapse in">
                                 <li>
 									<%
 										Object group = session.getAttribute("group");
 										if (group != null && group.toString().equals("0")) {
 									%> 
-									<a href="userManager">用户管理</a> 
+									<a class="active" href="userManager">用户管理</a> 
 									<%
 									 	}
 									 %> 
@@ -134,17 +134,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">续约任务
-                    	<div style="display:inline" id="taskView">
-		                    <label class="radio-inline" style="font-size:14px"><input type="radio"  name="inlineRadioOptions" id="rDay" value="day" style="margin-top:1px"> 日视图</label>
-							<label class="radio-inline" style="font-size:14px"><input type="radio" name="inlineRadioOptions" id="rWeek" value="week" style="margin-top:1px"> 周视图</label>
-							<label class="radio-inline" style="font-size:14px"><input type="radio" checked name="inlineRadioOptions" id="rMonth" value="month" style="margin-top:1px"> 月视图</label>
-						</div>
-
-						<span class="label label-info" style="font-size:14px;right:240px;position:absolute;margin-top:10px">请选择日期：</span>						
-						<div class="dtPicker" style="display:inline;right:20px;position:absolute;margin-top:5px">
-							<input type="text" class="form-control" style="width:200px;height:30px;float:right;margin-bottom:5px;cursor:pointer;background-color:#ffffff" readonly="true"/>
-			            </div>
+                    <h1 class="page-header">用户管理
 		            </h1>   
              	</div>
                 <!-- /.col-lg-12 -->
@@ -154,33 +144,45 @@
                 <div class="col-lg-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                        	合约用户
+                        	VIP经理
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-hover" id="dt-contract">
+                                <table class="table table-striped table-bordered table-hover" id="dt-users">
                                     <thead>
 									    <tr class="success">
-									    	<th>手机号</th>
-									        <!--th>优先级</th-->
-									        <th>
-									        	<select id="orderby" class="form-control" style="font-size:9px">
-                                                    <option value="regular_score">保有优先</option>
-                                                    <option value="value_change">价值优先</option>
-                                                </select>
-                                            </th>
-									        <th>合约开始</th>
-									        <th>合约结束</th>
-									        <!--th>合约剩余</th-->
-									        <th>当前套餐</th>
-									        <th>任务状态</th>
-									        <th>操作</th>
-									    </tr>
+									    	<th>用户名</th>
+											<th>姓名</th>
+											<th>类别</th>
+											<th>创建时间</th>
+											<th>修改时间</th>
+											<th>最后登录</th>
+										</tr>
 									    </thead>
 									    <tbody>
-									    
-									    </tbody>
+										<s:iterator value="users" status="status">
+											<s:if test="#status.even">
+												<tr class="even">
+											</s:if>
+											<s:else>
+												<tr>
+											</s:else>
+											<td><s:property value="username" /></td>
+											<td><s:property value="realname" /></td>
+											<td><s:property value="groupName" /></td>
+											<td><s:date name="gmtCreate"
+													format="yyyy-MM-dd HH:mm:ss" /></td>
+											<td><s:date name="gmtModified"
+													format="yyyy-MM-dd HH:mm:ss" /></td>
+											<td><s:date name="gmtLogin" format="yyyy-MM-dd HH:mm:ss" /></td>
+											<%-- <td><a class="btn"
+												href="member/v_update.do?id=${flag.id}">修改</a> <a
+												href="javascript:;" class="btn"
+												onclick="optDelete(${flag.id});">删除</a></td>
+											</tr> --%>
+										</s:iterator>
+									</tbody>
                                 </table>
                             </div>
                             <!-- /.table-responsive -->

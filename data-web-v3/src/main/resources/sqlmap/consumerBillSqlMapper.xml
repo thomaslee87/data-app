@@ -16,7 +16,21 @@
 			<if test="contractQuery != null">
 				and (contract_to &gt; #{contractQuery.end} or contract_to &lt; #{contractQuery.begin})
 			</if>
+			<if test="taskStateContract >=0 ">
+				and task_state_contract = #{taskStateContract}
+			</if>
+			and is_group_user=0
 		</where>
+	</select>
+	
+	<select id="updateContractStatus" parameterType="com.intellbi.dataobject.BillQuery">
+		update
+			bi_bills_${theMonth}
+		set
+			task_state_contract = #{taskStateContract},
+			view_date = #{viewDate}
+		where
+			phone_no = #{phoneNo}
 	</select>
 
 	<select id="getBrandUpConsumers" parameterType="com.intellbi.dataobject.BillQuery" resultType="consumerBill">
@@ -36,7 +50,12 @@
 			priority as priority,
 			value_change as valueChange,
 			recommend as recommend,
-			case when contract_to > #{contractQuery.end} then 1 else 0 end as isContractConsumer
+			case when contract_to > #{contractQuery.end} then 1 else 0 end as isContractConsumer,
+			recommend_4g as recommend4G,
+			value_change_4g as valueChange4G,
+			task_state_contract as taskStateContract,
+			task_state_brandup as taskStateBrandUp<!-- ,
+			view_date as viewDate -->
        	from
      		bi_bills_${theMonth}
        <where>
@@ -46,6 +65,10 @@
 			<if test="contractQuery != null">
 				and (contract_to &gt; #{contractQuery.end} or contract_to &lt; #{contractQuery.begin})
 			</if>
+			<if test="taskStateContract>=0 ">
+				and task_state_contract = #{taskStateContract}
+			</if>
+			and is_group_user=0
        	</where>
        	<if test="pagination !=null">
        		order by ${pagination.orderBy} desc
@@ -100,7 +123,11 @@
 			recommend as recommend,
 			ROUND(regular_score,2) as regularScore,
 			priority as priority,
-			value_change as valueChange
+			value_change as valueChange,
+			recommend_4g as recommend4G,
+			value_change_4g as valueChange4G<!-- ,
+			task_state_contract as taskStateContract,
+			task_state_brandup as taskStateBrandUp -->
         from 
         	bi_bills_${theMonth}
         where
@@ -120,6 +147,10 @@
 			<if test="contractQuery != null">
           		and contract_to &lt;= #{contractQuery.end} and contract_to &gt;= #{contractQuery.begin}
           </if>
+          <if test="taskStateContract>=0 ">
+				and task_state_contract = #{taskStateContract}
+			</if>
+          and is_group_user=0
 		</where>
 	</select>
 	
@@ -138,7 +169,11 @@
 			regular_score as regularScore,
 			priority as priority,
 			value_change as valueChange,
-			recommend as recommend
+			recommend as recommend,
+			recommend_4g as recommend4G,
+			value_change_4g as valueChange4G,
+			task_state_contract as taskStateContract,
+			task_state_brandup as taskStateBrandUp
        	from
      		bi_bills_${theMonth}
        <where>
@@ -148,6 +183,10 @@
 			<if test="contractQuery != null">
 				and contract_to &lt;= #{contractQuery.end} and contract_to &gt;= #{contractQuery.begin}
 			</if>
+			<if test="taskStateContract >=0 ">
+				and task_state_contract = #{taskStateContract}
+			</if>
+			and is_group_user=0
        	</where>
        	<if test="pagination !=null">
        		order by ${pagination.orderBy} desc
@@ -162,7 +201,7 @@
 			<if test="userId != null and userId &gt; 0">
 				user_id = #{userId}
 			</if>
-			and consumer_type = 2
+			and consumer_type = 2 and is_group_user=0
 		</where>
 	</select>
 	
@@ -194,7 +233,9 @@
 				contract_from as contractFrom,
 				contract_to as contractTo,
 				regular_score as regularScore,
-				value_change as valueChange
+				value_change as valueChange,
+				recommend_4g as recommend4G,
+				value_change_4g as valueChange4G
        from bi_bills_${yearMonth}
        <where>
         	<if test="userId != null and userId &gt; 0">
@@ -203,7 +244,7 @@
         	<if test="phoneNo != null and phoneNo != '' ">
         		and phone_no = #{phoneNo}
         	</if>
-        	and consumer_type = 2
+        	and consumer_type = 2 and is_group_user=0
        </where>
        order by gprs_spill desc
        limit 
@@ -228,6 +269,7 @@
           <if test="minContract !=null and minContract &gt; 0">
           and contract_to > #{minContract}
           </if>
+          and is_group_user=0
        </where>
    </select>
 
@@ -262,7 +304,9 @@
 				regular_score as regularScore,
 				priority as priority,
 				value_change as valueChange,
-				recommend as recommend
+				recommend as recommend,
+				recommend_4g as recommend4G,
+			value_change_4g as valueChange4G
        from bi_bills_${yearMonth}
        <where>
         	<if test="userId != null and userId &gt; 0">
@@ -277,6 +321,7 @@
          <if test="minContract !=null and minContract &gt; 0">
           and contract_to > #{minContract}
           </if>
+          and is_group_user=0
        </where>
        order by ${orderField} desc
        limit 
@@ -332,7 +377,9 @@
 				recommend as recommend,
 				ROUND(regular_score,2) as regularScore,
 				priority as priority,
-				value_change as valueChange
+				value_change as valueChange,
+				recommend_4g as recommend4G,
+			value_change_4g as valueChange4G
         from bi_bills_${yearMonth}
         <where>
         	<if test="userId &gt; 0 ">
@@ -341,6 +388,7 @@
         	<if test="phoneNo != null and phoneNo != '' ">
         		and phone_no = #{phoneNo}
         	</if>
+        	and is_group_user=0
        	</where>
        	limit 1
    </select>

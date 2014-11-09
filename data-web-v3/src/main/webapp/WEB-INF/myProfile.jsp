@@ -74,7 +74,7 @@
                         <i class="fa fa-user fa-fw"></i><%=session.getAttribute("realname")%>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                       <!--  <li><a href="#"><i class="fa fa-user fa-fw"></i> 我的信息</a>
+                        <!-- <li><a href="#"><i class="fa fa-user fa-fw"></i> 我的信息</a>
                         </li>
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> 设置</a>
                         </li>
@@ -98,19 +98,19 @@
                             <a href="customers"><i class="fa fa-table fa-fw"></i> 我的客户</a>
                         </li> -->
                         <li>
-                            <a class="active" href="contractTask"><i class="fa fa-table fa-fw"></i> 续约任务</a>
+                            <a href="contractTask"><i class="fa fa-table fa-fw"></i> 续约任务</a>
                         </li>
 						<li>
                             <a href="#"><i class="fa fa-sitemap fa-fw"></i> 专项任务<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level collapse">
                                 <li>
-                                    <a href="brandUp">4G带宽升级</a>
+                                    <a class="active" href="brandUp">4G带宽升级</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-cog fa-fw"></i> 我的设置<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <ul class="nav nav-second-level collapse in">
                                 <li>
 									<%
 										Object group = session.getAttribute("group");
@@ -120,7 +120,7 @@
 									<%
 									 	}
 									 %> 
-									 <a href="myProfile">我的信息</a>
+									 <a class="active" href="myProfile">我的信息</a>
                                 </li>
                             </ul>
                         </li>
@@ -134,17 +134,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">续约任务
-                    	<div style="display:inline" id="taskView">
-		                    <label class="radio-inline" style="font-size:14px"><input type="radio"  name="inlineRadioOptions" id="rDay" value="day" style="margin-top:1px"> 日视图</label>
-							<label class="radio-inline" style="font-size:14px"><input type="radio" name="inlineRadioOptions" id="rWeek" value="week" style="margin-top:1px"> 周视图</label>
-							<label class="radio-inline" style="font-size:14px"><input type="radio" checked name="inlineRadioOptions" id="rMonth" value="month" style="margin-top:1px"> 月视图</label>
-						</div>
-
-						<span class="label label-info" style="font-size:14px;right:240px;position:absolute;margin-top:10px">请选择日期：</span>						
-						<div class="dtPicker" style="display:inline;right:20px;position:absolute;margin-top:5px">
-							<input type="text" class="form-control" style="width:200px;height:30px;float:right;margin-bottom:5px;cursor:pointer;background-color:#ffffff" readonly="true"/>
-			            </div>
+                    <h1 class="page-header">我的信息
 		            </h1>   
              	</div>
                 <!-- /.col-lg-12 -->
@@ -154,42 +144,34 @@
                 <div class="col-lg-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                        	合约用户
+                        	密码管理
                         </div>
                         <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-hover" id="dt-contract">
-                                    <thead>
-									    <tr class="success">
-									    	<th>手机号</th>
-									        <!--th>优先级</th-->
-									        <th>
-									        	<select id="orderby" class="form-control" style="font-size:9px">
-                                                    <option value="regular_score">保有优先</option>
-                                                    <option value="value_change">价值优先</option>
-                                                </select>
-                                            </th>
-									        <th>合约开始</th>
-									        <th>合约结束</th>
-									        <!--th>合约剩余</th-->
-									        <th>当前套餐</th>
-									        <th>任务状态</th>
-									        <th>操作</th>
-									    </tr>
-									    </thead>
-									    <tbody>
-									    
-									    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.table-responsive -->
-                            <!--div class="well">
-                                <h4>DataTables Usage Information</h4>
-                                <p>DataTables is a very flexible, advanced tables plugin for jQuery. In SB Admin, we are using a specialized version of DataTables built for Bootstrap 3. We have also customized the table headings to use Font Awesome icons in place of images. For complete documentation on DataTables, visit their website at <a target="_blank" href="https://datatables.net/">https://datatables.net/</a>.</p>
-                                <a class="btn btn-default btn-lg btn-block" target="_blank" href="https://datatables.net/">View DataTables Documentation</a>
-                            </div-->
-                        </div>
+						<div class="panel-body">
+
+							<div class="form-group has-success">
+								<label class="control-label" for="inputSuccess">请输入老密码：</label>
+								<input type="password" class="form-control" id="oldpasswd"
+									style="width: 300px">
+							</div>
+							<div class="form-group has-error">
+								<label class="control-label" for="inputSuccess">请输入新密码：</label>
+								<input type="password" class="form-control" id="newpasswd1"
+									style="width: 300px">
+							</div>
+							<div class="form-group has-error">
+								<label class="control-label" for="inputSuccess">请确认新密码</label> <input
+									type="password" class="form-control" id="newpasswd2"
+									style="width: 300px">
+							</div>
+
+							<div id="screen" class="alert alert-danger" style="display:none">
+								<span id="msg"> </span>
+							</div>
+
+								<a id="ok" class="btn btn-success">提交</a>
+								
+						</div>
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
@@ -225,6 +207,47 @@
     <script src="js/intellbi.biz.js"></script>
 
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    
+    <script type="text/javascript">
+		$('#ok').bind('click', function(e){
+			passwd = $('#newpasswd2').val();
+			oldpasswd = $('#oldpasswd').val();
+			if($('#newpasswd1').val() != $('#newpasswd2').val()) {
+				$('#screen').css('display','block');
+				$('#msg').html('两次输入的新密码不一样');
+			}
+			else {
+				$.ajax({
+					  type: "POST",
+					  url: "setPasswd",
+					  data: { "password": passwd, "oldpassword": oldpasswd},
+					  success:function(data){
+							$('#screen').css('display','block');
+					      $('#msg').html(data['msgText']);
+					  }
+				});
+			}
+		});
+		
+		$('#newpasswd1').bind('change', function(e){
+			if($('#newpasswd1').val() != $('#newpasswd2').val()) {
+				$('#screen').css('display','block');
+				$('#msg').html('两次输入的新密码不一样');
+			}
+			else
+				$('#msg').html('');
+		});
+		
+		$('#newpasswd2').bind('change', function(e){
+			if($('#newpasswd1').val() != $('#newpasswd2').val()){ 
+				$('#screen').css('display','block');
+				$('#msg').html('两次输入的新密码不一样');
+			}
+			else
+				$('#msg').html('');
+		});
+		
+    </script>
 
 </body>
 

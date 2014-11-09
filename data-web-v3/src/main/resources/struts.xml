@@ -35,6 +35,11 @@
         <action name="my" class="com.opensymphony.xwork2.ActionSupport">
         	<result>WEB-INF/index.jsp</result>
         </action>
+        
+         <action name="my" class="com.opensymphony.xwork2.ActionSupport">
+        	<result>WEB-INF/index.jsp</result>
+        </action>
+        
         <action name="login" class="com.opensymphony.xwork2.ActionSupport">
         	<result>WEB-INF/login.jsp</result>
         </action>
@@ -75,6 +80,16 @@
     
         <action name="logout" class="com.intellbi.web.UserAction" method="logout">
         </action>
+        
+        
+        <action name="userManager" class="com.intellbi.web.UserManageAction" method="getAllUsers">
+        	<result name="success">WEB-INF/userManager.jsp</result>
+        </action>
+        
+        <action name="myProfile" class="com.opensymphony.xwork2.ActionSupport">
+        	<result>WEB-INF/myProfile.jsp</result>
+        </action>
+        
         
         <action name="setPasswd" class="com.intellbi.web.UserAction" method="setPasswd">
         	<result type="json">

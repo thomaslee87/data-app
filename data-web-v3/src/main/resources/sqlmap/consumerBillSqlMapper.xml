@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.intellbi.dao.ConsumerBillDAO">
+
+	<select id="getBrandUpCnt" parameterType="com.intellbi.dataobject.BillQuery" resultType="Integer">
+		select	
+			count(1)
+       	from
+     		bi_bills_${theMonth} a 
+     	left join
+     	(
+     		select 
+     			*
+     	 	from
+     			bi_feedback
+     		where
+     			the_month = #{theBizMonth}
+     			and type=1
+     	) c
+     	on
+     		a.phone_no = c.phone
+       <where>
+       		<if test="userId != null and userId &gt; 0">
+        		a.user_id = #{userId}
+        	</if>
+			<if test="contractQuery != null">
+				and (contract_to &gt; #{contractQuery.end} or contract_to &lt; #{contractQuery.begin})
+			</if>
+			<if test="taskStateContract >=0 ">
+				and task_state_contract = #{taskStateContract}
+			</if>
+			<if test="hideDone != 0">
+				and (c.done is null or c.done = 0)
+			</if>
+			and is_group_user=0
+		</where>
+	</select>
+	
+	<select id="updateContractStatus" parameterType="com.intellbi.dataobject.BillQuery">
+		update
+			bi_bills_${theMonth}
+		set
+			task_state_contract = #{taskStateContract},
+			view_date = #{viewDate}
+		where
+			phone_no = #{phoneNo}
+	</select>
+
+	<select id="getBrandUpConsumers" parameterType="com.intellbi.dataobject.BillQuery" resultType="consumerBill">
+		select	
+			a.id as id,
+      		phone_no as phoneNo,
+			package_id as packageId,
+      		package_name as packageName,
+      		ROUND(income,2) as income,
+			ROUND(income6,2) as income6,
+			ROUND(gprs,2) as gprs,
+			ROUND(gprs6,2) as gprs6,
+			is_group_user as isGroupUser,
+			network as network,
+			a.status as status,
+			regular_score as regularScore,
+			priority as priority,
+			value_change as valueChange,
+			recommend as recommend,
+			case when contract_to > #{contractQuery.end} then 1 else 0 end as isContractConsumer,
+			recommend_4g as recommend4G,
+			value_change_4g as valueChange4G,
+			task_state_contract as taskStateContract,
+			task_state_brandup as taskStateBrandUp,
+			b.is_photo as isPhoto,
+			b.is_photo_4g as isPhoto4G,
+			c.done as done
+			<!-- ,
+			view_date as viewDate -->
+       	from
+     		bi_bills_${theMonth} a
+     	left join
+     		bi_consumer b
+     	on
+     		a.phone_no = b.phone
+     	left join
+     	(
+     		select 
+     			*
+     	 	from
+     			bi_feedback
+     		where
+     			the_month = #{theBizMonth}
+     			and type=1
+     	) c
+     	on
+     		a.phone_no = c.phone
+       <where>
+       		<if test="userId != null and userId &gt; 0">
+        		b.user_id = #{userId}
+        	</if>
+			<if test="contractQuery != null">
+				and (contract_to &gt; #{contractQuery.end} or contract_to &lt; #{contractQuery.begin})
+			</if>
+			<if test="taskStateContract>=0 ">
+				and task_state_contract = #{taskStateContract}
+			</if>
+			<if test="hideDone != 0">
+				and (c.done is null or c.done = 0)
+			</if>
+			and is_group_user=0
+       	</where>
+       	<if test="pagination !=null">
+       		order by b.is_photo_4g desc, ${pagination.orderBy} desc
+       		limit #{pagination.pageBeginSeq}, #{pagination.pageSize}		
+       	</if>
+	</select>
+
+
+
+	<select id="getConsumerMonthBill" parameterType="com.intellbi.dataobject.BillQuery" resultType="consumerBill">
+		select  
+			id as id,
+       		phone_no as phoneNo,
+       		the_month as yearMonth,
+			package_id as packageId,
+			package_name as packageName,
+			ROUND(income,2) as income,
+			monthly_rental as monthlyRental,
+			local_voice_fee as localVoiceFee,
+			roaming_fee as roamingFee,
+			long_distance_voice_fee as longDistanceVoiceFee,
+			value_added_fee as valueAddedFee,
+			other_fee as otherFee,
+			grant_fee as grantFee,
+			call_number as callNumber,
+			local_call_duration as localCallDuration,
+			roam_call_duration as roamCallDuration,
+			long_distance_call_duration as longDistanceCallDuration,
+			internal_call_duration as internalCallDuration,
+			international_call_duration as internationlCallDuration,
+			sms as sms,
+			ROUND(gprs,2) as gprs,
+			is_group_user as isGroupUser,
+			network as network,
+			status as status,
+			contract_from as contractFrom,
+			contract_to as contractTo,
+			consumer_type as consumerType,
+			ROUND(income6,2) as income6,
+			ROUND(income3,2) as income3,
+			voice6 as voice6,
+			voice3 as voice3,
+			ROUND(gprs6,2) as gprs6,
+			ROUND(gprs3,2) as gprs3,
+			ROUND(package_spill,2) as packageSpill,
+			ROUND(voice_spill,2) as voiceSpill,
+			ROUND(gprs_spill,2) as gprsSpill,
+			ROUND(income_fluctuation,2) as incomeFluctuation,
+			ROUND(voice_fluctuation,2) as voiceFluctuation , 
+			ROUND(gprs_fluctuation,2) gprsFluctuation ,
+			ROUND(score,2) as score,
+			recommend as recommend,
+			ROUND(regular_score,2) as regularScore,
+			priority as priority,
+			value_change as valueChange,
+			recommend_4g as recommend4G,
+			value_change_4g as valueChange4G<!-- ,
+			task_state_contract as taskStateContract,
+			task_state_brandup as taskStateBrandUp -->
+        from 
+        	bi_bills_${theMonth}
+        where
+        	phone_no = #{phoneNo}
+       	limit 1
+	</select>
+
+	<select id="getContractCnt" parameterType="com.intellbi.dataobject.BillQuery" resultType="Integer">
+		select 
+			count(1)
+		from
+			bi_bills_${theMonth} a
+		left join
+			(
+     		select 
+     			*
+     	 	from
+     			bi_feedback
+     		where
+     			the_month = #{theBizMonth}
+     			and type=0
+     	) c
+		on
+			a.phone_no = c.phone
+		<where>
+			<if test="userId != null and userId &gt; 0">
+				a.user_id = #{userId}
+			</if>
+			<if test="contractQuery != null">
+          		and contract_to &lt;= #{contractQuery.end} and contract_to &gt;= #{contractQuery.begin}
+          </if>
+          <if test="taskStateContract>=0 ">
+				and task_state_contract = #{taskStateContract}
+			</if>
+			<if test="hideDone != 0">
+				and (c.done is null or c.done = 0)
+			</if>
+          and is_group_user=0
+		</where>
+	</select>
+	
+	<select id="getContractUsers" parameterType="com.intellbi.dataobject.BillQuery" resultType="ConsumerBill">
+		select	
+			a.id as id,
+      		phone_no as phoneNo,
+			package_id as packageId,
+      		package_name as packageName,
+			ROUND(income6,2) as income6,
+			is_group_user as isGroupUser,
+			network as network,
+			a.status as status,
+			contract_from as contractFrom,
+			contract_to as contractTo,
+			regular_score as regularScore,
+			priority as priority,
+			value_change as valueChange,
+			recommend as recommend,
+			recommend_4g as recommend4G,
+			value_change_4g as valueChange4G,
+			task_state_contract as taskStateContract,
+			task_state_brandup as taskStateBrandUp,
+			b.is_photo as isPhoto,
+			b.is_photo_4g as isPhoto4G,
+			c.done as done
+       	from
+     		bi_bills_${theMonth} a
+     	left join
+     		bi_consumer b
+     	on
+     		a.phone_no = b.phone
+     	left join
+     	(
+     		select 
+     			*
+     	 	from
+     			bi_feedback
+     		where
+     			the_month = #{theBizMonth}
+     			and type = 0
+     	) c
+     	on
+     		a.phone_no = c.phone
+       <where>
+       		<if test="userId != null and userId &gt; 0">
+        		b.user_id = #{userId}
+        	</if>
+			<if test="contractQuery != null">
+				and contract_to &lt;= #{contractQuery.end} and contract_to &gt;= #{contractQuery.begin}
+			</if>
+			<if test="taskStateContract >=0 ">
+				and task_state_contract = #{taskStateContract}
+			</if>
+			<if test="hideDone != 0">
+				and (c.done is null or c.done = 0)
+			</if>
+			and is_group_user=0
+       	</where>
+       	<if test="pagination !=null">
+       		order by b.is_photo desc, ${pagination.orderBy} desc
+       		limit #{pagination.pageBeginSeq}, #{pagination.pageSize}		
+       	</if>
+	</select>
+
+ 	<select id="getSingleHighGprsCnt" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="Integer">
+		select count(1)
+		from bi_bills_${yearMonth}
+		<where>
+			<if test="userId != null and userId &gt; 0">
+				user_id = #{userId}
+			</if>
+			and consumer_type = 2 and is_group_user=0
+		</where>
+	</select>
+	
+	<select id="findAllSingleHighGprs" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="consumerBill">
+       select	id as id,
+       			phone_no as phoneNo,
+       			<!--the_month as yearMonth,-->
+       			package_id as packageId,
+       			package_name as packageName,
+				<!--income as income,
+				monthly_rental as monthlyRental,
+				local_voice_fee as localVoiceFee,
+				roaming_fee as roamingFee,
+				long_distance_voice_fee as longDistanceVoiceFee,
+				value_added_fee as valueAddedFee,
+				other_fee as otherFee,
+				grant_fee as grantFee,
+				call_number as callNumber,
+				local_call_duration as lcoalCallDuration,
+				roam_call_duration as roamCallDuration,
+				long_distance_call_duration as longDistanceCallDuration,
+				internal_call_duration as internalCallDuration,
+				international_call_duration as internationlCallDuration,
+				sms as sms,
+				gprs as gprs,-->
+				is_group_user as isGroupUser,
+				network as network,
+				status as status,
+				contract_from as contractFrom,
+				contract_to as contractTo,
+				regular_score as regularScore,
+				value_change as valueChange,
+				recommend_4g as recommend4G,
+				value_change_4g as valueChange4G
+       from bi_bills_${yearMonth}
+       <where>
+        	<if test="userId != null and userId &gt; 0">
+        		user_id = #{userId}
+        	</if>
+        	<if test="phoneNo != null and phoneNo != '' ">
+        		and phone_no = #{phoneNo}
+        	</if>
+        	and consumer_type = 2 and is_group_user=0
+       </where>
+       order by gprs_spill desc
+       limit 
+       		<if test="pageBegin &gt;=0 and pageSize &gt; 0">
+       			#{pageBegin}, #{pageSize}		
+       		</if>
+       		<if test="pageBegin &lt; 0 or pageSize &lt;= 0">
+       			50
+       		</if>
+   </select>
+   
+	<select id="getCnt" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="Integer">
+       select count(1)
+       from bi_bills_${yearMonth}
+       <where>
+        	<if test="userId != null and userId &gt; 0">
+        		user_id = #{userId}
+        	</if>
+        	<if test="maxContract != null and maxContract &gt; 0">
+          and contract_to &lt; #{maxContract}
+          </if>
+          <if test="minContract !=null and minContract &gt; 0">
+          and contract_to > #{minContract}
+          </if>
+          and is_group_user=0
+       </where>
+   </select>
+
+   <select id="findAll" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="consumerBill">
+       select	id as id,
+       			phone_no as phoneNo,
+       			<!--the_month as yearMonth,-->
+       			package_id as packageId,
+       			package_name as packageName,
+				<!--income as income,
+				monthly_rental as monthlyRental,
+				local_voice_fee as localVoiceFee,
+				roaming_fee as roamingFee,
+				long_distance_voice_fee as longDistanceVoiceFee,
+				value_added_fee as valueAddedFee,
+				other_fee as otherFee,
+				grant_fee as grantFee,
+				call_number as callNumber,
+				local_call_duration as lcoalCallDuration,
+				roam_call_duration as roamCallDuration,
+				long_distance_call_duration as longDistanceCallDuration,
+				internal_call_duration as internalCallDuration,
+				international_call_duration as internationlCallDuration,
+				sms as sms,
+				gprs as gprs,-->
+				ROUND(income6,2) as income6,
+				is_group_user as isGroupUser,
+				network as network,
+				status as status,
+				contract_from as contractFrom,
+				contract_to as contractTo,
+				regular_score as regularScore,
+				priority as priority,
+				value_change as valueChange,
+				recommend as recommend,
+				recommend_4g as recommend4G,
+			value_change_4g as valueChange4G
+       from bi_bills_${yearMonth}
+       <where>
+        	<if test="userId != null and userId &gt; 0">
+        		user_id = #{userId}
+        	</if>
+        	<if test="phoneNo != null and phoneNo != '' ">
+        		and phone_no = #{phoneNo}
+        	</if>
+         <if test="maxContract != null and maxContract &gt; 0">
+             and contract_to &lt; #{maxContract}
+         </if>
+         <if test="minContract !=null and minContract &gt; 0">
+          and contract_to > #{minContract}
+          </if>
+          and is_group_user=0
+       </where>
+       order by ${orderField} desc
+       limit 
+       		<if test="pageBegin &gt;=0 and pageSize &gt; 0">
+       			#{pageBegin}, #{pageSize}		
+       		</if>
+       		<if test="pageBegin &lt; 0 or pageSize &lt;= 0">
+       			50
+       		</if>
+   </select>
+   
+   <select id="get" parameterType="com.intellbi.dataobject.BillQueryParameter" resultType="consumerBill">
+    	select  id as id,
+       		   phone_no as phoneNo,
+       		   the_month as yearMonth,
+				package_id as packageId,
+				package_name as packageName,
+				ROUND(income,2) as income,
+				monthly_rental as monthlyRental,
+				local_voice_fee as localVoiceFee,
+				roaming_fee as roamingFee,
+				long_distance_voice_fee as longDistanceVoiceFee,
+				value_added_fee as valueAddedFee,
+				other_fee as otherFee,
+				grant_fee as grantFee,
+				call_number as callNumber,
+				local_call_duration as localCallDuration,
+				roam_call_duration as roamCallDuration,
+				long_distance_call_duration as longDistanceCallDuration,
+				internal_call_duration as internalCallDuration,
+				international_call_duration as internationlCallDuration,
+				sms as sms,
+				ROUND(gprs,2) as gprs,
+				is_group_user as isGroupUser,
+				network as network,
+				status as status,
+				contract_from as contractFrom,
+				contract_to as contractTo,
+				consumer_type as consumerType,
+				ROUND(income6,2) as income6,
+				ROUND(income3,2) as income3,
+				voice6 as voice6,
+				voice3 as voice3,
+				ROUND(gprs6,2) as gprs6,
+				ROUND(gprs3,2) as gprs3,
+				ROUND(package_spill,2) as packageSpill,
+				ROUND(voice_spill,2) as voiceSpill,
+				ROUND(gprs_spill,2) as gprsSpill,
+				ROUND(income_fluctuation,2) as incomeFluctuation,
+				ROUND(voice_fluctuation,2) as voiceFluctuation , 
+				ROUND(gprs_fluctuation,2) gprsFluctuation ,
+				ROUND(score,2) as score,
+				recommend as recommend,
+				ROUND(regular_score,2) as regularScore,
+				priority as priority,
+				value_change as valueChange,
+				recommend_4g as recommend4G,
+			value_change_4g as valueChange4G
+        from bi_bills_${yearMonth}
+        <where>
+        	<if test="userId &gt; 0 ">
+        		user_id = #{userId}
+        	</if>
+        	<if test="phoneNo != null and phoneNo != '' ">
+        		and phone_no = #{phoneNo}
+        	</if>
+        	and is_group_user=0
+       	</where>
+       	limit 1
+   </select>
+    
+</mapper>

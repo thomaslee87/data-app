@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.intellbi.dao.BiFeedbackDao">
+   
+   <select id="findConsumerFeedback" parameterType="java.util.Map" resultType="com.intellbi.dataobject.BiFeedbackDO">
+       select
+       		id as id,
+       		phone as phone,
+       		the_month as theMonth,
+       		cmt_user_id as cmtUserId,
+       		call_num as callNum,
+       		succ_call_num as succCallNum,
+       		feedback as feedback,
+       		type as type,
+       		done as done
+       from 
+       		bi_feedback
+       <where>
+       		<if test='phone != null and phone != ""'>
+        		phone = #{phone}
+        	</if>
+			<if test='theMonth != null and theMonth != ""'>
+				and the_month = #{theMonth}
+			</if>
+			<if test='type != null and type >= 0'>
+				and type = #{type}
+			</if>
+		</where>
+   </select>
+   
+   <select id="update" parameterType="com.intellbi.dataobject.BiFeedbackDO">
+   		replace into
+   			bi_feedback
+   		(
+   			phone ,
+       		the_month ,
+       		cmt_user_id ,
+       		call_num ,
+       		succ_call_num ,
+       		feedback ,
+       		type,
+       		done
+   		)
+   		values	
+   		(
+   			#{phone},
+   			#{theMonth},
+   			#{cmtUserId},
+   			#{callNum},
+   			#{succCallNum},
+   			#{feedback},
+   			#{type},
+   			#{done}
+   		)
+   </select>
+   
+</mapper>

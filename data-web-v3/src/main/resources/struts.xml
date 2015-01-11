@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.i18n.encoding" value="utf-8"></constant>
+	<constant name="struts.multipart.maxSize" value="20971520"/>
+    <constant name="struts.devMode" value="false" />
+    <constant name="struts.action.extension" value=","></constant>
+    
+    <package name="default" extends="struts-default,json-default">  
+    
+     	<interceptors>  
+            <interceptor name="authority" class="com.intellbi.framework.core.LoginInterceptor">  
+                <param name="excludeMethods">doLogin,logout</param>
+            </interceptor>  
+            <!-- 拦截器栈 -->  
+            <interceptor-stack name="mydefault">  
+                <interceptor-ref name="defaultStack" />  
+                <interceptor-ref name="authority" />  
+            </interceptor-stack>  
+        </interceptors>  
+        <default-interceptor-ref name="mydefault"></default-interceptor-ref>
+        
+        <global-results>
+            <result name="error" type="redirect">404.html</result>
+            <result name="login">WEB-INF/login.jsp</result>
+        </global-results>
+        
+        <action name="" class="com.opensymphony.xwork2.ActionSupport">
+        	<result>WEB-INF/index.jsp</result>
+        </action>
+        
+        <action name="my" class="com.opensymphony.xwork2.ActionSupport">
+        	<result>WEB-INF/index.jsp</result>
+        </action>
+        
+         <action name="my" class="com.opensymphony.xwork2.ActionSupport">
+        	<result>WEB-INF/index.jsp</result>
+        </action>
+        
+        <action name="postFeedback" class="com.intellbi.web.FeedbackAction" method="doUpdatePhoneFeedback">
+        	<result name="success">WEB-INF/succ.jsp</result>
+        </action>
+        
+         <action name="getFeedback" class="com.intellbi.web.FeedbackAction" method="doGetPhoneFeedback">
+        	<result type="json">
+        		<param name="root">feedbackList</param>
+       		</result>
+        </action>
+        
+        <action name="login" class="com.opensymphony.xwork2.ActionSupport">
+        	<result>WEB-INF/login.jsp</result>
+        </action>
+		<action name="doLogin" class="com.intellbi.web.UserAction" method="doLogin">  
+            <result name="success" type="redirect">/</result>
+            <result name="error">WEB-INF/login.jsp</result> 
+        </action>
+        
+        <action name="customers" class="com.intellbi.web.CustomerAction" method="getAllCustomers">  
+            <result name="success">WEB-INF/customer.jsp</result>
+        </action>
+        
+        <action name="contractTask" class="com.intellbi.web.ConsumerTaskAction" method="getContractConsumerBills">
+        	<result name="success">WEB-INF/contract.jsp</result>
+        </action>
+        
+		<action name="brandUp" class="com.intellbi.web.BrandUpAction" method="">
+        	<result name="success">WEB-INF/brandUp.jsp</result>
+        </action>
+        <action name="getBrandUpConsumers" class="com.intellbi.web.BrandUpAction" method="getBrandUpConsumers">
+        	<result type="json">
+        		<param name="root">dataMap</param>
+       		</result>
+        </action>
+        <action name="brandUpDetail" class="com.intellbi.web.BillDetailAction" method="getBillDetails">
+        	<result name="success">WEB-INF/brandUpDetail.jsp</result>
+        </action>
+        
+        
+        <action name="getContract" class="com.intellbi.web.ContractTaskDatatablesAction" method="getContractConsumerList">
+        	<result type="json" > <!--将action的bean属性以json字符串返回浏览器-->
+        		<param name="root">dataMap</param>
+        	</result>
+        </action>
+        <action name="billDetail" class="com.intellbi.web.BillDetailAction" method="getBillDetails">
+        	<result name="success">WEB-INF/billDetail.jsp</result>
+        </action>
+    
+        <action name="logout" class="com.intellbi.web.UserAction" method="logout">
+        </action>
+        
+        
+        <action name="userManager" class="com.intellbi.web.UserManageAction" method="getAllUsers">
+        	<result name="success">WEB-INF/userManager.jsp</result>
+        </action>
+        
+        <action name="myProfile" class="com.opensymphony.xwork2.ActionSupport">
+        	<result>WEB-INF/myProfile.jsp</result>
+        </action>
+        
+        
+        <action name="setPasswd" class="com.intellbi.web.UserAction" method="setPasswd">
+        	<result type="json">
+        		<param name="root">sysMsg</param>
+        	</result>
+        </action>
+        
+        <action name="getContractConsumerBills" class="com.intellbi.web.ConsumerTaskAction" method="getContractConsumerBills">
+        	<result name="success">admin/pages/task/contractTask.jsp</result>
+        	<result name="error">admin/pages/exception.jsp</result>
+        	<result name="login">login.jsp</result>
+        </action>
+        
+         <action name="getAllContractConsumerBills" class="com.intellbi.web.ConsumerTaskAction" method="getAllContractConsumerBills">
+            <result name="success">admin/pages/task/myConsumer.jsp</result>
+            <result name="error">admin/pages/exception.jsp</result>
+            <result name="login">login.jsp</result>
+        </action>
+        
+        <action name="getConsumerBillsJson" class="com.intellbi.web.ConsumerTaskAction" method="getConsumerBillsJson">
+        	<result type="json">
+        		<param name="root">consumerBillDO</param>
+        	</result>
+        </action>
+        
+        <action name="getRecentConsumerBillsJson" class="com.intellbi.web.ConsumerTaskAction" method="getRecentConsumerBillsJson">
+        	<result type="json">
+        		<param name="root">recentBills</param>
+        	</result>
+        </action>
+        
+        <action name="getSingleHighGprsConsumerBills" class="com.intellbi.web.ConsumerTaskAction" method="getSingleHighGprsConsumerBills">
+        	<result name="success">admin/pages/task/singleHighGprsTask.jsp</result>
+        	<result name="error">admin/pages/exception.jsp</result>
+        	<result name="login">login.jsp</result>
+        </action>
+        
+        <action name="getAllUsers" class="com.intellbi.web.UserManageAction" method="getAllUsers">
+        	<result name="success">admin/pages/user/showUser.jsp</result>
+        </action>
+        
+    </package>  
+    
+</struts>

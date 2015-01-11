@@ -1,0 +1,28 @@
+.dtPicker {
+	float: right; 
+	width: 290px;
+	padding: 5px;
+	font-size: 12px;
+}
+
+.taskView {
+	float: left; 
+	width: 250px;
+	padding: 5px;
+	font-size: 12px;
+}
+
+.dtInfo {
+	float: left; 
+	text-align:center;
+	font-weight:bold;
+	width: 40%;
+	padding: 5px;
+	font-size: 16px;
+}
+
+.alert-fixed{
+	padding:4px;
+	height:40px;
+	margin:0px;
+}

@@ -25,7 +25,7 @@ public class MdbBillReader implements BillReader {
 	private String theMonth;
 	private String filename;
 	private Database db;
-	private Table table;
+	private Iterator<String> tableIter;
 	private Iterator<Row> iter;
 	
 	private static final String MDBCOL_PHONENO = "号码"; 
@@ -60,7 +60,7 @@ public class MdbBillReader implements BillReader {
 		this.theMonth = theMonth;
 		this.filename = filename;
 	}
-
+	
 	@Override
 	public boolean init() {
 		// TODO Auto-generated method stub
@@ -74,20 +74,37 @@ public class MdbBillReader implements BillReader {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				logger.error(e.getMessage());
+				logger.error(e.getMessage(), e);
 				break;
 			}
 			Set<String> tableNames;
 			try {
 				tableNames = db.getTableNames();
-				table = db.getTable((String) tableNames.toArray()[0]);
+				
+				Iterator<String> it = tableNames.iterator();  
+		        while(it.hasNext()){ 
+		            String tableName = it.next();  
+		            //保留收入表
+		            if( (tableName.indexOf("收入") >= 0 && tableName.indexOf("上网卡") < 0) || tableName.indexOf("inf_income") >= 0) 
+		                continue;
+		            it.remove();  
+		        }
+		        if(tableNames.size() == 0)
+		        	return false;
+		        tableIter = tableNames.iterator();
+//				table = db.getTable((String) tableNames.toArray()[0]);
+		        
+		        if(tableIter.hasNext()) {
+					Table table = db.getTable((String)tableIter.next());
+					iter = table.iterator();
+				}
+		        
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				logger.error(e.getMessage());
+				logger.error(e.getMessage(), e);
 				break;
 			}
-			iter = table.iterator();
 			
 			ret = true;
 		} while (false);
@@ -98,7 +115,21 @@ public class MdbBillReader implements BillReader {
 	@Override
 	public boolean hasNext() {
 		// TODO Auto-generated method stub
-		return iter.hasNext();
+		if(iter.hasNext())
+			return true;
+		
+		if(tableIter.hasNext()) {
+			try {
+				Table table = db.getTable((String)tableIter.next());
+				iter = table.iterator();
+				return iter.hasNext();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				logger.error(e.getMessage(), e);
+			}
+		}
+		
+		return false;
 	}
 
 	@Override

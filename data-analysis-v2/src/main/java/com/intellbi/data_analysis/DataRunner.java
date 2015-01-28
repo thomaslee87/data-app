@@ -1,11 +1,18 @@
 package com.intellbi.data_analysis;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.intellbi.config.ConfigManager;
@@ -21,6 +28,7 @@ public class DataRunner {
 		options.addOption("c", "config", true, "[required]Project config file");
 		options.addOption("m", "month", true, "[required]Business data month");
 		options.addOption("d", "debug", false, "[optional]Run in debug mode");
+		options.addOption("e", "exclude", false, "[optional]Skip month-data in analysis");
 		CommandLineParser parser = new PosixParser();
 		CommandLine cmdArg = null;
 		ConfigManager config = null;
@@ -50,13 +58,35 @@ public class DataRunner {
 			if(config != null)
 				config.setDebug(true);
 		}
+		if(cmdArg.hasOption("e")) {
+			if(config != null) {
+				Set<String> excluedMonths = new HashSet<String>();
+				String eMonths = cmdArg.getOptionValue("e");
+				if(StringUtils.isNotBlank(eMonths)) {
+					String[] eMons = eMonths.split(",");
+					for(String m: eMons) 
+						excluedMonths.add(m.trim());
+				}
+				config.setExludedMonth(excluedMonths);
+			}
+		}
 		return config;
 	}
-
-	public static void main(String[] args) {
+	
+	private static final Logger logger=  Logger.getLogger(DataRunner.class);
+	
+	public static void main(String[] args) throws IOException {
+	    /*BufferedReader br = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("log4j.properties"), "utf-8"));
+	    String line ;
+	    while( (line =br.readLine()) != null) {
+	    	System.out.println(line);
+	    }
+	    System.exit(0);*/
 	    
-	    PropertyConfigurator.configure(ClassLoader.getSystemResource("src/main/resources/log4j.properties"));
-	    
+	    PropertyConfigurator.configure(ClassLoader.getSystemResource("log4j.properties"));
+	    System.out.println("log level: " + logger.getLevel());
+	    logger.setLevel(Level.DEBUG);
+	    logger.info(StringUtils.join(args, " "));
 		ConfigManager config = parseArgs(args);
 		if(config != null){
 			DataAnalyzer dataAnalyzer = new DataAnalyzer(config);

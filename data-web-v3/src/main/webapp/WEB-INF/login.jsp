@@ -61,7 +61,7 @@
                                 </div>
                                 <div class="checkbox">
                                     <label>
-                                        <input name="remember" type="checkbox" value="Remember Me">记住用户名
+                                        <input id="showPassword" name="passwordVisible" type="checkbox" value="Remember Me">显示密码
                                     </label>
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
@@ -85,6 +85,17 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="js/sb-admin-2.js"></script>
+    
+    <script type="text/javascript">
+    	$('#showPassword').on('change', function(){
+    		if($(this).prop('checked')) {
+    			$('input[name=password]').attr('type', 'text');
+    		} else {
+    			$('input[name=password]').attr('type', 'password');
+    		}
+    	});
+    	
+    </script>
 
 </body>
 

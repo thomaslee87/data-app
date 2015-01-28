@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 public class ConfigManager {
     
@@ -16,7 +18,16 @@ public class ConfigManager {
 	private Properties properties ;
 	
 	private boolean isDebug = false;
+	private Set<String> exludedMonth = null;
 	
+	public Set<String> getExludedMonth() {
+		return exludedMonth;
+	}
+
+	public void setExludedMonth(Set<String> exludedMonth) {
+		this.exludedMonth = exludedMonth;
+	}
+
 	private ConfigManager(String config) {
 		properties = new Properties();
 		try {

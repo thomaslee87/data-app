@@ -181,8 +181,10 @@ public class DataAnalyzer {
 		String dataFileFormat = config.getDataFileFormat();
 		for(int start = 1 - config.getAnalysisLongPeriod(); start <= 0; start ++) {
 			String month = MyDateUtils.getMonthByDelta(theMonth, start);
+			if(config.getExludedMonth() != null && config.getExludedMonth().contains(month))
+				continue;
 			String dataFile = dataLocation + String.format(dataFileFormat, month);
-			logger.info("Begin Processing data file: " + dataFile);
+			logger.error("Begin Processing data file: " + dataFile);
 			
 			BillReader reader = new MdbBillReader(theMonth, dataFile);
 			int i = 0;
@@ -192,7 +194,7 @@ public class DataAnalyzer {
 					if(billDetailWrapper != null && consumers.containsKey(billDetailWrapper.getPhoneNo())) {
 						consumerSessionMap.add(billDetailWrapper.getPhoneNo(), billDetailWrapper);
 						if(config.isDebug())
-						    logger.info(gson.toJson(billDetailWrapper));
+						    logger.error(gson.toJson(billDetailWrapper));
 						i ++;
 						if(config.isDebug() && i > 10000)
 							break;
@@ -258,8 +260,8 @@ public class DataAnalyzer {
 		try {
 			Statement stat = conn.createStatement();
 			if(config.isDebug()) {
-			    logger.info("Drop sql: " + dropSql);
-	            logger.info("Create sql: " + createSql);
+			    logger.error("Drop sql: " + dropSql);
+	            logger.error("Create sql: " + createSql);
 			} else {
 				stat.execute(dropSql);
 				stat.execute(createSql);

@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.intellbi.dao.TelecomPackageDao">
+<mapper namespace="com.intellbit.dao.TelecomPackageDao">
 
-	<select id="getAll4G" resultType="telPackage">
+	<select id="getAll4G" resultType="com.intellbit.dataobject.TelecomPackageDO">
    select
    		id as id,
    		name as name,
@@ -24,7 +24,7 @@
    		bi_4g_package
    </select>
    
-   <select id="findById" parameterType="java.lang.Integer" resultType="telPackage">
+   <select id="findById" parameterType="java.lang.Integer" resultType="com.intellbit.dataobject.TelecomPackageDO">
    select
    		id as id,
    		name as name,
@@ -47,7 +47,7 @@
    </select>
    
    
-   <select id="getAll" resultType="telPackage">
+   <select id="getAll" resultType="com.intellbit.dataobject.TelecomPackageDO">
    select
    		id as id,
    		name as name,

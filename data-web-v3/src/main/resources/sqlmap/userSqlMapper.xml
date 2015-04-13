@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.intellbi.dao.UserDao">
+<mapper namespace="com.intellbit.dao.UserDao">
    
-   <select id="findAll" resultType="biUser">
+   <select id="findAll" resultType="com.intellbit.dataobject.UserDO">
        select  a.id as id,
        		   a.group_id as groupId,
                a.staff_id as staffId,
@@ -21,7 +21,7 @@
        order by a.group_id,a.id
    </select>
    
-   <select id="get" parameterType="java.lang.Integer" resultType="biUser">
+   <select id="get" parameterType="java.lang.Integer" resultType="com.intellbit.dataobject.UserDO">
     	select  a.id as id,
        		   a.group_id as groupId,
                a.staff_id as staffId,
@@ -38,7 +38,7 @@
        where a.id=#{id}
    </select>
    
-   <select id="findByUser" parameterType="biUser" resultType="biUser">
+   <select id="findByUser" parameterType="java.lang.String" resultType="com.intellbit.dataobject.UserDO">
     	select  a.id as id,
        		   a.group_id as groupId,
                a.staff_id as staffId,
@@ -55,7 +55,7 @@
         where a.username=#{username}
    </select>
     
-    <insert id="save" parameterType="biUser" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.intellbit.dataobject.UserDO" useGeneratedKeys="true" keyProperty="id">
 		insert into bi_user (
 			group_id,
 			staff_id,
@@ -67,7 +67,7 @@
 	</insert>
 
 
-	<update id="update" parameterType="biUser">
+	<update id="update" parameterType="com.intellbit.dataobject.UserDO">
 	   update bi_user set 
 		   group_id=#{groupId},
 		   staff_id=#{staffId},
@@ -79,4 +79,29 @@
 	   where id=#{id} 
 	</update>
     
+    <select id="getUserIdOfContractPhone" parameterType="String" resultType="com.intellbit.dataobject.UserDO">
+		select
+			user_id as id
+		from
+			bi_contract_map a
+		where
+			phone = #{phone}
+	</select>
+	<select id="getUserIdOfMaintainPhone" parameterType="String" resultType="com.intellbit.dataobject.UserDO">
+		select
+			user_id as id
+		from
+			bi_maintain_map a
+		where
+			phone = #{phone}
+	</select>
+	<select id="getUserIdOfBandwidthPhone" parameterType="String" resultType="com.intellbit.dataobject.UserDO">
+		select
+			user_id as id
+		from
+			bi_bandwidth_map a
+		where
+			phone = #{phone}
+	</select>
+	
 </mapper>

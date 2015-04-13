@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.intellbi.dao.UserDao;
-import com.intellbi.dataobject.UserDO;
+import com.intellbit.dao.UserDao;
+import com.intellbit.dataobject.UserDO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring/spring-dao.xml")

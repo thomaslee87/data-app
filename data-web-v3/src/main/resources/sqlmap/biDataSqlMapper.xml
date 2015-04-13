@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.intellbi.dao.BiDataDao">
+<mapper namespace="com.intellbit.dao.BiDataDao">
    
-   <select id="findAll" resultType="biData">
+   <select id="findAll" resultType="com.intellbit.dataobject.BiDataDO">
        select	
        		id as id,
        		themonth as theMonth,
@@ -14,7 +14,7 @@
        	order by themonth desc
    </select>
    
-   <select id="findRecent" resultType="biData">
+   <select id="findRecent" resultType="com.intellbit.dataobject.BiDataDO">
    		select	
        		id as id,
        		themonth as theMonth,

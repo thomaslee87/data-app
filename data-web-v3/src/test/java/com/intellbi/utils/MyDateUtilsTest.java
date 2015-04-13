@@ -3,6 +3,8 @@ package com.intellbi.utils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.intellbit.utils.MyDateUtils;
+
 public class MyDateUtilsTest {
 	
 	@Test
@@ -44,8 +46,8 @@ public class MyDateUtilsTest {
 	@Test
 	public void testGetMonthOfDate1() {
 		String date = "20140212";
-		String start = MyDateUtils.getMonthOfDate(date).getBegin();
-		String end = MyDateUtils.getMonthOfDate(date).getEnd();
+		String start = MyDateUtils.getMonthRangeOfDate(date).getBegin();
+		String end = MyDateUtils.getMonthRangeOfDate(date).getEnd();
 		Assert.assertEquals(start, "20140201");
 		Assert.assertEquals(end, "20140228");
 	}

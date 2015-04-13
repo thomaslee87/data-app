@@ -8,26 +8,6 @@
 	<!--配置mybatis log4j日志打印sql-->
 	<settings><setting name="logImpl" value="LOG4J"/></settings> 
 
-	<typeAliases>
-        <typeAlias alias="biUser" type="com.intellbi.dataobject.UserDO"/>
-        <typeAlias alias="consumerBill" type="com.intellbi.dataobject.ConsumerBillDO"/>
-        <typeAlias alias="biData" type="com.intellbi.dataobject.BiDataDO"/>
-        <typeAlias alias="telPackage" type="com.intellbi.dataobject.TelecomPackageDO"/>
-        <typeAlias alias="biNotice" type="com.intellbi.dataobject.BiNoticeDO"/>
-    </typeAliases>
-    
-	<!-- environments default="development">
-		<environment id="development">
-			<transactionManager type="JDBC" />
-			<dataSource type="POOLED">
-				<property name="driver" value="${jdbc.driver}" />
-				<property name="url" value="${jdbc.url}" />
-				<property name="username" value="${jdbc.username}" />
-				<property name="password" value="${jdbc.password}" />
-			</dataSource>
-		</environment>
-	</environments-->
-	
 	<mappers>
 		<mapper resource="sqlmap/userSqlMapper.xml" />
 		<mapper resource="sqlmap/consumerBillSqlMapper.xml" />
@@ -35,6 +15,9 @@
 		<mapper resource="sqlmap/packageSqlMapper.xml" />
 		<mapper resource="sqlmap/biNoticeSqlMapper.xml"/>
 		<mapper resource="sqlmap/biFeedbackSqlMapper.xml"/>
+		<mapper resource="sqlmap/biConsumerDataSqlMapper.xml"/>
+		
+		<!-- <mapper resource="sqlmap/biMap.xml"/> -->
 	</mappers>
 	
 </configuration>

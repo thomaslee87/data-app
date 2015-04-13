@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.intellbi.dao.BiNoticeDO">
+<mapper namespace="com.intellbit.dao.BiNoticeDO">
    
-   <select id="findAll" resultType="biNotice">
+   <select id="findAll" resultType="com.intellbit.dataobject.BiNoticeDO">
        select	
        		id as id,
        		title as title,
@@ -17,7 +17,7 @@
        		bi_notice
    </select>
    
-   <select id="findById" parameterType="java.lang.Integer" resultType="biNotice">
+   <select id="findById" parameterType="java.lang.Integer" resultType="com.intellbit.dataobject.BiNoticeDO">
    		select	
        		id as id,
        		title as title,
@@ -32,7 +32,7 @@
        		id=#{id}		
    </select>
    
-   <insert id="save" parameterType="biNotice" useGeneratedKeys="true" keyProperty="id">
+   <insert id="save" parameterType="com.intellbit.dataobject.BiNoticeDO" useGeneratedKeys="true" keyProperty="id">
 		insert into bi_notice (
 			title,
 			content,
@@ -43,7 +43,7 @@
 		) values(#{title},#{content},#{url},#{startTime},#{endTime},#{status});
 	</insert>
    
-	<update id="update" parameterType="biNotice">
+	<update id="update" parameterType="com.intellbit.dataobject.BiNoticeDO">
 	   update
 	      	bi_notice
 	   set 

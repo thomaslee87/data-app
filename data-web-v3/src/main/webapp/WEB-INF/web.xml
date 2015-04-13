@@ -3,56 +3,92 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-	<display-name>Archetype Created Web Application</display-name>
-
+	<display-name>IntellBit</display-name>
+	
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>WEB-INF/classes/log4j.properties</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<!--param-value>classpath:/applicationContext.xml</param-value -->
-		<param-value>classpath:spring/*.xml</param-value>
+		<param-value>classpath:spring/spring.xml,classpath:spring/spring-mybatis.xml</param-value>
 	</context-param>
-	
-	<context-param> 
-      <param-name> log4jConfigLocation</param-name> 
-      <param-value>/WEB-INF/log4j.properties</param-value> 
-   </context-param> 
-   <context-param> 
-      <param-name> log4jRefreshInterval</param-name> 
-      <param-value>6000</param-value> 
-   </context-param>
-    
 	<filter>
-		<filter-name>shiroFilter</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<description>字符集过滤器</description>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<description>字符集编码</description>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
 	</filter>
-
-	<filter>
-		<filter-name>struts2</filter-name>
-		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
-	</filter>
-
 	<filter-mapping>
-		<filter-name>shiroFilter</filter-name>
-		<url-pattern>/*</url-pattern>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/</url-pattern>
 	</filter-mapping>
 
+	<filter>
+		<description>登录状态验证</description>
+		<filter-name>loginFilter</filter-name>
+		<filter-class>com.intellbit.filter.LoginFilter</filter-class>
+		<init-param>
+			<param-name>excludedUrls</param-name>
+			<param-value>/login.html,/login.do</param-value>
+		</init-param>
+	</filter>
 	<filter-mapping>
-		<filter-name>struts2</filter-name>
+		<filter-name>loginFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-
-	<listener>
-		<listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
-	</listener>
 	
 	<listener>
+		<description>springListener</description>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	
-	<listener> 
-      <listener-class> 
-         org.springframework.web.util.Log4jConfigListener 
-      </listener-class> 
-   </listener>
-	
+	<!-- 防止spring内存溢出监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
+	<!-- spring mvc servlet -->
+	<servlet>
+		<description>spring mvc servlet</description>
+		<servlet-name>springMvcServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<description>spring mvc config</description>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/spring-mvc.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.js</url-pattern>
+		<url-pattern>*.css</url-pattern>
+		<url-pattern>*.less</url-pattern> 
+		<url-pattern>*.eot</url-pattern>
+		<url-pattern>*.svg</url-pattern>
+		<url-pattern>*.ttf</url-pattern>
+		<url-pattern>*.woff</url-pattern>
+		<url-pattern>*.jpg</url-pattern>
+		<url-pattern>*.png</url-pattern>
+		<url-pattern>*.gif</url-pattern>
+		<url-pattern>*.ico</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>springMvcServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<!-- 配置session超时时间，单位分钟 -->
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+	<welcome-file-list>
+		<welcome-file>/index.html</welcome-file>
+	</welcome-file-list>
 </web-app>

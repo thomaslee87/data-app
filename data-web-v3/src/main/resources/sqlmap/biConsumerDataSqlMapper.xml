@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.intellbit.dao.ConsumerDataDao">
+
+<!-- public int getMaintainConsumersCount(QueryCondition qCond);
+	public List<String> getMaintainConsumers(QueryCondition qCond);
+	
+	public int getContractConsumersCount(QueryCondition qCond);
+	public List<String> getContractConsumers(QueryCondition qCond);
+	
+	public int getBrandupConsumersCount(QueryCondition qCond);
+	public List<String> getBrandupConsumers(QueryCondition qCond); -->
+	
+	<select id="getContractConsumersCount" parameterType="com.intellbit.dataobject.QueryCondition" resultType="Integer">
+		select 
+			count(1) 
+		from
+			bi_bills_${theMonth} a
+		left join
+     		bi_contract_map b
+     	on
+     		a.phone_no = b.phone
+		left join (
+			select	
+				*
+			from
+				bi_feedback
+			where
+				the_month = #{theMonth} and type=0
+		) c
+		on
+			a.phone_no = c.phone
+		left join
+     		bi_package_dict d
+		on
+			a.package_dict_id = d.id
+		<where>
+			<if test="userId != null and userId &gt; 0">
+				b.user_id = #{userId}
+			</if>
+			<!-- <if test="contractQuery != null">
+				and contract_to &lt;= #{contractQuery.end} and contract_to &gt;= #{contractQuery.begin}
+			</if> -->
+			<if test="hideDone == true">
+				and (c.done is null or c.done = 0)
+			</if>
+			<if test="filter != null">
+				<if test="filter.phone != null and filter.phone != ''">
+					and a.phone_no = #{filter.phone}
+				</if>
+				<if test="filter.fromStart != null and filter.fromStart != ''">
+					and a.contract_from &gt;= #{filter.fromStart}
+				</if>
+				<if test="filter.fromEnd != null and filter.fromEnd != ''">
+					and a.contract_from &lt;= #{filter.fromEnd}
+				</if>
+				<if test="filter.toStart != null and filter.toStart != ''">
+					and a.contract_to &gt;= #{filter.toStart}
+				</if>
+				<if test="filter.toEnd != null and filter.toEnd != ''">
+					and a.contract_to &lt;= #{filter.toEnd}
+				</if>
+				<if test="filter.price != null and filter.price > 0">
+					and d.package_price = #{filter.price} 
+				</if>
+			</if>
+          and is_group_user=0
+          and a.contract_to > 0
+		</where>
+	</select>
+	
+	<select id="getContractConsumers" parameterType="com.intellbit.dataobject.QueryCondition" resultType="com.intellbit.dataobject.ConsumerBillDO">
+		select	
+			a.id as id,
+      		phone_no as phoneNo,
+			package_id as packageId,
+      		a.package_name as packageName,
+      		d.package_price as packagePrice,
+			ROUND(income6,2) as income6,
+			is_group_user as isGroupUser,
+			network as network,
+			a.status as status,
+			contract_from as contractFrom,
+			contract_to as contractTo,
+			regular_score as regularScore,
+			priority as priority,
+			value_change as valueChange,
+			recommend as recommend,
+			recommend_4g as recommend4G,
+			value_change_4g as valueChange4G,
+			task_state_contract as taskStateContract,
+			task_state_brandup as taskStateBrandUp,
+			<!-- b.is_photo as isPhoto,
+			b.is_photo_4g as isPhoto4G, -->
+			c.done as done
+       	from
+     		bi_bills_${theMonth} a
+     	left join
+     		bi_contract_map b
+     	on
+     		a.phone_no = b.phone
+     	left join
+     	(
+     		select 
+     			*
+     	 	from
+     			bi_feedback
+     		where
+     			the_month = #{theMonth}
+     			and type = 0
+     	) c
+     	on
+			a.phone_no = c.phone
+     	left join
+     		bi_package_dict d
+     	on
+     		a.package_dict_id = d.id
+       <where>
+       		<if test="userId != null and userId &gt; 0">
+        		b.user_id = #{userId}
+        	</if>
+        	<if test="filter != null">
+				<if test="filter.phone != null and filter.phone != ''">
+					and a.phone_no = #{filter.phone}
+				</if>
+				<if test="filter.fromStart != null and filter.fromStart != ''">
+					and a.contract_from &gt;= #{filter.fromStart}
+				</if>
+				<if test="filter.fromEnd != null and filter.fromEnd != ''">
+					and a.contract_from &lt;= #{filter.fromEnd}
+				</if>
+				<if test="filter.toStart != null and filter.toStart != ''">
+					and a.contract_to &gt;= #{filter.toStart}
+				</if>
+				<if test="filter.toEnd != null and filter.toEnd != ''">
+					and a.contract_to &lt;= #{filter.toEnd}
+				</if>
+				<if test="filter.price != null and filter.price > 0">
+					and d.package_price = #{filter.price} <!-- REGEXP  concat('[^\d]',#{filter.price},'元') -->
+				</if>
+			</if>
+			and is_group_user=0
+			and a.contract_to > 0
+       	</where>
+       	
+       	<foreach collection="orderFileds" index="index" item="item" open="order by" separator="," close=" ">
+       		${item}
+       	</foreach>
+       	
+       	<if test="page != null">
+       		<!-- order by b.is_photo desc, ${pagination.orderBy} desc -->
+       		limit #{page.pageStart}, #{page.pageSize}
+       	</if>
+	</select>
+
+	<select id="getMaintainConsumersCount" parameterType="com.intellbit.dataobject.QueryCondition" resultType="Integer">
+		select 
+			count(1) 
+		from
+			bi_bills_${theMonth} a
+		left join
+     		bi_maintain_map b
+     	on
+     		a.phone_no = b.phone
+		left join (
+			select	
+				*
+			from
+				bi_feedback
+			where
+				the_month = #{theMonth} and type=0
+		) c
+		on
+			a.phone_no = c.phone
+		left join
+     		bi_package_dict d
+		on
+			a.package_dict_id = d.id
+		<where>
+			<if test="userId != null and userId &gt; 0">
+				b.user_id = #{userId}
+			</if>
+			<!-- <if test="contractQuery != null">
+				and contract_to &lt;= #{contractQuery.end} and contract_to &gt;= #{contractQuery.begin}
+			</if> -->
+			<if test="hideDone == true">
+				and (c.done is null or c.done = 0)
+			</if>
+			<if test="filter != null">
+				<if test="filter.phone != null and filter.phone != ''">
+					and a.phone_no = #{filter.phone}
+				</if>
+				<if test="filter.fromStart != null and filter.fromStart != ''">
+					and a.contract_from &gt;= #{filter.fromStart}
+				</if>
+				<if test="filter.fromEnd != null and filter.fromEnd != ''">
+					and a.contract_from &lt;= #{filter.fromEnd}
+				</if>
+				<if test="filter.toStart != null and filter.toStart != ''">
+					and a.contract_to &gt;= #{filter.toStart}
+				</if>
+				<if test="filter.toEnd != null and filter.toEnd != ''">
+					and a.contract_to &lt;= #{filter.toEnd}
+				</if>
+				<if test="filter.price != null and filter.price > 0">
+					and d.package_price = #{filter.price} 
+				</if>
+			</if>
+          and is_group_user=0
+          and a.contract_to > 0
+		</where>
+	</select>
+	
+	<select id="getMaintainConsumers" parameterType="com.intellbit.dataobject.QueryCondition" resultType="com.intellbit.dataobject.ConsumerBillDO">
+		select	
+			a.id as id,
+      		phone_no as phoneNo,
+			package_id as packageId,
+      		a.package_name as packageName,
+      		d.package_price as packagePrice,
+			ROUND(income6,2) as income6,
+			is_group_user as isGroupUser,
+			network as network,
+			a.status as status,
+			contract_from as contractFrom,
+			contract_to as contractTo,
+			regular_score as regularScore,
+			priority as priority,
+			value_change as valueChange,
+			recommend as recommend,
+			recommend_4g as recommend4G,
+			value_change_4g as valueChange4G,
+			task_state_contract as taskStateContract,
+			task_state_brandup as taskStateBrandUp,
+			<!-- b.is_photo as isPhoto,
+			b.is_photo_4g as isPhoto4G, -->
+			c.done as done
+       	from
+     		bi_bills_${theMonth} a
+     	left join
+     		bi_maintain_map b
+     	on
+     		a.phone_no = b.phone
+     	left join
+     	(
+     		select 
+     			*
+     	 	from
+     			bi_feedback
+     		where
+     			the_month = #{theMonth}
+     			and type = 0
+     	) c
+     	on
+			a.phone_no = c.phone
+     	left join
+     		bi_package_dict d
+     	on
+     		a.package_dict_id = d.id
+       <where>
+       		<if test="userId != null and userId &gt; 0">
+        		b.user_id = #{userId}
+        	</if>
+        	<if test="filter != null">
+				<if test="filter.phone != null and filter.phone != ''">
+					and a.phone_no = #{filter.phone}
+				</if>
+				<if test="filter.fromStart != null and filter.fromStart != ''">
+					and a.contract_from &gt;= #{filter.fromStart}
+				</if>
+				<if test="filter.fromEnd != null and filter.fromEnd != ''">
+					and a.contract_from &lt;= #{filter.fromEnd}
+				</if>
+				<if test="filter.toStart != null and filter.toStart != ''">
+					and a.contract_to &gt;= #{filter.toStart}
+				</if>
+				<if test="filter.toEnd != null and filter.toEnd != ''">
+					and a.contract_to &lt;= #{filter.toEnd}
+				</if>
+				<if test="filter.price != null and filter.price > 0">
+					and d.package_price = #{filter.price} <!-- REGEXP  concat('[^\d]',#{filter.price},'元') -->
+				</if>
+			</if>
+			and is_group_user=0
+			and a.contract_to > 0
+       	</where>
+       	
+       	<foreach collection="orderFileds" index="index" item="item" open="order by" separator="," close=" ">
+       		${item}
+       	</foreach>
+       	
+       	<if test="page != null">
+       		<!-- order by b.is_photo desc, ${pagination.orderBy} desc -->
+       		limit #{page.pageStart}, #{page.pageSize}
+       	</if>
+	</select>
+	
+	<select id="getBandwidthConsumersCount" parameterType="com.intellbit.dataobject.QueryCondition" resultType="Integer">
+		select 
+			count(1) 
+		from
+			bi_bills_${theMonth} a
+		left join
+     		bi_bandwidth_map b
+     	on
+     		a.phone_no = b.phone
+		left join (
+			select	
+				*
+			from
+				bi_feedback
+			where
+				the_month = #{theMonth} and type=0
+		) c
+		on
+			a.phone_no = c.phone
+		left join
+     		bi_package_dict d
+		on
+			a.package_dict_id = d.id
+		<where>
+			<if test="userId != null and userId &gt; 0">
+				b.user_id = #{userId}
+			</if>
+			<!-- <if test="contractQuery != null">
+				and contract_to &lt;= #{contractQuery.end} and contract_to &gt;= #{contractQuery.begin}
+			</if> -->
+			<if test="hideDone == true">
+				and (c.done is null or c.done = 0)
+			</if>
+			<if test="filter != null">
+				<if test="filter.phone != null and filter.phone != ''">
+					and a.phone_no = #{filter.phone}
+				</if>
+				<if test="filter.fromStart != null and filter.fromStart != ''">
+					and a.contract_from &gt;= #{filter.fromStart}
+				</if>
+				<if test="filter.fromEnd != null and filter.fromEnd != ''">
+					and a.contract_from &lt;= #{filter.fromEnd}
+				</if>
+				<if test="filter.toStart != null and filter.toStart != ''">
+					and a.contract_to &gt;= #{filter.toStart}
+				</if>
+				<if test="filter.toEnd != null and filter.toEnd != ''">
+					and a.contract_to &lt;= #{filter.toEnd}
+				</if>
+				<if test="filter.price != null and filter.price > 0">
+					and d.package_price = #{filter.price} 
+				</if>
+			</if>
+          and is_group_user=0
+		</where>
+	</select>
+	
+	<select id="getBandwidthConsumers" parameterType="com.intellbit.dataobject.QueryCondition" resultType="com.intellbit.dataobject.ConsumerBillDO">
+		select	
+			a.id as id,
+      		phone_no as phoneNo,
+			package_id as packageId,
+      		a.package_name as packageName,
+      		d.package_price as packagePrice,
+      		ROUND(income,2) as income,
+			ROUND(income6,2) as income6,
+			ROUND(gprs,2) as gprs,
+			ROUND(gprs6,2) as gprs6,
+			is_group_user as isGroupUser,
+			network as network,
+			a.status as status,
+			contract_from as contractFrom,
+			contract_to as contractTo,
+			regular_score as regularScore,
+			priority as priority,
+			value_change as valueChange,
+			recommend as recommend,
+			case when contract_to > 0 then 1 else 0 end as isContractConsumer,
+			recommend_4g as recommend4G,
+			value_change_4g as valueChange4G,
+			task_state_contract as taskStateContract,
+			task_state_brandup as taskStateBrandUp,
+			<!-- b.is_photo as isPhoto,
+			b.is_photo_4g as isPhoto4G, -->
+			c.done as done
+       	from
+     		bi_bills_${theMonth} a
+     	left join
+     		bi_bandwidth_map b
+     	on
+     		a.phone_no = b.phone
+     	left join
+     	(
+     		select 
+     			*
+     	 	from
+     			bi_feedback
+     		where
+     			the_month = #{theMonth}
+     			and type = 0
+     	) c
+     	on
+			a.phone_no = c.phone
+     	left join
+     		bi_package_dict d
+     	on
+     		a.package_dict_id = d.id
+       <where>
+       		<if test="userId != null and userId &gt; 0">
+        		b.user_id = #{userId}
+        	</if>
+        	<if test="filter != null">
+				<if test="filter.phone != null and filter.phone != ''">
+					and a.phone_no = #{filter.phone}
+				</if>
+				<if test="filter.fromStart != null and filter.fromStart != ''">
+					and a.contract_from &gt;= #{filter.fromStart}
+				</if>
+				<if test="filter.fromEnd != null and filter.fromEnd != ''">
+					and a.contract_from &lt;= #{filter.fromEnd}
+				</if>
+				<if test="filter.toStart != null and filter.toStart != ''">
+					and a.contract_to &gt;= #{filter.toStart}
+				</if>
+				<if test="filter.toEnd != null and filter.toEnd != ''">
+					and a.contract_to &lt;= #{filter.toEnd}
+				</if>
+				<if test="filter.price != null and filter.price > 0">
+					and d.package_price = #{filter.price} <!-- REGEXP  concat('[^\d]',#{filter.price},'元') -->
+				</if>
+			</if>
+			and is_group_user=0
+       	</where>
+       	
+       	<foreach collection="orderFileds" index="index" item="item" open="order by" separator="," close=" ">
+       		${item}
+       	</foreach>
+       	
+       	<if test="page != null">
+       		<!-- order by b.is_photo desc, ${pagination.orderBy} desc -->
+       		limit #{page.pageStart}, #{page.pageSize}
+       	</if>
+	</select>
+	
+	
+	<select id="getConsumerMonthBill" parameterType="com.intellbit.dataobject.QueryCondition" resultType="com.intellbit.dataobject.ConsumerBillDO">
+		select  
+			id as id,
+       		phone_no as phoneNo,
+       		the_month as yearMonth,
+			package_id as packageId,
+			package_name as packageName,
+			ROUND(income,2) as income,
+			monthly_rental as monthlyRental,
+			local_voice_fee as localVoiceFee,
+			roaming_fee as roamingFee,
+			long_distance_voice_fee as longDistanceVoiceFee,
+			value_added_fee as valueAddedFee,
+			other_fee as otherFee,
+			grant_fee as grantFee,
+			call_number as callNumber,
+			local_call_duration as localCallDuration,
+			roam_call_duration as roamCallDuration,
+			long_distance_call_duration as longDistanceCallDuration,
+			internal_call_duration as internalCallDuration,
+			international_call_duration as internationlCallDuration,
+			sms as sms,
+			ROUND(gprs,2) as gprs,
+			is_group_user as isGroupUser,
+			network as network,
+			status as status,
+			contract_from as contractFrom,
+			contract_to as contractTo,
+			consumer_type as consumerType,
+			ROUND(income6,2) as income6,
+			ROUND(income3,2) as income3,
+			voice6 as voice6,
+			voice3 as voice3,
+			ROUND(gprs6,2) as gprs6,
+			ROUND(gprs3,2) as gprs3,
+			ROUND(package_spill,2) as packageSpill,
+			ROUND(voice_spill,2) as voiceSpill,
+			ROUND(gprs_spill,2) as gprsSpill,
+			ROUND(income_fluctuation,2) as incomeFluctuation,
+			ROUND(voice_fluctuation,2) as voiceFluctuation , 
+			ROUND(gprs_fluctuation,2) gprsFluctuation ,
+			ROUND(score,2) as score,
+			recommend as recommend,
+			ROUND(regular_score,2) as regularScore,
+			priority as priority,
+			value_change as valueChange,
+			recommend_4g as recommend4G,
+			value_change_4g as valueChange4G<!-- ,
+			task_state_contract as taskStateContract,
+			task_state_brandup as taskStateBrandUp -->
+        from 
+        	bi_bills_${theMonth}
+        where
+        	phone_no = #{phoneNo}
+       	limit 1
+	</select>
+
+</mapper>

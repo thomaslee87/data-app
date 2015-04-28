@@ -258,7 +258,6 @@ public class ConsumerSession{
 	}
 	
 	private class ComparatorPackageCost implements Comparator<PackageCost>{
-		@Override
 		public int compare(PackageCost arg0, PackageCost arg1) {
 			if(arg0.realCost > arg1.realCost + 0.001)
 				return 1;
@@ -293,7 +292,6 @@ public class ConsumerSession{
 	}
 	
 	private class ComparatorPackageCost4G implements Comparator<Package4GCost>{
-		@Override
 		public int compare(Package4GCost arg0, Package4GCost arg1) {
 			if(arg0.realCost > arg1.realCost + 0.001)
 				return 1;

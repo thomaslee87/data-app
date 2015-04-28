@@ -61,7 +61,6 @@ public class MdbBillReader implements BillReader {
 		this.filename = filename;
 	}
 	
-	@Override
 	public boolean init() {
 		// TODO Auto-generated method stub
 		boolean ret = false;
@@ -112,7 +111,6 @@ public class MdbBillReader implements BillReader {
 		return ret;
 	}
 
-	@Override
 	public boolean hasNext() {
 		// TODO Auto-generated method stub
 		if(iter.hasNext())
@@ -132,13 +130,11 @@ public class MdbBillReader implements BillReader {
 		return false;
 	}
 
-	@Override
 	public ConsumerBillDetailWrapper next() {
 		// TODO Auto-generated method stub
 		return parseRow(iter.next());
 	}
 
-	@Override
 	public void finish() {
 		// TODO Auto-generated method stub
 		try {

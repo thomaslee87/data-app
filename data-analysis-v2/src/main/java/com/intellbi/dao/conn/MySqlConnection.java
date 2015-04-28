@@ -22,7 +22,6 @@ public class MySqlConnection implements IDBConnection {
 		this.config = config;
 	}
 	
-	@Override
 	public Connection getConnection() {
 		if(conn != null)
 			return conn;
@@ -39,7 +38,6 @@ public class MySqlConnection implements IDBConnection {
 		return conn;
 	}
 
-	@Override
 	public void closeConnection() throws SQLException {
 		// TODO Auto-generated method stub
 		if(conn != null){

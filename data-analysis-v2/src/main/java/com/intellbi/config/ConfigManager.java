@@ -1,15 +1,19 @@
 package com.intellbi.config;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.intellbit.v2.exception.PropertyParseException;
+
 public class ConfigManager {
+	
+	private static Logger logger = LoggerFactory.getLogger(ConfigManager.class);
     
     private static ConfigManager instance = null;
 	
@@ -27,19 +31,16 @@ public class ConfigManager {
 		this.exludedMonth = exludedMonth;
 	}
 
-	private ConfigManager(String config) {
-		properties = new Properties();
-		try {
-			properties.load(new InputStreamReader(new FileInputStream(config), "utf-8"));
-//			properties.load(new FileInputStream(ClassLoader.getSystemResource(Constants.CONFIG_FILE).getFile()));
-//			properties.load(new InputStreamReader(ClassLoader.getSystemResourceAsStream(Constants.CONFIG_FILE), "utf-8"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	private ConfigManager() {
+		
+	}
+	
+	private void loadProperties(String... config) throws PropertyParseException {
+		File[] files = new File[config.length];
+		for (int i = 0; i < config.length; i ++) 
+			files[i] = new File(config[i]);
+		
+		properties = PropertyFileUtil.loadProperties(files);
 	}
 	
 	public void put(String k, String v) {
@@ -51,15 +52,15 @@ public class ConfigManager {
 	}
 	
 	public String getMysqlConnStatment() {
-		return properties.getProperty("intellbi.mysql.conn", "jdbc:mysql://127.0.0.1:3306/intellbi?useUnicode=true&characterEncoding=UTF-8");
+		return properties.getProperty("jdbc.url", "jdbc:mysql://127.0.0.1:3306/intellbi?useUnicode=true&characterEncoding=UTF-8");
 	}
 	
 	public String getMysqlUsername() {
-		return properties.getProperty("intellbi.mysql.username", "root");
+		return properties.getProperty("jdbc.username", "root");
 	}
 	
 	public String getMysqlPassword() {
-		return properties.getProperty("intellbi.mysql.password", "root");
+		return properties.getProperty("jdbc.password", "root");
 	}
 	
 	public String getDataLocation() {
@@ -94,10 +95,15 @@ public class ConfigManager {
 		this.isDebug = isDebug;
 	}
 	
-	public static ConfigManager getInstance(String config){
-	    if(instance == null)
-	        instance = new ConfigManager(config);
-	    return instance;
+	public static ConfigManager getConfigManager(String... conf) {
+		ConfigManager config = new ConfigManager();
+	    try {
+	    	config.loadProperties(conf);
+	    } catch (PropertyParseException e) {
+	    	logger.error(e.getMessage(), e);
+	    }
+	    instance = config;//待重构，兼容老逻辑
+	    return config;
 	}
 	
 	public static ConfigManager getInstance(){

@@ -52,11 +52,6 @@ public class SettingController {
 		int userId = Integer.valueOf((request.getSession().getAttribute(Const.SS_USER_ID).toString()));
 		UserDO userDO = userService.getUser(userId);
 		data.put("realname", userDO.getRealname());
-		data.put("group", String.valueOf(userDO.getGroupId()));
-		if (userDO.getGroupId() != 0) {
-			data.put("info", Const.INFO_NOT_ALLOWED);
-			return new ModelAndView("error", data);
-		}
 		List<UserDO> users = userService.getAllUsers();
 		data.put("users", users);
 		return new ModelAndView("profile", data);

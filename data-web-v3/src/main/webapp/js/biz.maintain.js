@@ -627,7 +627,7 @@ function initDataTable() {
                 "sLengthMenu": "每页显示 ：_MENU_",
                 "sZeroRecords": "暂无数据",
                 "sInfo": "第_START_ ~ _END_ 项，共 _TOTAL_ 项",
-                "sInfoEmpty": "无可显示的数据",
+                "sInfoEmpty": "<span style='color:red'>无可显示的数据</span>",
                 "sInfoFiltered": "(共   _MAX_ 项)",
                 "sInfoPostFix": "",
                 "sSearch": "",

@@ -33,6 +33,7 @@ public class MySqlConnection implements IDBConnection {
 					config.getMysqlUsername(),
 					config.getMysqlPassword());
 		} catch (Exception e) {
+			logger.error(config.getMysqlConnStatment() + ", " + config.getMysqlUsername() + ", " + config.getMysqlPassword());
 			logger.error("failed to connect to mysql." + "\t" + e.getMessage());
 		}
 		return conn;

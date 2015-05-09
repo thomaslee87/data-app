@@ -17,6 +17,7 @@ import com.intellbit.dataobject.QueryCondition.QueryConditionBuilder;
 import com.intellbit.dataobject.TelecomPackageDO;
 import com.intellbit.dataobject.ajax.RequestQueryFilter;
 import com.intellbit.service.ConsumerDataService;
+import com.intellbit.utils.MyDateUtils;
 
 // get consumer's bill data of given user
 @Service("consumerDataService")
@@ -99,6 +100,10 @@ public class ConsumerDataServiceImpl implements ConsumerDataService {
 	public int getContractConsumersCount(int userId, String theMonth,
 			RequestQueryFilter filter) {
 		// TODO Auto-generated method stub
+		// 续约任务看6个月内合约到期的用户，这里和过滤条件中的合约结束期比较，取较小的值
+		String end = MyDateUtils.getMonthByDelta(theMonth, 6);
+		if (StringUtils.isBlank(filter.getToEnd()) || end.compareTo(filter.getToEnd()) < 0)
+			filter.setToEnd(end);
 		QueryConditionBuilder builder = new QueryConditionBuilder()
 				.setUserId(userId).setTheMonth(theMonth).setFilter(filter);
 		return consumerDataDao.getContractConsumersCount(builder.build());
@@ -109,6 +114,10 @@ public class ConsumerDataServiceImpl implements ConsumerDataService {
 			String theMonth, int pageStart, int pageSize,
 			List<String> orderFields, RequestQueryFilter filter) {
 		// TODO Auto-generated method stub
+		// 续约任务看6个月内合约到期的用户，这里和过滤条件中的合约结束期比较，取较小的值
+		String end = MyDateUtils.getMonthByDelta(theMonth, 6);
+		if (StringUtils.isBlank(filter.getToEnd()) || end.compareTo(filter.getToEnd()) < 0)
+			filter.setToEnd(end);
 		QueryConditionBuilder builder = new QueryConditionBuilder()
 				.setUserId(userId).setTheMonth(theMonth)
 				.setPage(pageStart, pageSize).setFilter(filter);

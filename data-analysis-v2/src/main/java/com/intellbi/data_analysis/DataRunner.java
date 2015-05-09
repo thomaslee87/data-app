@@ -22,6 +22,8 @@ public class DataRunner {
 	
 	public static final String APP_NAME = "DataRunner";
 	
+	private static String conf;
+	
 	public static ConfigManager parseArgs(String[] args) {
 		Options options = new Options();
 		options.addOption("h", "help", false, "[optional]Show help infomation");
@@ -44,7 +46,8 @@ public class DataRunner {
 		}
 		if(cmdArg.hasOption("c")) {
 			// 加载配置文件
-		    config = ConfigManager.getInstance(cmdArg.getOptionValue("c"));
+			conf = cmdArg.getOptionValue("c");
+		    config = ConfigManager.getConfigManager(cmdArg.getOptionValue("c"));
 //			config = new ConfigManager(cmdArg.getOptionValue("c"));
 		}
 		if(cmdArg.hasOption("m")) {
@@ -83,11 +86,11 @@ public class DataRunner {
 	    }
 	    System.exit(0);*/
 	    
-	    PropertyConfigurator.configure(ClassLoader.getSystemResource("log4j.properties"));
-	    System.out.println("log level: " + logger.getLevel());
-	    logger.setLevel(Level.DEBUG);
-	    logger.info(StringUtils.join(args, " "));
 		ConfigManager config = parseArgs(args);
+		PropertyConfigurator.configure(conf + "\\log4j.properties");
+		System.out.println("log level: " + logger.getLevel());
+		logger.setLevel(Level.DEBUG);
+		logger.info(StringUtils.join(args, " "));
 		if(config != null){
 			DataAnalyzer dataAnalyzer = new DataAnalyzer(config);
 			dataAnalyzer.run();

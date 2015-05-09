@@ -184,7 +184,7 @@ public class DataAnalyzer {
 			if(config.getExludedMonth() != null && config.getExludedMonth().contains(month))
 				continue;
 			String dataFile = dataLocation + String.format(dataFileFormat, month);
-			logger.error("Begin Processing data file: " + dataFile);
+			logger.info("Begin Processing data file: " + dataFile);
 			
 			BillReader reader = new MdbBillReader(theMonth, dataFile);
 			int i = 0;
@@ -194,7 +194,7 @@ public class DataAnalyzer {
 					if(billDetailWrapper != null && consumers.containsKey(billDetailWrapper.getPhoneNo())) {
 						consumerSessionMap.add(billDetailWrapper.getPhoneNo(), billDetailWrapper);
 						if(config.isDebug())
-						    logger.error(gson.toJson(billDetailWrapper));
+						    logger.info(gson.toJson(billDetailWrapper));
 						i ++;
 						if(config.isDebug() && i > 10000)
 							break;
@@ -243,12 +243,12 @@ public class DataAnalyzer {
 				+ "`consumer_type`,`income6`,`income3`,`voice6`,`voice3`,`gprs6`,`gprs3`,"
 				+ "`package_spill`,`voice_spill`,`gprs_spill`,`income_fluctuation`,"
 				+ "`voice_fluctuation`,`gprs_fluctuation`,`score`,`recommend`,`value_change`,"
-				+ "`recommend_4g`, `value_change_4g`"
+				+ "`recommend_4g`, `value_change_4g`,`package_price`"
 				+ ")"
 				+ " values " ;
 		String sqlArgs = "('%s',%d,%d,%d,'%s',%f,%f,%f,"
 				+ "%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d,%f,%d,%d,'%s',%d,%d,"
-				+ "%d,%f,%f,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,'%s',%f,'%s',%f"
+				+ "%d,%f,%f,%d,%d,%f,%f,%f,%f,%f,%f,%f,%f,%f,'%s',%f,'%s',%f,%d"
 				+ ")";
 		
 		int number = 0;
@@ -260,8 +260,8 @@ public class DataAnalyzer {
 		try {
 			Statement stat = conn.createStatement();
 			if(config.isDebug()) {
-			    logger.error("Drop sql: " + dropSql);
-	            logger.error("Create sql: " + createSql);
+			    logger.info("Drop sql: " + dropSql);
+	            logger.info("Create sql: " + createSql);
 			} else {
 				stat.execute(dropSql);
 				stat.execute(createSql);
@@ -281,7 +281,7 @@ public class DataAnalyzer {
 				
 				ConsumerBillDetailWrapper wrapper = consumerSession.getCurrConsumerBillDetailWrapper();			
 				
-				int mgrId = userManager.getConsumerMap().get(phoneNo).getUserId();
+				int mgrId = 0;//userManager.getConsumerMap().get(phoneNo).getUserId();
 				
 				String sqlStat = String.format(sqlArgs, phoneNo, mgrId, Utils.parseInteger(theMonth),
 					wrapper.getThePackage().getId(), wrapper.getThePackage().getName(),
@@ -300,7 +300,7 @@ public class DataAnalyzer {
 					consumerSession.getVoiceSpill(),consumerSession.getGprsSpill(),consumerSession.getIncomeFluctuation(),
 					consumerSession.getVoiceFluctuation(),consumerSession.getGprsFluctuation(),consumerSession.getScore(),
 					consumerSession.getRecommenedString(),consumerSession.getValueChange(),consumerSession.getRecommened4GString(),
-					consumerSession.getValueChange4G()
+					consumerSession.getValueChange4G(),(int)wrapper.getThePackage().getFee()
 				);
 				
 				if(sb.length() > 0)

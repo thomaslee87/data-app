@@ -480,7 +480,7 @@ public class UserManager {
         logger.info("Config file is: " + config);
         logger.info("Data file is: " + file);
 
-        ConfigManager cfg = ConfigManager.getInstance(config);//new ConfigManager(config);
+        ConfigManager cfg = ConfigManager.getConfigManager(config);//new ConfigManager(config);
         UserManager userManager = null;
         try {
             userManager = new UserManager(cfg, file, type);

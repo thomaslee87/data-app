@@ -1,5 +1,6 @@
 package com.intellbit.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +58,11 @@ public class UserController {
 			HttpServletRequest request,
 			HttpServletResponse response) {
 		
+		try {
+			username = new String(username.getBytes("iso-8859-1"), "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			logger.warn(e.getMessage(), e);
+		}
 		Object oUserId = request.getSession().getAttribute(Const.SS_USER_ID);
 		if (oUserId == null) {
 			UserDO userDO = userService.getUser(username);

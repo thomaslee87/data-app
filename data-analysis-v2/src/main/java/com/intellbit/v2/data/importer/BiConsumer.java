@@ -15,5 +15,6 @@ public class BiConsumer {
 	private String vipLevel;
 	private String isGroupUser;
 	private String identity;
+	private String identityType;
 	
 }

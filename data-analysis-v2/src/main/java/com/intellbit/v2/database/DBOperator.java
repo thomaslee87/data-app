@@ -155,14 +155,15 @@ public class DBOperator {
         return consumers;
 	}
 	public void insertBiConsumers(List<BiConsumer> consumers) throws SQLException {
-		String sql = "INSERT INTO bi_consumer (phone,name,identity,gmt_create,vip_level) VALUES %s";
-		String tpl = "('%s','%s','%s',now(),'%s'),";
+		String sql = "INSERT INTO bi_consumer (phone,name,identity,identity_type,gmt_create,vip_level) VALUES %s";
+		String tpl = "('%s','%s','%s','%s',now(),'%s'),";
 		StringBuilder sb = new StringBuilder();
 		for (BiConsumer consumer: consumers) {
 			sb.append(String.format(tpl, 
 					consumer.getPhone(),
 					consumer.getName(),
 					consumer.getIdentity(),
+					consumer.getIdentityType(),
 					consumer.getVipLevel()
 				));
 		}
@@ -175,12 +176,13 @@ public class DBOperator {
 		}
 	}
 	public void updateBiConsumerByPhone(BiConsumer consumer) throws SQLException {
-		String sql = "UPDATE bi_consumer SET name=?,identity=?,vip_level=?,gmt_modified=now() WHERE phone=?";
+		String sql = "UPDATE bi_consumer SET name=?,identity=?,identity_type=?,vip_level=?,gmt_modified=now() WHERE phone=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, consumer.getName());
 		stmt.setString(2, consumer.getIdentity());
-		stmt.setString(3, consumer.getVipLevel());
-		stmt.setString(4, consumer.getPhone());
+		stmt.setString(3, consumer.getIdentityType());
+		stmt.setString(4, consumer.getVipLevel());
+		stmt.setString(5, consumer.getPhone());
 		stmt.executeUpdate();
 	}
 	

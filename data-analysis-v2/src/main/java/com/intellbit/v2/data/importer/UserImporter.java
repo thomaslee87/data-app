@@ -36,9 +36,10 @@ public class UserImporter {
 
 	private static final String HEADER_PHONE = "用户号码";
 	private static final String HEADER_NAME  = "用户姓名";
-	private static final String HEADER_MANAGER = "客户经理名";
-	private static final String HEADER_IDCARD = "用户身份证";
-	private static final String HEADER_VIPLEVEL = "vip_level";
+	private static final String HEADER_MANAGER = "客户经理";
+	private static final String HEADER_IDCARD = "证件号码";
+	private static final String HEADER_IDCARD_TYPE = "证件类型";
+	private static final String HEADER_VIPLEVEL = "vip级别";
 	
 	private String jdbcConfig;
 	private List<String> head;
@@ -259,6 +260,17 @@ public class UserImporter {
 		}
 	}
 	
+	private String readCellString(Cell cell) {
+		if (cell == null){// || cell.getCellType() == Cell.CELL_TYPE_BLANK) {
+			return "";
+		} else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+			DecimalFormat df = new DecimalFormat("0");
+			return df.format(cell.getNumericCellValue());
+		} else {
+			return cell.getStringCellValue();
+		}
+	}
+	
 	private List<BiUser> biUsers; 
 	private List<BiConsumer> biConsumers;
 	private Map<String, String> biConsumerUserMap; //phone->user name
@@ -290,7 +302,7 @@ public class UserImporter {
 			BiConsumerBuilder consumerBuilder = BiConsumer.builder();
 			
 			String phone = null, managerName = null;
-			String identity = "", name = "", vipLevel = "";
+			String identity = "", name = "", vipLevel = "", identityType = "";
 			Row row = sheet.getRow(r);
 			for(int i = 0; i < row.getLastCellNum(); i ++) {
 				Cell cell = row.getCell(i);
@@ -300,17 +312,17 @@ public class UserImporter {
 					continue;
 				
 				if (headerName.equals(HEADER_PHONE) ) {
-					DecimalFormat df = new DecimalFormat("0");
-					phone = df.format(cell.getNumericCellValue());
+					phone = readCellString(cell);
 				} else if (headerName.equals(HEADER_MANAGER) ) {
-					managerName = cell.getStringCellValue();
+					managerName = readCellString(cell);
 				} else if (headerName.equals(HEADER_NAME)) {
-					name = cell.getStringCellValue();
+					name = readCellString(cell);
 				} else if (headerName.equals(HEADER_IDCARD)) {
-					DecimalFormat df = new DecimalFormat("0");
-					identity = df.format(cell.getNumericCellValue());
+					identity = readCellString(cell);
 				} else if (headerName.equalsIgnoreCase(HEADER_VIPLEVEL)) {
 					vipLevel = cell.getStringCellValue();
+				} else if (headerName.equals(HEADER_IDCARD_TYPE)) {
+					identityType = readCellString(cell);
 				}
 			}	
 			
@@ -324,6 +336,7 @@ public class UserImporter {
 						.phone(phone)
 						.manager(managerName)
 						.identity(identity)
+						.identityType(identityType)
 						.name(name)
 						.vipLevel(vipLevel)
 						.build();

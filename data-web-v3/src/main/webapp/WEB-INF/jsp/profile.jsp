@@ -111,7 +111,7 @@
                             <a href="#"><i class="fa fa-cog fa-fw"></i> 我的设置<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse in">
                                 <li>
-                                    <c:if test="${group=='0'}"><a class="active" href="userManager.html">用户管理</a> </c:if>
+                                    <c:if test="${group=='0'}"><a href="userManager.html">用户管理</a> </c:if>
                                      <a class="active" href="profile.html">我的信息</a>
                                 </li>
                             </ul>

@@ -567,7 +567,7 @@
 					{ 
 						theMonth: "<c:out value='${theBizMonth}' />",
 						phone: "<c:out value='${phoneNo}' />",
-						type: 0,
+						type: "<c:out value='${type}' />"
 					},
 					function(data){
 						$('#txt_call_num').val(data[0].callNum);
@@ -593,7 +593,7 @@
 									{ 
 										theMonth: "<c:out value='${theBizMonth}' />",
 										phone: "<c:out value='${phoneNo}' />",
-										type: 0,
+										type: "<c:out value='${type}' />",
 										callNum:$('#txt_call_num').val(),
 										succCallNum:$('#txt_succ_call_num').val(),
 										feedback:$("input[name='optionsRadios']:checked").val(),

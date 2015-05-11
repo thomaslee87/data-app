@@ -389,7 +389,6 @@
 						</div>
 					</div>
 
-
 					<div class="row">
 						<div class="col-lg-15">
 							<div class="panel panel-success">
@@ -567,13 +566,16 @@
 					{ 
 						theMonth: "<c:out value='${theBizMonth}' />",
 						phone: "<c:out value='${phoneNo}' />",
-						type: 0,
+						type: "<c:out value='${type}' />"
 					},
 					function(data){
-						$('#txt_call_num').val(data[0].callNum);
-						$('#txt_succ_call_num').val(data[0].succCallNum);
-						$("input[name='optionsRadios'][value="+data[0].feedback+"]").prop("checked",true);
-						$("input[name='optionsDeal'][value="+data[0].done+"]").prop("checked",true);
+						if (data['errCode'] == 0) {
+							data = data['data'];
+							$('#txt_call_num').val(data[0].callNum);
+							$('#txt_succ_call_num').val(data[0].succCallNum);
+							$("input[name='optionsRadios'][value="+data[0].feedback+"]").prop("checked",true);
+							$("input[name='optionsDeal'][value="+data[0].done+"]").prop("checked",true);
+						}
 					});
 			
 			if($('#btn_feedback_sv').length > 0) {
@@ -593,7 +595,7 @@
 									{ 
 										theMonth: "<c:out value='${theBizMonth}' />",
 										phone: "<c:out value='${phoneNo}' />",
-										type: 0,
+										type: "<c:out value='${type}' />",
 										callNum:$('#txt_call_num').val(),
 										succCallNum:$('#txt_succ_call_num').val(),
 										feedback:$("input[name='optionsRadios']:checked").val(),

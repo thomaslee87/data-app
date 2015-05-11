@@ -94,6 +94,9 @@ public class PageController {
 		UserDO userDO = userService.getUser(userId);
 		data.put("realname", userDO.getRealname());
 		data.put("phone", phoneNo);
+		data.put("theBizMonth", theBizMonth);
+		data.put("phoneNo", phoneNo);
+		data.put("type", 1);
 //		data.put("task", "带宽升级任务");
 		
 		boolean dateValid = MyDateUtils.checkMonthFormat(String.valueOf(theBizMonth), "yyyyMM");
@@ -439,6 +442,9 @@ public class PageController {
 		UserDO userDO = userService.getUser(userId);
 		data.put("realname", userDO.getRealname());
 		data.put("phone", phoneNo);
+		data.put("theBizMonth", theBizMonth);
+		data.put("phoneNo", phoneNo);
+		data.put("type", 0);
 //		data.put("task", "带宽升级任务");
 		
 		boolean dateValid = MyDateUtils.checkMonthFormat(String.valueOf(theBizMonth), "yyyyMM");
@@ -783,6 +789,9 @@ public class PageController {
 		UserDO userDO = userService.getUser(userId);
 		data.put("realname", userDO.getRealname());
 		data.put("phone", phoneNo);
+		data.put("theBizMonth", theBizMonth);
+		data.put("phoneNo", phoneNo);
+		data.put("type", 2);
 //		data.put("task", "带宽升级任务");
 		
 		boolean dateValid = MyDateUtils.checkMonthFormat(String.valueOf(theBizMonth), "yyyyMM");

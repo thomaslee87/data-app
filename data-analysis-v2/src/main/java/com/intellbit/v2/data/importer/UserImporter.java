@@ -108,8 +108,8 @@ public class UserImporter {
 			for(BiConsumer consumer : biConsumers) {
 				if (!dbConsumerMap.containsKey(consumer.getPhone()))
 					newConsumers.add(consumer);
-				else 
-					db.updateBiConsumerByPhone(consumer);
+//				else 
+//					db.updateBiConsumerByPhone(consumer);
 			}
 			if (newConsumers.size() > 0)
 				db.insertBiConsumers(newConsumers);
@@ -133,7 +133,7 @@ public class UserImporter {
 		Map<String, Integer> phoneUserMap = new TreeMap<String, Integer>();
 		
 		DBOperator db = DBOperator.getDBOperator(jdbcConfig);
-		Set<String> dbPhones = db.selectContractMap();
+		Map<String, Integer> dbPhones = db.selectContractMap();
 		List<BiUser> biUserList = db.selectAllBiUsers();
 		Map<String, BiUser> biUserMap = this.transferBiUserList2Map(biUserList);
 		
@@ -145,10 +145,11 @@ public class UserImporter {
 				BiUser biUser = biUserMap.get(userName);
 				if (biUser != null) {
 					int userId = biUser.getId();
-					if (dbPhones.contains(phone)) {
-						db.updateContractMap(phone, userId);
-					} else {
+					Integer dbUserId = dbPhones.get(phone);
+					if (dbUserId == null)
 						phoneUserMap.put(phone, userId);
+					else if (userId != dbUserId.intValue()) {
+						db.updateContractMap(phone, userId);
 					}
 				}
 			}
@@ -172,7 +173,7 @@ public class UserImporter {
 		Map<String, Integer> phoneUserMap = new TreeMap<String, Integer>();
 		
 		DBOperator db = DBOperator.getDBOperator(jdbcConfig);
-		Set<String> dbPhones = db.selectMaintainMap();
+		Map<String, Integer> dbPhones = db.selectMaintainMap();
 		List<BiUser> biUserList = db.selectAllBiUsers();
 		Map<String, BiUser> biUserMap = this.transferBiUserList2Map(biUserList);
 		
@@ -184,10 +185,11 @@ public class UserImporter {
 				BiUser biUser = biUserMap.get(userName);
 				if (biUser != null) {
 					int userId = biUser.getId();
-					if (dbPhones.contains(phone)) {
-						db.updateMantainMap(phone, userId);
-					} else {
+					Integer dbUserId = dbPhones.get(phone);
+					if (dbUserId == null)
 						phoneUserMap.put(phone, userId);
+					else if (userId != dbUserId.intValue()) {
+						db.updateContractMap(phone, userId);
 					}
 				}
 			}
@@ -211,7 +213,7 @@ public class UserImporter {
 		Map<String, Integer> phoneUserMap = new TreeMap<String, Integer>();
 		
 		DBOperator db = DBOperator.getDBOperator(jdbcConfig);
-		Set<String> dbPhones = db.selectBandwidthMap();
+		Map<String, Integer> dbPhones = db.selectBandwidthMap();
 		List<BiUser> biUserList = db.selectAllBiUsers();
 		Map<String, BiUser> biUserMap = this.transferBiUserList2Map(biUserList);
 		
@@ -223,10 +225,11 @@ public class UserImporter {
 				BiUser biUser = biUserMap.get(userName);
 				if (biUser != null) {
 					int userId = biUser.getId();
-					if (dbPhones.contains(phone)) {
-						db.updateBandwidthMap(phone, userId);
-					} else {
+					Integer dbUserId = dbPhones.get(phone);
+					if (dbUserId == null)
 						phoneUserMap.put(phone, userId);
+					else if (userId != dbUserId.intValue()) {
+						db.updateContractMap(phone, userId);
 					}
 				}
 			}

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -186,18 +187,18 @@ public class DBOperator {
 		stmt.executeUpdate();
 	}
 	
-	public Set<String> selectContractMap() {
-		Set<String> phones = new HashSet<String>();
+	public Map<String, Integer> selectContractMap() {
+		Map<String, Integer> phones = new HashMap<String, Integer>();
 		String sql = "SELECT id, user_id, phone from bi_contract_map";
 		ResultSet rs = null;
 		try {
 			Statement stat = conn.createStatement();
 			rs = stat.executeQuery(sql);
 			while (rs.next()) {
-				/*int id = rs.getInt("id");
-				int userId = rs.getInt("user_id");*/
+				/*int id = rs.getInt("id");*/
+				int userId = rs.getInt("user_id");
 				String phone = rs.getString("phone");
-				phones.add(phone);
+				phones.put(phone, userId);
 			}
 		} catch (SQLException e) {
 			logger.warn(e.getMessage(), e);
@@ -237,18 +238,18 @@ public class DBOperator {
 		stmt.executeUpdate();
 	}
 	
-	public Set<String> selectMaintainMap() {
-		Set<String> phones = new HashSet<String>();
+	public Map<String, Integer> selectMaintainMap() {
+		Map<String, Integer> phones = new HashMap<>();
 		String sql = "SELECT id, user_id, phone from bi_maintain_map";
 		ResultSet rs = null;
 		try {
 			Statement stat = conn.createStatement();
 			rs = stat.executeQuery(sql);
 			while (rs.next()) {
-				/*int id = rs.getInt("id");
-				int userId = rs.getInt("user_id");*/
+				/*int id = rs.getInt("id");*/
+				int userId = rs.getInt("user_id");
 				String phone = rs.getString("phone");
-				phones.add(phone);
+				phones.put(phone, userId);
 			}
 		} catch (SQLException e) {
 			logger.warn(e.getMessage(), e);
@@ -288,18 +289,18 @@ public class DBOperator {
 		stmt.executeUpdate();
 	}
 	
-	public Set<String> selectBandwidthMap() {
-		Set<String> phones = new HashSet<String>();
+	public Map<String, Integer> selectBandwidthMap() {
+		Map<String, Integer> phones = new HashMap<>();
 		String sql = "SELECT id, user_id, phone from bi_bandwidth_map";
 		ResultSet rs = null;
 		try {
 			Statement stat = conn.createStatement();
 			rs = stat.executeQuery(sql);
 			while (rs.next()) {
-				/*int id = rs.getInt("id");
-				int userId = rs.getInt("user_id");*/
+				/*int id = rs.getInt("id");*/
+				int userId = rs.getInt("user_id");
 				String phone = rs.getString("phone");
-				phones.add(phone);
+				phones.put(phone, userId);
 			}
 		} catch (SQLException e) {
 			logger.warn(e.getMessage(), e);

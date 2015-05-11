@@ -40,10 +40,13 @@ public class DataAnalyzer {
 	private ConfigManager config ;
 	private UserManager userManager;
 	
+	private String dbName;
+	
 	public DataAnalyzer(ConfigManager config) {
 		this.config = config;
 		this.theMonth = config.get("bizmonth");
 		this.userManager = new UserManager(config);
+		dbName = config.getDbName();
 	}
 	
 	public boolean init() {
@@ -70,7 +73,7 @@ public class DataAnalyzer {
 		try {
 			stat = conn.createStatement();
 			
-			String avgSql = "select avg(score) as avg_score,count(1) as cnt from intellbit.bi_bills_" + theMonth;
+			String avgSql = "select avg(score) as avg_score,count(1) as cnt from " + dbName + ".bi_bills_" + theMonth;
 			ResultSet rs1 = stat.executeQuery(avgSql);
 			rs1.next();
 			double avgScore = rs1.getDouble("avg_score");
@@ -81,7 +84,7 @@ public class DataAnalyzer {
 //			String updateArg = "(%d, %f)";
 //			StringBuilder sb = new StringBuilder();
 			
-			String selSql = "select id,score from intellbit.bi_bills_" + theMonth ;
+			String selSql = "select id,score from  " + dbName + ".bi_bills_" + theMonth ;
 			ResultSet rs = stat.executeQuery(selSql);
 			Map<Integer,Double> scoreMap = new HashMap<Integer,Double>();
 			while(rs.next()){
@@ -93,7 +96,7 @@ public class DataAnalyzer {
 			rs.close();
 			
 			for(int id : scoreMap.keySet()) {
-				String uSql = "update intellbit.bi_bills_" + theMonth + " set regular_score=" + scoreMap.get(id) + " where id=" +id;
+				String uSql = "update  " + dbName + ".bi_bills_" + theMonth + " set regular_score=" + scoreMap.get(id) + " where id=" +id;
 				stat.execute(uSql);
 			}
 			
@@ -103,7 +106,7 @@ public class DataAnalyzer {
 				priSet.add(new HashSet<Integer>());
 			}
 			
-			selSql = "select id from intellbit.bi_bills_" + theMonth + " order by regular_score desc";
+			selSql = "select id from  " + dbName + ".bi_bills_" + theMonth + " order by regular_score desc";
 			rs = stat.executeQuery(selSql);
 			int i = 0;
 			while(rs.next()){
@@ -120,7 +123,7 @@ public class DataAnalyzer {
 			}
 			rs.close();
 			
-			String uSqlFormat = "update intellbit.bi_bills_%s set priority=%d where id in (%s)";
+			String uSqlFormat = "update  " + dbName + ".bi_bills_%s set priority=%d where id in (%s)";
 			for(i = 0; i < 10; i ++) {
 				String ids = priSet.get(i).toString();
 				String uSql = String.format(uSqlFormat, theMonth, i+1, ids.substring(1, ids.length()-1)); 
@@ -228,11 +231,11 @@ public class DataAnalyzer {
 			}
 		};
 		
-		String dropSql = "drop table if exists intellbit.bi_bills_" + theMonth;
-		String createSql = "create table if not exists intellbit.bi_bills_" + theMonth 
-				+ " like intellbit.bi_bills_template";
+		String dropSql = "drop table if exists  " + dbName + ".bi_bills_" + theMonth;
+		String createSql = "create table if not exists  " + dbName + ".bi_bills_" + theMonth 
+				+ " like  " + dbName + ".bi_bills_template";
 		
-		String sql = "insert into intellbit.bi_bills_"
+		String sql = "insert into  " + dbName + ".bi_bills_"
 				+ theMonth
 				+ " (`phone_no`, `user_id`, `the_month`, `package_id`,`package_name`, `income`, "
 				+ "`monthly_rental`, `local_voice_fee`, `roaming_fee`, `long_distance_voice_fee`,"

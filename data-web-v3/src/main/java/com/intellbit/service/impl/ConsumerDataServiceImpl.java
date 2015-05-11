@@ -97,27 +97,37 @@ public class ConsumerDataServiceImpl implements ConsumerDataService {
 	}
 
 	@Override
-	public int getContractConsumersCount(int userId, String theMonth,
+	public int getContractConsumersCount(int userId, String bizmonth,  String theMonth,
 			RequestQueryFilter filter) {
 		// TODO Auto-generated method stub
 		// 续约任务看6个月内合约到期的用户，这里和过滤条件中的合约结束期比较，取较小的值
-		String end = MyDateUtils.getMonthByDelta(theMonth, 6);
-		if (StringUtils.isBlank(filter.getToEnd()) || end.compareTo(filter.getToEnd()) < 0)
+		String end = MyDateUtils.getMonthByDelta(bizmonth, 6);
+		end += "32";
+		if (StringUtils.isBlank(filter.getToEnd()) || end.compareTo(filter.getToEnd()) < 0) {
 			filter.setToEnd(end);
+		}
+		if (StringUtils.isBlank(filter.getToStart()) || bizmonth.compareTo(filter.getToStart()) > 0) {
+			filter.setToStart(bizmonth + "00");
+		}
 		QueryConditionBuilder builder = new QueryConditionBuilder()
 				.setUserId(userId).setTheMonth(theMonth).setFilter(filter);
 		return consumerDataDao.getContractConsumersCount(builder.build());
 	}
 
 	@Override
-	public List<ConsumerBillDO> getContractConsumers(int userId,
+	public List<ConsumerBillDO> getContractConsumers(int userId,String bizmonth, 
 			String theMonth, int pageStart, int pageSize,
 			List<String> orderFields, RequestQueryFilter filter) {
 		// TODO Auto-generated method stub
 		// 续约任务看6个月内合约到期的用户，这里和过滤条件中的合约结束期比较，取较小的值
-		String end = MyDateUtils.getMonthByDelta(theMonth, 6);
-		if (StringUtils.isBlank(filter.getToEnd()) || end.compareTo(filter.getToEnd()) < 0)
+		String end = MyDateUtils.getMonthByDelta(bizmonth, 6);
+		end += "32";
+		if (StringUtils.isBlank(filter.getToEnd()) || end.compareTo(filter.getToEnd()) < 0) {
 			filter.setToEnd(end);
+		}
+		if (StringUtils.isBlank(filter.getToStart()) || bizmonth.compareTo(filter.getToStart()) > 0) {
+			filter.setToStart(bizmonth + "00");
+		}
 		QueryConditionBuilder builder = new QueryConditionBuilder()
 				.setUserId(userId).setTheMonth(theMonth)
 				.setPage(pageStart, pageSize).setFilter(filter);

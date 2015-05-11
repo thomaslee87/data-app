@@ -32,10 +32,6 @@
 		) c
 		on
 			a.phone_no = c.phone
-		left join
-     		bi_package_dict d
-		on
-			a.package_dict_id = d.id
 		<where>
 			<if test="userId != null and userId &gt; 0">
 				b.user_id = #{userId}
@@ -63,7 +59,7 @@
 					and a.contract_to &lt;= #{filter.toEnd}
 				</if>
 				<if test="filter.price != null and filter.price > 0">
-					and d.package_price = #{filter.price} 
+					and a.package_price = #{filter.price} 
 				</if>
 			</if>
           and is_group_user=0
@@ -77,7 +73,7 @@
       		phone_no as phoneNo,
 			package_id as packageId,
       		a.package_name as packageName,
-      		d.package_price as packagePrice,
+      		a.package_price as packagePrice,
 			ROUND(income6,2) as income6,
 			is_group_user as isGroupUser,
 			network as network,
@@ -113,10 +109,6 @@
      	) c
      	on
 			a.phone_no = c.phone
-     	left join
-     		bi_package_dict d
-     	on
-     		a.package_dict_id = d.id
        <where>
        		<if test="userId != null and userId &gt; 0">
         		b.user_id = #{userId}
@@ -138,7 +130,7 @@
 					and a.contract_to &lt;= #{filter.toEnd}
 				</if>
 				<if test="filter.price != null and filter.price > 0">
-					and d.package_price = #{filter.price} <!-- REGEXP  concat('[^\d]',#{filter.price},'元') -->
+					and a.package_price = #{filter.price} <!-- REGEXP  concat('[^\d]',#{filter.price},'元') -->
 				</if>
 			</if>
 			and is_group_user=0
@@ -174,10 +166,6 @@
 		) c
 		on
 			a.phone_no = c.phone
-		left join
-     		bi_package_dict d
-		on
-			a.package_dict_id = d.id
 		<where>
 			<if test="userId != null and userId &gt; 0">
 				b.user_id = #{userId}
@@ -205,7 +193,7 @@
 					and a.contract_to &lt;= #{filter.toEnd}
 				</if>
 				<if test="filter.price != null and filter.price > 0">
-					and d.package_price = #{filter.price} 
+					and a.package_price = #{filter.price} 
 				</if>
 			</if>
           and is_group_user=0
@@ -219,7 +207,7 @@
       		phone_no as phoneNo,
 			package_id as packageId,
       		a.package_name as packageName,
-      		d.package_price as packagePrice,
+      		a.package_price as packagePrice,
 			ROUND(income6,2) as income6,
 			is_group_user as isGroupUser,
 			network as network,
@@ -255,10 +243,6 @@
      	) c
      	on
 			a.phone_no = c.phone
-     	left join
-     		bi_package_dict d
-     	on
-     		a.package_dict_id = d.id
        <where>
        		<if test="userId != null and userId &gt; 0">
         		b.user_id = #{userId}
@@ -280,7 +264,7 @@
 					and a.contract_to &lt;= #{filter.toEnd}
 				</if>
 				<if test="filter.price != null and filter.price > 0">
-					and d.package_price = #{filter.price} <!-- REGEXP  concat('[^\d]',#{filter.price},'元') -->
+					and a.package_price = #{filter.price} <!-- REGEXP  concat('[^\d]',#{filter.price},'元') -->
 				</if>
 			</if>
 			and is_group_user=0
@@ -316,10 +300,6 @@
 		) c
 		on
 			a.phone_no = c.phone
-		left join
-     		bi_package_dict d
-		on
-			a.package_dict_id = d.id
 		<where>
 			<if test="userId != null and userId &gt; 0">
 				b.user_id = #{userId}
@@ -347,7 +327,7 @@
 					and a.contract_to &lt;= #{filter.toEnd}
 				</if>
 				<if test="filter.price != null and filter.price > 0">
-					and d.package_price = #{filter.price} 
+					and a.package_price = #{filter.price} 
 				</if>
 			</if>
           and is_group_user=0
@@ -360,7 +340,7 @@
       		phone_no as phoneNo,
 			package_id as packageId,
       		a.package_name as packageName,
-      		d.package_price as packagePrice,
+      		a.package_price as packagePrice,
       		ROUND(income,2) as income,
 			ROUND(income6,2) as income6,
 			ROUND(gprs,2) as gprs,
@@ -400,10 +380,6 @@
      	) c
      	on
 			a.phone_no = c.phone
-     	left join
-     		bi_package_dict d
-     	on
-     		a.package_dict_id = d.id
        <where>
        		<if test="userId != null and userId &gt; 0">
         		b.user_id = #{userId}
@@ -425,7 +401,7 @@
 					and a.contract_to &lt;= #{filter.toEnd}
 				</if>
 				<if test="filter.price != null and filter.price > 0">
-					and d.package_price = #{filter.price} <!-- REGEXP  concat('[^\d]',#{filter.price},'元') -->
+					and a.package_price = #{filter.price} <!-- REGEXP  concat('[^\d]',#{filter.price},'元') -->
 				</if>
 			</if>
 			and is_group_user=0

@@ -52,6 +52,7 @@ public class SettingController {
 		int userId = Integer.valueOf((request.getSession().getAttribute(Const.SS_USER_ID).toString()));
 		UserDO userDO = userService.getUser(userId);
 		data.put("realname", userDO.getRealname());
+		data.put("group", String.valueOf(userDO.getGroupId()));
 		List<UserDO> users = userService.getAllUsers();
 		data.put("users", users);
 		return new ModelAndView("profile", data);

@@ -257,7 +257,9 @@ public class ConsumerAPIController {
 				
 				dgResp.setDraw(String.valueOf(aoData.getsEcho()));
 				
-				int iConsumerCnt = consumerDataService.getContractConsumersCount(userId, theMonth,reqQueryCondition);
+				int iConsumerCnt = consumerDataService.getContractConsumersCount(userId,
+						bizmonth, theMonth,
+						reqQueryCondition);
 				dgResp.setRecordsTotal(String.valueOf(iConsumerCnt));
 				dgResp.setRecordsFiltered(String.valueOf(iConsumerCnt));
 				
@@ -268,7 +270,8 @@ public class ConsumerAPIController {
 					orderFields.add(field.trim());
 				
 				//get consumer data list
-				List<ConsumerBillDO> detailDataList = consumerDataService.getContractConsumers(userId, theMonth, 
+				List<ConsumerBillDO> detailDataList = consumerDataService.getContractConsumers(userId,
+						bizmonth, theMonth, 
 						aoData.getiDisplayStart(), aoData.getiDisplayLength(),orderFields,reqQueryCondition);
 				
 				//load package info(cached in map)

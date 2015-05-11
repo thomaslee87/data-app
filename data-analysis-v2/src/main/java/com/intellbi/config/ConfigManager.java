@@ -51,6 +51,10 @@ public class ConfigManager {
 		return options.get(k);
 	}
 	
+	public String getDbName() {
+		return properties.getProperty("jdbc.dbname", "intellbit");
+	}
+	
 	public String getMysqlConnStatment() {
 		return properties.getProperty("jdbc.url", "jdbc:mysql://127.0.0.1:3306/intellbi?useUnicode=true&characterEncoding=UTF-8");
 	}

@@ -12,7 +12,14 @@ public class RequestQueryFilter implements Serializable {
 	private String toStart;
 	private String toEnd;
 	private int price;
+	private boolean hideDone;
 	
+	public boolean isHideDone() {
+		return hideDone;
+	}
+	public void setHideDone(boolean hideDone) {
+		this.hideDone = hideDone;
+	}
 	public String getPhone() {
 		return phone;
 	}

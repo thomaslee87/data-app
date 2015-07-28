@@ -1,10 +1,7 @@
 package com.intellbit.service.impl;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +11,6 @@ import com.intellbit.dao.ConsumerDataDao;
 import com.intellbit.dao.TelecomPackageDao;
 import com.intellbit.dataobject.ConsumerBillDO;
 import com.intellbit.dataobject.QueryCondition.QueryConditionBuilder;
-import com.intellbit.dataobject.TelecomPackageDO;
 import com.intellbit.dataobject.ajax.RequestQueryFilter;
 import com.intellbit.service.ConsumerDataService;
 import com.intellbit.utils.MyDateUtils;
@@ -30,20 +26,20 @@ public class ConsumerDataServiceImpl implements ConsumerDataService {
 	private TelecomPackageDao telPakcageDao;
 
 	@Override
-	public int getMaintainConsumersCount(int userId, String theMonth,
+	public int getMaintainConsumersCount(int userId, String bizmonth, String theMonth,
 			RequestQueryFilter filter) {
 		QueryConditionBuilder builder = new QueryConditionBuilder()
-				.setUserId(userId).setTheMonth(theMonth).setFilter(filter);
+				.setUserId(userId).setTheMonth(theMonth).setBizmonth(bizmonth).setFilter(filter);
 		return consumerDataDao.getMaintainConsumersCount(builder.build());
 	}
 
 	@Override
-	public List<ConsumerBillDO> getMaintainConsumers(int userId,
+	public List<ConsumerBillDO> getMaintainConsumers(int userId,String bizmonth, 
 			String theMonth, int pageStart, int pageSize,
 			List<String> orderFields, RequestQueryFilter filter) {
 
 		QueryConditionBuilder builder = new QueryConditionBuilder()
-				.setUserId(userId).setTheMonth(theMonth)
+				.setUserId(userId).setTheMonth(theMonth).setBizmonth(bizmonth)
 				.setPage(pageStart, pageSize).setFilter(filter);
 
 		if (orderFields != null) {
@@ -55,21 +51,21 @@ public class ConsumerDataServiceImpl implements ConsumerDataService {
 	}
 
 	@Override
-	public int getBandwidthConsumersCount(int userId, String theMonth,
+	public int getBandwidthConsumersCount(int userId, String bizmonth, String theMonth,
 			RequestQueryFilter filter) {
 		// TODO Auto-generated method stub
 		QueryConditionBuilder builder = new QueryConditionBuilder()
-				.setUserId(userId).setTheMonth(theMonth).setFilter(filter);
+				.setUserId(userId).setTheMonth(theMonth).setBizmonth(bizmonth).setFilter(filter);
 		return consumerDataDao.getBandwidthConsumersCount(builder.build());
 	}
 
 	@Override
-	public List<ConsumerBillDO> getBandwidthConsumers(int userId,
+	public List<ConsumerBillDO> getBandwidthConsumers(int userId,String bizmonth, 
 			String theMonth, int pageStart, int pageSize,
 			List<String> orderFields, RequestQueryFilter filter) {
 		// TODO Auto-generated method stub
 		QueryConditionBuilder builder = new QueryConditionBuilder()
-				.setUserId(userId).setTheMonth(theMonth)
+				.setUserId(userId).setTheMonth(theMonth).setBizmonth(bizmonth)
 				.setPage(pageStart, pageSize).setFilter(filter);
 
 		if (orderFields != null) {
@@ -110,7 +106,7 @@ public class ConsumerDataServiceImpl implements ConsumerDataService {
 			filter.setToStart(bizmonth + "00");
 		}
 		QueryConditionBuilder builder = new QueryConditionBuilder()
-				.setUserId(userId).setTheMonth(theMonth).setFilter(filter);
+				.setUserId(userId).setTheMonth(theMonth).setBizmonth(bizmonth).setFilter(filter);
 		return consumerDataDao.getContractConsumersCount(builder.build());
 	}
 
@@ -129,7 +125,7 @@ public class ConsumerDataServiceImpl implements ConsumerDataService {
 			filter.setToStart(bizmonth + "00");
 		}
 		QueryConditionBuilder builder = new QueryConditionBuilder()
-				.setUserId(userId).setTheMonth(theMonth)
+				.setUserId(userId).setTheMonth(theMonth).setBizmonth(bizmonth)
 				.setPage(pageStart, pageSize).setFilter(filter);
 
 		if (orderFields != null) {

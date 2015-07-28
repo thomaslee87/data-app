@@ -28,7 +28,7 @@
 			from
 				bi_feedback
 			where
-				the_month = #{theMonth} and type=0
+				the_month = #{bizmonth} and type=1
 		) c
 		on
 			a.phone_no = c.phone
@@ -39,7 +39,7 @@
 			<!-- <if test="contractQuery != null">
 				and contract_to &lt;= #{contractQuery.end} and contract_to &gt;= #{contractQuery.begin}
 			</if> -->
-			<if test="hideDone == true">
+			<if test="filter.hideDone == true">
 				and (c.done is null or c.done = 0)
 			</if>
 			<if test="filter != null">
@@ -104,8 +104,8 @@
      	 	from
      			bi_feedback
      		where
-     			the_month = #{theMonth}
-     			and type = 0
+     			the_month = #{bizmonth}
+     			and type = 1
      	) c
      	on
 			a.phone_no = c.phone
@@ -113,6 +113,9 @@
        		<if test="userId != null and userId &gt; 0">
         		b.user_id = #{userId}
         	</if>
+        	<if test="filter.hideDone == true">
+				and (c.done is null or c.done = 0)
+			</if>
         	<if test="filter != null">
 				<if test="filter.phone != null and filter.phone != ''">
 					and a.phone_no = #{filter.phone}
@@ -162,7 +165,7 @@
 			from
 				bi_feedback
 			where
-				the_month = #{theMonth} and type=0
+				the_month = #{bizmonth} and type=0
 		) c
 		on
 			a.phone_no = c.phone
@@ -173,7 +176,7 @@
 			<!-- <if test="contractQuery != null">
 				and contract_to &lt;= #{contractQuery.end} and contract_to &gt;= #{contractQuery.begin}
 			</if> -->
-			<if test="hideDone == true">
+			<if test="filter.hideDone == true">
 				and (c.done is null or c.done = 0)
 			</if>
 			<if test="filter != null">
@@ -238,7 +241,7 @@
      	 	from
      			bi_feedback
      		where
-     			the_month = #{theMonth}
+     			the_month = #{bizmonth}
      			and type = 0
      	) c
      	on
@@ -247,6 +250,9 @@
        		<if test="userId != null and userId &gt; 0">
         		b.user_id = #{userId}
         	</if>
+        	<if test="filter.hideDone == true">
+				and (c.done is null or c.done = 0)
+			</if>
         	<if test="filter != null">
 				<if test="filter.phone != null and filter.phone != ''">
 					and a.phone_no = #{filter.phone}
@@ -296,7 +302,7 @@
 			from
 				bi_feedback
 			where
-				the_month = #{theMonth} and type=0
+				the_month = #{bizmonth} and type=2
 		) c
 		on
 			a.phone_no = c.phone
@@ -307,7 +313,7 @@
 			<!-- <if test="contractQuery != null">
 				and contract_to &lt;= #{contractQuery.end} and contract_to &gt;= #{contractQuery.begin}
 			</if> -->
-			<if test="hideDone == true">
+			<if test="filter.hideDone == true">
 				and (c.done is null or c.done = 0)
 			</if>
 			<if test="filter != null">
@@ -375,8 +381,8 @@
      	 	from
      			bi_feedback
      		where
-     			the_month = #{theMonth}
-     			and type = 0
+     			the_month = #{bizmonth}
+     			and type = 2
      	) c
      	on
 			a.phone_no = c.phone
@@ -384,6 +390,9 @@
        		<if test="userId != null and userId &gt; 0">
         		b.user_id = #{userId}
         	</if>
+        	<if test="filter.hideDone == true">
+				and (c.done is null or c.done = 0)
+			</if>
         	<if test="filter != null">
 				<if test="filter.phone != null and filter.phone != ''">
 					and a.phone_no = #{filter.phone}

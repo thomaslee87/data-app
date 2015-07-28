@@ -3,8 +3,6 @@ package com.intellbit.dataobject;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.management.QueryEval;
-
 import com.intellbit.dataobject.ajax.RequestQueryFilter;
 
 public class QueryCondition {
@@ -14,6 +12,7 @@ public class QueryCondition {
 		private int userId;
 		private String phoneNo;
 		private String theMonth;
+		private String bizmonth;
 		private boolean hideDone;
 		private Page page = new Page();
 		private List<String> orderFileds = new ArrayList<String>();
@@ -31,6 +30,11 @@ public class QueryCondition {
 		
 		public QueryConditionBuilder setTheMonth(String theMonth) {
 			this.theMonth = theMonth;
+			return this;
+		}
+		
+		public QueryConditionBuilder setBizmonth(String bizmonth) {
+			this.bizmonth = bizmonth;
 			return this;
 		}
 		
@@ -81,6 +85,7 @@ public class QueryCondition {
 		this.setUserId(builder.userId);
 		this.setTheMonth(builder.theMonth);
 		this.setHideDone(builder.hideDone);
+		this.setBizmonth(builder.bizmonth);
 		
 		this.setPage(builder.page);
 		this.setOrderFileds(builder.orderFileds);
@@ -93,12 +98,19 @@ public class QueryCondition {
 	private int userId;
 	private String phoneNo;
 	private String theMonth;
+	private String bizmonth;
 	private boolean hideDone;
 	private Page page;
 	private List<String> orderFileds;
 	
 	private RequestQueryFilter filter;
 	
+	public String getBizmonth() {
+		return bizmonth;
+	}
+	public void setBizmonth(String bizmonth) {
+		this.bizmonth = bizmonth;
+	}
 	public String getPhoneNo() {
 		return phoneNo;
 	}

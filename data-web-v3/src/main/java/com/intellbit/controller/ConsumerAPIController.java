@@ -78,6 +78,7 @@ public class ConsumerAPIController {
 			
 			RequestQueryFilter reqQueryCondition = SerializationUtil.gson2Object(condition, 
 					new TypeToken<RequestQueryFilter>(){}.getType());
+			reqQueryCondition.setHideDone(hideDone);
 			
 			if (aoData.getiDisplayLength() > 0 && aoData.getiDisplayStart() >= 0) {
 				//find current login user
@@ -104,7 +105,7 @@ public class ConsumerAPIController {
 				
 				dgResp.setDraw(String.valueOf(aoData.getsEcho()));
 				
-				int iConsumerCnt = consumerDataService.getMaintainConsumersCount(userId, theMonth,reqQueryCondition);
+				int iConsumerCnt = consumerDataService.getMaintainConsumersCount(userId, bizmonth,theMonth,reqQueryCondition);
 				dgResp.setRecordsTotal(String.valueOf(iConsumerCnt));
 				dgResp.setRecordsFiltered(String.valueOf(iConsumerCnt));
 				
@@ -115,7 +116,7 @@ public class ConsumerAPIController {
 					orderFields.add(field.trim());
 				
 				//get consumer data list
-				List<ConsumerBillDO> detailDataList = consumerDataService.getMaintainConsumers(userId, theMonth, 
+				List<ConsumerBillDO> detailDataList = consumerDataService.getMaintainConsumers(userId, bizmonth,theMonth, 
 						aoData.getiDisplayStart(), aoData.getiDisplayLength(),orderFields,reqQueryCondition);
 				
 				//load package info(cached in map)
@@ -186,7 +187,7 @@ public class ConsumerAPIController {
 					
 					if(o.getDone() == 0)
 						row.add("<span class=\"label label-danger\">未处理</span>");
-	                else if(o.getTaskStateContract() == 1)
+	                else
 	                	row.add("<span class=\"label label-success\">已处理</span>");
 					
 					row.add(new ExtraInfo()
@@ -231,6 +232,7 @@ public class ConsumerAPIController {
 			
 			RequestQueryFilter reqQueryCondition = SerializationUtil.gson2Object(condition, 
 					new TypeToken<RequestQueryFilter>(){}.getType());
+			reqQueryCondition.setHideDone(hideDone);
 			
 			if (aoData.getiDisplayLength() > 0 && aoData.getiDisplayStart() >= 0) {
 				//find current login user
@@ -342,7 +344,7 @@ public class ConsumerAPIController {
 					
 					if(o.getDone() == 0)
 						row.add("<span class=\"label label-danger\">未处理</span>");
-	                else if(o.getTaskStateContract() == 1)
+	                else 
 	                	row.add("<span class=\"label label-success\">已处理</span>");
 					
 					row.add(new ExtraInfo()
@@ -387,6 +389,7 @@ public class ConsumerAPIController {
 			
 			RequestQueryFilter reqQueryCondition = SerializationUtil.gson2Object(condition, 
 					new TypeToken<RequestQueryFilter>(){}.getType());
+			reqQueryCondition.setHideDone(hideDone);
 			
 			if (aoData.getiDisplayLength() > 0 && aoData.getiDisplayStart() >= 0) {
 				//find current login user
@@ -413,7 +416,7 @@ public class ConsumerAPIController {
 				
 				dgResp.setDraw(String.valueOf(aoData.getsEcho()));
 				
-				int iConsumerCnt = consumerDataService.getBandwidthConsumersCount(userId, theMonth, reqQueryCondition);
+				int iConsumerCnt = consumerDataService.getBandwidthConsumersCount(userId,bizmonth, theMonth, reqQueryCondition);
 				
 				dgResp.setRecordsTotal(String.valueOf(iConsumerCnt));
 				dgResp.setRecordsFiltered(String.valueOf(iConsumerCnt));
@@ -425,7 +428,7 @@ public class ConsumerAPIController {
 					orderFields.add(field.trim());
 				
 				//get consumer data list
-				List<ConsumerBillDO> detailDataList = consumerDataService.getBandwidthConsumers(userId, theMonth, 
+				List<ConsumerBillDO> detailDataList = consumerDataService.getBandwidthConsumers(userId,bizmonth, theMonth, 
 						aoData.getiDisplayStart(), aoData.getiDisplayLength(),orderFields,reqQueryCondition);
 				
 				//load package info(cached in map)
@@ -477,7 +480,7 @@ public class ConsumerAPIController {
 					
 					if(o.getDone() == 0)
 						row.add("<span class=\"label label-danger\">未处理</span>");
-	                else if(o.getTaskStateContract() == 1)
+	                else
 	                	row.add("<span class=\"label label-success\">已处理</span>");
 					
 					row.add(new ExtraInfo()

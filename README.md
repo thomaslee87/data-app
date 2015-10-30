@@ -6,13 +6,7 @@ A tool for telecom CRM written by Java. Includes:
 
 - data app: web application
     
-what we used:
-
-    - spring
-    - struts2
-    - mybatis
-    - shiro
-    - easyui  
+    springMVC + bootstrap
 
 - data analysis: background analysis program
 

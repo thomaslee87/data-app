@@ -62,7 +62,7 @@
 			username,
 			realname,
 			password,
-			gmt_modified
+			gmt_create
 		) values(#{groupId},#{staffId},#{username},#{realname},#{password},now());
 	</insert>
 

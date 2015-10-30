@@ -73,6 +73,8 @@ public class UserController {
 				return new ModelAndView("login", data);
 			}
 			request.getSession().setAttribute(Const.SS_USER_ID, userDO.getId());
+			userDO.setGmtLogin(new Date());
+			userService.update(userDO);
 		}
 		logger.info("[LOGIN SUCCESS]username:" + username);
 		return new ModelAndView(new RedirectView("index.html"));
